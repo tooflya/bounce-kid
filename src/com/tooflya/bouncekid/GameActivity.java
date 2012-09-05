@@ -1,24 +1,30 @@
 package com.tooflya.bouncekid;
-import org.andengine.engine.options.EngineOptions;
-import org.andengine.entity.scene.Scene;
-import org.andengine.ui.activity.SimpleBaseGameActivity;
 
-public class GameActivity extends SimpleBaseGameActivity {
+import org.anddev.andengine.engine.Engine;
+import org.anddev.andengine.ui.activity.BaseGameActivity;
+
+public class GameActivity extends BaseGameActivity {
 
 	@Override
-	public EngineOptions onCreateEngineOptions() {
+	public void onLoadComplete() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Engine onLoadEngine() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	protected void onCreateResources() {
+	public void onLoadResources() {
 		// TODO Auto-generated method stub
 
 	}
 
 	@Override
-	protected Scene onCreateScene() {
+	public org.anddev.andengine.entity.scene.Scene onLoadScene() {
 		// TODO Auto-generated method stub
 		return null;
 	}
