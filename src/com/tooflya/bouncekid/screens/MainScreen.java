@@ -2,11 +2,7 @@ package com.tooflya.bouncekid.screens;
 
 import org.anddev.andengine.entity.layer.tiled.tmx.TMXLayer;
 import org.anddev.andengine.entity.layer.tiled.tmx.TMXLoader;
-import org.anddev.andengine.entity.layer.tiled.tmx.TMXLoader.ITMXTilePropertiesListener;
-import org.anddev.andengine.entity.layer.tiled.tmx.TMXProperties;
 import org.anddev.andengine.entity.layer.tiled.tmx.TMXTile;
-import org.anddev.andengine.entity.layer.tiled.tmx.TMXTileProperty;
-import org.anddev.andengine.entity.layer.tiled.tmx.TMXTiledMap;
 import org.anddev.andengine.entity.layer.tiled.tmx.util.exception.TMXLoadException;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.background.AutoParallaxBackground;
@@ -18,9 +14,6 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
-import org.anddev.andengine.util.Debug;
-
-import android.widget.Toast;
 
 import com.tooflya.bouncekid.GameActivity;
 import com.tooflya.bouncekid.Options;
@@ -104,9 +97,9 @@ public class MainScreen extends Screen {
 
 		final TMXLoader tmxLoader = new TMXLoader(GameActivity.activity,
 				GameActivity.instance.getTextureManager(),
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA) {
+		};
 
-		TMXLayer tmxLayer;
 		try {
 			tmxLayer = tmxLoader.loadFromAsset(GameActivity.activity, "tmx/desert.tmx").getTMXLayers().get(0);
 			this.attachChild(tmxLayer);
@@ -119,6 +112,24 @@ public class MainScreen extends Screen {
 	// ===========================================================
 	// Virtual methods
 	// ===========================================================
+	private TMXLayer tmxLayer;
+	private float heroX = 0;
+
+	@Override
+	protected void onManagedUpdate(final float pSecondsElapsed) {
+		super.onManagedUpdate(pSecondsElapsed);
+
+		tmxLayer.setPosition(tmxLayer.getX() - 5, tmxLayer.getY());
+		heroX += 5;
+
+		TMXTile a = tmxLayer.getTMXTileAt(heroX, hero.getY()+285);
+		if (a != null) {
+			System.out.println(a.getTileY()+"");
+			hero.setPosition(hero.getX(), a.getTileY());
+		} else {
+			hero.setPosition(hero.getX(), hero.getY() + 1);
+		}
+	}
 
 	/*
 	 * (non-Javadoc)
