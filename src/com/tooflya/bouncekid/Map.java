@@ -36,7 +36,7 @@ public class Map extends Entity {
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
-	
+
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			this.blocks.getByIndex(i).setPosition(this.blocks.getByIndex(i).getX() - Options.blockStep, this.blocks.getByIndex(i).getY());
 			if (this.blocks.getByIndex(i).getX() + this.blocks.getByIndex(i).getWidth() < 0) {
@@ -65,10 +65,13 @@ public class Map extends Entity {
 
 	private void GenerateNextBlock() {
 		this.tempBlock = (Block) this.blocks.create(); // TODO: Replace for right function.
-		//float offsetX = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksX;
-		//float offsetY = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksY; // TODO: Add negative offsetY.
-		//this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight() + offsetX, this.lastBlock.getY() + offsetY);
-		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight(), this.lastBlock.getY()); // TODO: remove this
+		float offsetX = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksX;
+		float offsetY = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksY; // TODO: Add negative offsetY.
+		if (this.lastBlock.getY() - offsetY < MainScreen.hero.getHeight()) {
+			offsetY = this.lastBlock.getY() - MainScreen.hero.getHeight();
+		}
+		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight() + offsetX, this.lastBlock.getY() - offsetY);
+		// this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight(), this.lastBlock.getY()); // TODO: remove this
 		this.lastBlock = this.tempBlock;
 	}
 
@@ -89,11 +92,11 @@ public class Map extends Entity {
 
 	public void CheckCollision(Personage personage) {
 		if (!personage.IsState(ActionHelper.Jump)) {
-			//personage.ChangeStates(ActionHelper.Fall, (byte) 0);
-			for (int i = 0; i < this.blocks.getCount(); i++) { // TODO: && personage.IsState(ActionHelper.Fall)
+			personage.ChangeStates(ActionHelper.Fall, (byte) 0);
+			for (int i = 0; i < this.blocks.getCount() && personage.IsState(ActionHelper.Fall); i++) {
 				// TODO: Maybe need other function of correct collision detection.
 				if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
-					personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeight());
+					personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeight() + 1);
 					personage.ChangeStates((byte) 0, ActionHelper.Fall);
 				}
 			}
