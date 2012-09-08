@@ -63,9 +63,8 @@ public class Personage extends Entity {
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 
-		if (this.IsState(ActionHelper.Running)) {
-			runningProceed();
-		}
+		runningProceed();
+
 		if (this.IsState(ActionHelper.Jump)) {
 			jumpProceed();
 		}
@@ -115,5 +114,6 @@ public class Personage extends Entity {
 
 	public void ChangeStates(byte settingMaskActions, byte unsettingMaskActions) {
 		this.currentStates = (byte) ((this.currentStates | settingMaskActions) & ~unsettingMaskActions); // And what I need to do if I don't want to have operation with int?
+		System.out.println("State: " + this.currentStates);
 	}
 }

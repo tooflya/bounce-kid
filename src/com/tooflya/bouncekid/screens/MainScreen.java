@@ -54,7 +54,7 @@ public class MainScreen extends Screen {
 
 				switch (arg1.getAction()) {
 				case TouchEvent.ACTION_DOWN:
-					if (!hero.IsState(ActionHelper.Jump)) {
+					if (!hero.IsState(ActionHelper.Jump) && !hero.IsState(ActionHelper.Fall)) {
 						hero.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
 					}
 					break;
