@@ -57,9 +57,7 @@ public class CustomCamera extends Camera {
 					sentitX = -1;
 				if (Math.random() < 0.5)
 					sentitY = -1;
-				this.setCenter((float) (mX + Math.random() * mIntensity
-						* sentitX), (float) (mY + Math.random() * mIntensity
-						* sentitY));
+				this.setCenter((float) (mX + Math.random() * mIntensity * sentitX), (float) (mY + Math.random() * mIntensity * sentitY));
 			}
 		}
 	}

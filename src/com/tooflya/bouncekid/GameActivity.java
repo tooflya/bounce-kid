@@ -37,8 +37,7 @@ import com.tooflya.bouncekid.ui.CustomCamera;
  * @author Tooflya.com
  * @since
  */
-public class GameActivity extends LayoutGameActivity implements IAsyncCallback,
-		IAccelerometerListener {
+public class GameActivity extends LayoutGameActivity implements IAsyncCallback, IAccelerometerListener {
 
 	// ===========================================================
 	// Constants
@@ -185,20 +184,18 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback,
 		DisplayMetrics dm = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-		camera = new CustomCamera(0, 0, Options.cameraWidth,
-				Options.cameraHeight);
+		camera = new CustomCamera(0, 0, Options.cameraWidth, Options.cameraHeight);
 
 		/**
 		 * 
 		 * Initialize the configuration of engine
 		 * 
 		 */
-		final EngineOptions options = new EngineOptions(true,
-				ScreenOrientation.LANDSCAPE, new RatioResolutionPolicy(
-						dm.widthPixels, dm.heightPixels), camera)
+		final EngineOptions options = new EngineOptions(true, ScreenOrientation.LANDSCAPE, new RatioResolutionPolicy(dm.widthPixels, dm.heightPixels), camera)
 				.setWakeLockOptions(WakeLockOptions.SCREEN_BRIGHT)
 				.setWakeLockOptions(WakeLockOptions.SCREEN_ON)
-				.setNeedsMusic(true).setNeedsSound(true);
+				.setNeedsMusic(true)
+				.setNeedsSound(true);
 
 		/**
 		 * 
@@ -471,10 +468,8 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback,
 	public void onAccelerometerChanged(AccelerometerData pAccelerometerData) {
 		float sensivity = 0.9f;
 
-		accelerometerX = (sensivity * accelerometerX + (1.0f - sensivity)
-				* pAccelerometerData.getX());
-		accelerometerY = (sensivity * accelerometerY + (1.0f - sensivity)
-				* pAccelerometerData.getY());
+		accelerometerX = (sensivity * accelerometerX + (1.0f - sensivity) * pAccelerometerData.getX());
+		accelerometerY = (sensivity * accelerometerY + (1.0f - sensivity) * pAccelerometerData.getY());
 	}
 
 	/*

@@ -53,42 +53,21 @@ public class MainScreen extends Screen {
 	// ===========================================================
 
 	public MainScreen() {
-		heroTexture = new BitmapTextureAtlas(1024, 1024,
-				TextureOptions.NEAREST_PREMULTIPLYALPHA);
-		heroRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(heroTexture, GameActivity.context,
-						"sprite_running.png", 0, 0, 5, 2);
+		heroTexture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
+		heroRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(heroTexture, GameActivity.context, "sprite_running.png", 0, 0, 5, 2);
 
-		this.mAutoParallaxBackgroundTexture = new BitmapTextureAtlas(1024,
-				1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
+		this.mAutoParallaxBackgroundTexture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 
-		this.mParallaxLayerFront = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.mAutoParallaxBackgroundTexture,
-						GameActivity.context,
-						"parallax_background_layer_front.png", 0, 0);
-		this.mParallaxLayerBack = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.mAutoParallaxBackgroundTexture,
-						GameActivity.context,
-						"parallax_background_layer_back.png", 0, 188);
-		this.mParallaxLayerMid = BitmapTextureAtlasTextureRegionFactory
-				.createFromAsset(this.mAutoParallaxBackgroundTexture,
-						GameActivity.context,
-						"parallax_background_layer_mid.png", 0, 669);
+		this.mParallaxLayerFront = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, GameActivity.context, "parallax_background_layer_front.png", 0, 0);
+		this.mParallaxLayerBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, GameActivity.context, "parallax_background_layer_back.png", 0, 188);
+		this.mParallaxLayerMid = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, GameActivity.context, "parallax_background_layer_mid.png", 0, 669);
 
-		GameActivity.instance.getTextureManager().loadTextures(
-				this.mAutoParallaxBackgroundTexture, heroTexture);
+		GameActivity.instance.getTextureManager().loadTextures(this.mAutoParallaxBackgroundTexture, heroTexture);
 
 		autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.0f,
-				new Sprite(0, Options.cameraHeight
-						- this.mParallaxLayerBack.getHeight(),
-						this.mParallaxLayerBack)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f,
-				new Sprite(0, 80, this.mParallaxLayerMid)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f,
-				new Sprite(0, Options.cameraHeight
-						- this.mParallaxLayerFront.getHeight(),
-						this.mParallaxLayerFront)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.0f, new Sprite(0, Options.cameraHeight - this.mParallaxLayerBack.getHeight(), this.mParallaxLayerBack)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f, new Sprite(0, 80, this.mParallaxLayerMid)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, new Sprite(0, Options.cameraHeight - this.mParallaxLayerFront.getHeight(), this.mParallaxLayerFront)));
 
 		this.setBackground(autoParallaxBackground);
 
@@ -117,11 +96,8 @@ public class MainScreen extends Screen {
 
 		});
 
-		boxTexture = new BitmapTextureAtlas(64, 64,
-				TextureOptions.NEAREST_PREMULTIPLYALPHA);
-		boxRegion = BitmapTextureAtlasTextureRegionFactory
-				.createTiledFromAsset(boxTexture, GameActivity.context,
-						"Box.png", 0, 0, 1, 1);
+		boxTexture = new BitmapTextureAtlas(64, 64, TextureOptions.NEAREST_PREMULTIPLYALPHA);
+		boxRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(boxTexture, GameActivity.context, "Box.png", 0, 0, 1, 1);
 		box = new Box(720, Options.cameraHeight - 24, boxRegion);
 
 		GameActivity.instance.getTextureManager().loadTextures(boxTexture);
@@ -131,7 +107,7 @@ public class MainScreen extends Screen {
 
 			@Override
 			public void onUpdate(float arg0) {
-				if (hero.collidesWith(box) && hero.jumpPower == 0 && hero.getX() < box.getX()-64) {
+				if (hero.collidesWith(box) && hero.jumpPower == 0 && hero.getX() < box.getX() - 64) {
 					hero.setState((byte) 0, (byte) 0);
 					autoParallaxBackground.setParallaxChangePerSecond(0);
 					box.setSpeed(0);

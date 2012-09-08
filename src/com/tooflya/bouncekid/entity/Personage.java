@@ -45,8 +45,7 @@ public class Personage extends Entity {
 		this.setIgnoreUpdate(false);
 	}
 
-	public Personage(final int x, final int y,
-			final TiledTextureRegion pTiledTextureRegion) {
+	public Personage(final int x, final int y, final TiledTextureRegion pTiledTextureRegion) {
 		this(pTiledTextureRegion);
 
 		this.setPosition(x, y);
@@ -89,8 +88,7 @@ public class Personage extends Entity {
 	private void runningProceed() {
 		if ((this.states & 2) > 0) {
 			if (!this.isAnimationRunning() && this.jumpPower == 0) {
-				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80 }, 0,
-						7, true);
+				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80 }, 0, 7, true);
 			}
 		} else {
 			if (this.isAnimationRunning()) {
