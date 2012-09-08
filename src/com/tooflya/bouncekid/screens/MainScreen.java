@@ -26,6 +26,7 @@ import com.tooflya.bouncekid.GameActivity;
 import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.Screen;
 import com.tooflya.bouncekid.entity.Personage;
+import com.tooflya.bouncekid.helpers.ActionHelper;
 
 /**
  * @author Tooflya.com
@@ -88,12 +89,12 @@ public class MainScreen extends Screen {
 
 				switch (arg1.getAction()) {
 				case TouchEvent.ACTION_DOWN:
-					if (!hero.isJumping) {
-						hero.ChangeStates((byte) 4, (byte) 1);
+					if (!hero.IsState(ActionHelper.Jump) && !hero.IsState(ActionHelper.Fall)) {
+						hero.ChangeStates(ActionHelper.Jump, (byte) 0);
 					}
 					break;
 				case TouchEvent.ACTION_UP:
-					hero.ChangeStates((byte) 2, (byte) 2);
+					hero.ChangeStates((byte) 0, ActionHelper.Jump);
 					break;
 				}
 				return false;

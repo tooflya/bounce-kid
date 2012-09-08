@@ -25,7 +25,7 @@ public class Personage extends Entity {
 
 	public float jumpPower;
 	private float maxJumpPower;
-	public boolean isJumping;
+	private float jumpStep;
 
 	// ===========================================================
 	// Constructors
@@ -34,11 +34,10 @@ public class Personage extends Entity {
 	public Personage(final TiledTextureRegion pTiledTextureRegion) {
 		super(pTiledTextureRegion);
 
-		this.currentStates = 1;
+		this.currentStates = ActionHelper.Running;
 
-		this.jumpPower = 0;
-		this.maxJumpPower = 40;
-		this.isJumping = false;
+		this.jumpPower = this.maxJumpPower = 40;
+		this.jumpStep = 4f;
 
 		this.setFlippedHorizontal(true);
 		this.setScale(0.5f);
@@ -60,18 +59,20 @@ public class Personage extends Entity {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.anddev.andengine.entity.sprite.AnimatedSprite#onManagedUpdate
-	 * (float)
+	 * @see org.anddev.andengine.entity.sprite.AnimatedSprite#onManagedUpdate (float)
 	 */
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 
-		if ((this.currentStates & ActionHelper.Running) == ActionHelper.Running) {
+		if (this.IsState(ActionHelper.Running)) {
 			runningProceed();
 		}
-		if ((this.currentStates & ActionHelper.Jump) == ActionHelper.Jump) {
+		if (this.IsState(ActionHelper.Jump)) {
 			jumpProceed();
+		}
+		if (this.IsState(ActionHelper.Fall)) {
+			fallProceed();
 		}
 	}
 
@@ -80,8 +81,8 @@ public class Personage extends Entity {
 	// ===========================================================
 
 	private void runningProceed() {
-		if ((this.currentStates & ActionHelper.Running) == ActionHelper.Running) {
-			if (!this.isAnimationRunning() && this.jumpPower == 0) {
+		if (!this.IsState(ActionHelper.Jump) && !this.IsState(ActionHelper.Fall)) {
+			if (!this.isAnimationRunning()) {
 				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80 }, 0, 7, true);
 			}
 		} else {
@@ -92,29 +93,24 @@ public class Personage extends Entity {
 	}
 
 	private void jumpProceed() {
-		if ((this.currentStates & ActionHelper.Jump) == ActionHelper.Jump) {
-			if (this.jumpPower < this.maxJumpPower) {
-				this.jumpPower++;
-				this.setPosition(this.getX(), this.getY() - 4f);
-			} else {
-				this.currentStates = 2;
-			}
+		if (this.jumpPower > 0) {
+			this.jumpPower--;
+			this.setPosition(this.getX(), this.getY() - this.jumpStep);
 		} else {
-			if (this.jumpPower > 0) {
-				this.jumpPower--;
-				this.setPosition(this.getX(), this.getY() + 4f);
-			}
+			this.jumpPower = this.maxJumpPower;
+			this.currentStates = ActionHelper.Fall;
 		}
-		if (this.jumpPower == 0) {
-			this.isJumping = false;
-		} else {
-			this.isJumping = true;
-		}
+	}
+
+	private void fallProceed() {
+		this.setPosition(this.getX(), this.getY() + this.jumpStep);
+	}
+
+	public boolean IsState(byte state) {
+		return (this.state & state) == state;
 	}
 
 	public void ChangeStates(byte settingMaskActions, byte unsettingMaskActions) {
-		this.currentStates = (byte) (this.currentStates | settingMaskActions & ~unsettingMaskActions);
-		// And what I need to do if I don't want to have operation with int?
+		this.currentStates = (byte) (this.currentStates | settingMaskActions & ~unsettingMaskActions); // And what I need to do if I don't want to have operation with int?
 	}
-
 }
