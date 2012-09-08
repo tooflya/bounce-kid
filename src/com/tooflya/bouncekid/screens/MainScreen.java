@@ -1,6 +1,13 @@
 package com.tooflya.bouncekid.screens;
 
-import org.anddev.andengine.engine.handler.IUpdateHandler;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXLayer;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXLoader;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXLoader.ITMXTilePropertiesListener;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXProperties;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXTile;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXTileProperty;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXTiledMap;
+import org.anddev.andengine.entity.layer.tiled.tmx.util.exception.TMXLoadException;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.background.AutoParallaxBackground;
 import org.anddev.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
@@ -11,11 +18,13 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
+import org.anddev.andengine.util.Debug;
+
+import android.widget.Toast;
 
 import com.tooflya.bouncekid.GameActivity;
 import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.Screen;
-import com.tooflya.bouncekid.entity.Box;
 import com.tooflya.bouncekid.entity.Personage;
 
 /**
@@ -44,10 +53,6 @@ public class MainScreen extends Screen {
 
 	private AutoParallaxBackground autoParallaxBackground;
 
-	private Box box;
-	private BitmapTextureAtlas boxTexture;
-	private TiledTextureRegion boxRegion;
-
 	// ===========================================================
 	// Constructors
 	// ===========================================================
@@ -73,7 +78,7 @@ public class MainScreen extends Screen {
 
 		autoParallaxBackground.setParallaxChangePerSecond(40);
 
-		hero = new Personage(220, Options.cameraHeight - 220, heroRegion);
+		hero = new Personage(220, Options.cameraHeight - 285, heroRegion);
 		this.attachChild(hero);
 
 		this.setOnSceneTouchListener(new IOnSceneTouchListener() {
@@ -84,11 +89,11 @@ public class MainScreen extends Screen {
 				switch (arg1.getAction()) {
 				case TouchEvent.ACTION_DOWN:
 					if (!hero.isJumping) {
-						hero.setState((byte) 4, (byte) 1);
+						hero.ChangeStates((byte) 4, (byte) 1);
 					}
 					break;
 				case TouchEvent.ACTION_UP:
-					hero.setState((byte) 2, (byte) 2);
+					hero.ChangeStates((byte) 2, (byte) 2);
 					break;
 				}
 				return false;
@@ -96,32 +101,17 @@ public class MainScreen extends Screen {
 
 		});
 
-		boxTexture = new BitmapTextureAtlas(64, 64, TextureOptions.NEAREST_PREMULTIPLYALPHA);
-		boxRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(boxTexture, GameActivity.context, "box.jpg", 0, 0, 1, 1);
-		box = new Box(720, Options.cameraHeight - 24, boxRegion);
+		final TMXLoader tmxLoader = new TMXLoader(GameActivity.activity,
+				GameActivity.instance.getTextureManager(),
+				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		GameActivity.instance.getTextureManager().loadTextures(boxTexture);
-		this.attachChild(box);
-
-		this.registerUpdateHandler(new IUpdateHandler() {
-
-			@Override
-			public void onUpdate(float arg0) {
-				if (hero.collidesWith(box) && hero.jumpPower == 0 && hero.getX() < box.getX() - 64) {
-					hero.setState((byte) 0, (byte) 0);
-					autoParallaxBackground.setParallaxChangePerSecond(0);
-					box.setSpeed(0);
-					hero.stopAnimation(0);
-				}
-			}
-
-			@Override
-			public void reset() {
-				// TODO Auto-generated method stub
-
-			}
-
-		});
+		TMXLayer tmxLayer;
+		try {
+			tmxLayer = tmxLoader.loadFromAsset(GameActivity.activity, "tmx/desert.tmx").getTMXLayers().get(0);
+			this.attachChild(tmxLayer);
+		} catch (TMXLoadException e) {
+			e.printStackTrace();
+		}
 
 	}
 

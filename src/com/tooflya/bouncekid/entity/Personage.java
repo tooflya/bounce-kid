@@ -2,6 +2,8 @@ package com.tooflya.bouncekid.entity;
 
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
+import com.tooflya.bouncekid.helpers.ActionHelper;
+
 public class Personage extends Entity {
 
 	// ===========================================================
@@ -19,7 +21,7 @@ public class Personage extends Entity {
 	 * 0 - Is running? 1 - Is start jumping (power up)?
 	 * 
 	 */
-	private byte states;
+	private byte currentStates;
 
 	public float jumpPower;
 	private float maxJumpPower;
@@ -32,7 +34,7 @@ public class Personage extends Entity {
 	public Personage(final TiledTextureRegion pTiledTextureRegion) {
 		super(pTiledTextureRegion);
 
-		this.states = 2;
+		this.currentStates = 1;
 
 		this.jumpPower = 0;
 		this.maxJumpPower = 40;
@@ -65,20 +67,12 @@ public class Personage extends Entity {
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 
-		/**
-		 * 
-		 * If character has running status pvoide animation and if not stop
-		 * animation if it's running
-		 * 
-		 */
-		runningProceed();
-
-		/**
-		 * 
-		 *
-		 * 
-		 */
-		jumpProceed();
+		if ((this.currentStates & ActionHelper.Running) == ActionHelper.Running) {
+			runningProceed();
+		}
+		if ((this.currentStates & ActionHelper.Jump) == ActionHelper.Jump) {
+			jumpProceed();
+		}
 	}
 
 	// ===========================================================
@@ -86,7 +80,7 @@ public class Personage extends Entity {
 	// ===========================================================
 
 	private void runningProceed() {
-		if ((this.states & 2) > 0) {
+		if ((this.currentStates & ActionHelper.Running) == ActionHelper.Running) {
 			if (!this.isAnimationRunning() && this.jumpPower == 0) {
 				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80 }, 0, 7, true);
 			}
@@ -98,12 +92,12 @@ public class Personage extends Entity {
 	}
 
 	private void jumpProceed() {
-		if ((this.states & 4) > 0) {
+		if ((this.currentStates & ActionHelper.Jump) == ActionHelper.Jump) {
 			if (this.jumpPower < this.maxJumpPower) {
 				this.jumpPower++;
 				this.setPosition(this.getX(), this.getY() - 4f);
 			} else {
-				this.states = 2;
+				this.currentStates = 2;
 			}
 		} else {
 			if (this.jumpPower > 0) {
@@ -118,8 +112,9 @@ public class Personage extends Entity {
 		}
 	}
 
-	public void setState(final byte on, final byte off) {
-		this.states = on;
+	public void ChangeStates(byte settingMaskActions, byte unsettingMaskActions) {
+		this.currentStates = (byte) (this.currentStates | settingMaskActions & ~unsettingMaskActions);
+		// And what I need to do if I don't want to have operation with int?
 	}
 
 }
