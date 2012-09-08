@@ -57,21 +57,22 @@ public class Map extends Entity {
 		float y = this.lastBlock.getY();
 		float x = this.lastBlock.getX() + Options.blockWidth;
 		while (x < Options.cameraWidth) {
-			this.lastBlock = (Block) this.blocks.create(); // TODO: Replace for right function.
+			this.lastBlock = (Block) this.blocks.create();
 			this.lastBlock.setPosition(x, y);
 			x += Options.blockWidth;
 		}
 	}
 
 	private void GenerateNextBlock() {
-		this.tempBlock = (Block) this.blocks.create(); // TODO: Replace for right function.
+		this.tempBlock = (Block) this.blocks.create();
 		float offsetX = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksX;
-		float offsetY = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksY; // TODO: Add negative offsetY.
+		float upY = Math.min(Options.maxDistanceBetweenBlocksY, this.lastBlock.getY() - MainScreen.hero.getHeight());
+		float downY = Options.cameraHeight - this.lastBlock.getY() - this.lastBlock.getHeight();
+		float offsetY = GameActivity.random.nextFloat() * (upY + downY) - upY;
 		if (this.lastBlock.getY() - offsetY < MainScreen.hero.getHeight()) {
 			offsetY = this.lastBlock.getY() - MainScreen.hero.getHeight();
 		}
-		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight() + offsetX, this.lastBlock.getY() - offsetY);
-		// this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight(), this.lastBlock.getY()); // TODO: remove this
+		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight() + offsetX, this.lastBlock.getY() + offsetY);
 		this.lastBlock = this.tempBlock;
 	}
 
