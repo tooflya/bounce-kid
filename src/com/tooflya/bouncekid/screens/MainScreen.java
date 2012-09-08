@@ -115,6 +115,9 @@ public class MainScreen extends Screen {
 	private TMXLayer tmxLayer;
 	private float heroX = 0;
 
+	/* (non-Javadoc)
+	 * @see org.anddev.andengine.entity.scene.Scene#onManagedUpdate(float)
+	 */
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);

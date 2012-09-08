@@ -23,8 +23,8 @@ public class Personage extends Entity {
 	 */
 	private byte currentStates;
 
-	public float jumpPower;
-	private float maxJumpPower;
+	private int jumpPower;
+	private int maxJumpPower;
 	private float jumpStep;
 
 	// ===========================================================
