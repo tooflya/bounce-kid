@@ -2,6 +2,7 @@ package com.tooflya.bouncekid.entity;
 
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
+import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 
 public class Personage extends Entity {
@@ -71,7 +72,8 @@ public class Personage extends Entity {
 		if (this.IsState(ActionHelper.Fall)) {
 			fallProceed();
 		}
-		System.out.println(this.jumpPower);
+		
+		dieProceed();
 	}
 
 	@Override
@@ -108,6 +110,14 @@ public class Personage extends Entity {
 	private void fallProceed() {
 		this.jumpPower = 40;;
 		this.setPosition(this.getX(), this.getY() + this.jumpStep);
+	}
+	
+	private void dieProceed() {
+		if(this.getY() > Options.cameraHeight) {
+			this.setPosition(this.getX(), 0);
+			this.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
+			this.ChangeStates(ActionHelper.Fall, ActionHelper.Running);
+		}
 	}
 
 	public boolean IsState(byte state) {
