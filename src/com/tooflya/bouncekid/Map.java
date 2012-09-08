@@ -88,6 +88,10 @@ public class Map extends Entity {
 		}
 		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight() + offsetX, this.lastBlock.getY() + offsetY);
 		this.lastBlock = this.tempBlock;
+		offsetX = GameActivity.random.nextFloat() * Options.blockWidth;
+		offsetY = GameActivity.random.nextFloat() * Options.cameraHeight;
+		this.tempBlock = (Block) this.blocks.create();
+		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
 	}
 
 	private boolean IsBottomCollide(Personage personage, Block block) {
