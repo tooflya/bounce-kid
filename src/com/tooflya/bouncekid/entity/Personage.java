@@ -47,7 +47,7 @@ public class Personage extends Entity {
 		this.setIgnoreUpdate(false);
 	}
 
-	public Personage(final float x, final float  y, final TiledTextureRegion pTiledTextureRegion) {
+	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
 		this(pTiledTextureRegion);
 
 		this.setPosition(x, y);
@@ -75,6 +75,11 @@ public class Personage extends Entity {
 		if (this.IsState(ActionHelper.Fall)) {
 			fallProceed();
 		}
+	}
+
+	@Override
+	public Entity deepCopy() {
+		return null;
 	}
 
 	// ===========================================================

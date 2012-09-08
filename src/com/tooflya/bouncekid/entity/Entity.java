@@ -7,7 +7,7 @@ import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
  * @author Tooflya.com
  * @since
  */
-public class Entity extends AnimatedSprite {
+public abstract class Entity extends AnimatedSprite {
 
 	// ===========================================================
 	// Constants
@@ -142,8 +142,7 @@ public class Entity extends AnimatedSprite {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.anddev.andengine.entity.sprite.AnimatedSprite#onManagedUpdate
-	 * (float)
+	 * @see org.anddev.andengine.entity.sprite.AnimatedSprite#onManagedUpdate (float)
 	 */
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed) {
@@ -161,4 +160,10 @@ public class Entity extends AnimatedSprite {
 
 		this.setIgnoreUpdate(!visible);
 	}
+
+	// ===========================================================
+	// Abstract methods
+	// ===========================================================
+
+	public abstract Entity deepCopy();
 }
