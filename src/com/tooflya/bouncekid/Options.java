@@ -25,4 +25,19 @@ public class Options {
 	public static boolean ENABLE_MUSIC;
 
 	public static final int targerFPS = 120;
+
+	// ===========================================================
+	// Map options
+	// ===========================================================
+
+	public static final int maxDistanceBetweenBlocksX = 100; // TODO: Question(Igor): Int or Float type?
+	public static final int maxDistanceBetweenBlocksY = 100; // TODO: Question(Igor): Int or Float type?
+
+	// ===========================================================
+	// Map options
+	// ===========================================================
+
+	public static final int blockHeight = 64;
+	public static final int blockWidth = 64;
+	public static final float blockStep = 5;
 }
