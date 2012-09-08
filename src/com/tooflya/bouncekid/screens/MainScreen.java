@@ -97,7 +97,7 @@ public class MainScreen extends Screen {
 		});
 
 		boxTexture = new BitmapTextureAtlas(64, 64, TextureOptions.NEAREST_PREMULTIPLYALPHA);
-		boxRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(boxTexture, GameActivity.context, "Box.png", 0, 0, 1, 1);
+		boxRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(boxTexture, GameActivity.context, "box.png", 0, 0, 1, 1);
 		box = new Box(720, Options.cameraHeight - 24, boxRegion);
 
 		GameActivity.instance.getTextureManager().loadTextures(boxTexture);
