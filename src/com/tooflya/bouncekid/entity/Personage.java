@@ -73,7 +73,8 @@ public class Personage extends Entity {
 		if (this.IsState(ActionHelper.Fall)) {
 			fallProceed();
 		}
-		System.out.println(this.jumpPower);
+		
+		dieProceed();
 	}
 
 	@Override
@@ -126,6 +127,14 @@ public class Personage extends Entity {
 		this.jumpPower = 40;
 		;
 		this.setPosition(this.getX(), this.getY() + this.jumpStep);
+	}
+	
+	private void dieProceed() {
+		if(this.getY() > Options.cameraHeight) {
+			this.setPosition(this.getX(), 0);
+			this.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
+			this.ChangeStates(ActionHelper.Fall, ActionHelper.Running);
+		}
 	}
 
 	public boolean IsState(byte state) {

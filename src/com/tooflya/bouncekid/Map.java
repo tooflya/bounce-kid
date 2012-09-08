@@ -1,13 +1,15 @@
 package com.tooflya.bouncekid;
 
 import org.anddev.andengine.entity.Entity;
+import org.anddev.andengine.opengl.texture.TextureOptions;
+import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.tooflya.bouncekid.entity.Block;
 import com.tooflya.bouncekid.entity.Personage;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 import com.tooflya.bouncekid.managers.BlocksManager;
-import com.tooflya.bouncekid.screens.MainScreen;
 
 public class Map extends Entity {
 
@@ -15,6 +17,10 @@ public class Map extends Entity {
 
 	private Block tempBlock = null;
 	private Block lastBlock = null;
+
+	public static Personage hero;
+	private BitmapTextureAtlas heroTexture;
+	private TiledTextureRegion heroRegion;
 
 	public Map() {
 		super();
@@ -26,6 +32,14 @@ public class Map extends Entity {
 		this.reset();
 
 		GameActivity.screens.get(Screen.MAIN).attachChild(this);
+
+		heroTexture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
+		heroRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(heroTexture, GameActivity.context, "sprite_running.png", 0, 0, 5, 2);
+
+		GameActivity.instance.getTextureManager().loadTextures(heroTexture);
+
+		hero = new Personage(0, 0, heroRegion);
+		hero.setPosition(Options.someDistance, Options.cameraHeight - hero.getHeightScaled() - 100);
 	}
 
 	/*
@@ -47,7 +61,7 @@ public class Map extends Entity {
 		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth) {
 			this.GenerateNextBlock();
 		}
-		this.CheckCollision(MainScreen.hero);
+		this.CheckCollision(hero);
 	}
 
 	private void GenerateStartBlocks() {
@@ -66,11 +80,11 @@ public class Map extends Entity {
 	private void GenerateNextBlock() {
 		this.tempBlock = (Block) this.blocks.create();
 		float offsetX = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksX;
-		float upY = Math.min(Options.maxDistanceBetweenBlocksY, this.lastBlock.getY() - MainScreen.hero.getHeight());
+		float upY = Math.min(Options.maxDistanceBetweenBlocksY, this.lastBlock.getY() - hero.getHeight());
 		float downY = Options.cameraHeight - this.lastBlock.getY() - this.lastBlock.getHeight();
 		float offsetY = GameActivity.random.nextFloat() * (upY + downY) - upY;
-		if (this.lastBlock.getY() - offsetY < MainScreen.hero.getHeight()) {
-			offsetY = this.lastBlock.getY() - MainScreen.hero.getHeight();
+		if (this.lastBlock.getY() - offsetY < hero.getHeight()) {
+			offsetY = this.lastBlock.getY() - hero.getHeight();
 		}
 		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight() + offsetX, this.lastBlock.getY() + offsetY);
 		this.lastBlock = this.tempBlock;
