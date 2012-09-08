@@ -71,6 +71,7 @@ public class Personage extends Entity {
 		if (this.IsState(ActionHelper.Fall)) {
 			fallProceed();
 		}
+		System.out.println(this.jumpPower);
 	}
 
 	@Override
@@ -105,6 +106,7 @@ public class Personage extends Entity {
 	}
 
 	private void fallProceed() {
+		this.jumpPower = 40;;
 		this.setPosition(this.getX(), this.getY() + this.jumpStep);
 	}
 
