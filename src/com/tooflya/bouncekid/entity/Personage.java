@@ -40,7 +40,7 @@ public class Personage extends Entity {
 		this.jumpStep = 4f;
 
 		this.setFlippedHorizontal(true);
-		this.setScale(0.5f);
+//		this.setScale(0.5f);
 
 		this.setVisible(true);
 		this.setIgnoreUpdate(false);

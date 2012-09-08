@@ -116,26 +116,49 @@ public class MainScreen extends Screen {
 	private TMXLayer tmxLayer;
 	private float heroX = 0;
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.anddev.andengine.entity.scene.Scene#onManagedUpdate(float)
 	 */
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 
+		// float[] coor00 = new float[2];
+		// tmxLayer.convertSceneToLocalCoordinates(0, 0, coor00);
+		// float[] coor11 = new float[2];
+		// tmxLayer.convertSceneToLocalCoordinates(Options.cameraWidth, Options.cameraHeight, coor11);
+		// System.out.println(" " + coor00[0] + "; " + coor00[1] + " | " + coor11[0] + "; " + coor11[1]);
+
 		tmxLayer.setPosition(tmxLayer.getX() - 5, tmxLayer.getY());
 		heroX += 5;
-
-		TMXTile a = tmxLayer.getTMXTileAt(heroX, hero.getY()+285);
-		System.out.println("HX: " + heroX + " HY: " + hero.getY());
-		if(a != null) {
-		if (a.getTextureRegion() != null) {
-			System.out.println(a.getTileY()+"");
-			hero.setPosition(hero.getX(), a.getTileY());
+		TMXTile a = null;
+		final int tileColumn = (int) ((hero.getX() + heroX) / 25);
+		if (0 <= tileColumn && tileColumn <= tmxLayer.getTileColumns() - 1) {
+			final int tileRow = (int) ((hero.getY() + hero.getHeight()) / 32);
+			if (0 <= tileRow && tileRow <= tmxLayer.getTileRows() - 1) {
+				a = tmxLayer.getTMXTile(tileColumn, tileRow);
+			}
+		}
+		// // final float[] coor = tmxLayer.convertSceneToLocalCoordinates(hero.getX(), hero.getY() + hero.getHeight());
+		// // System.out.println("HX: " + hero.getX() + " HY: " + hero.getY() + "HH" + hero.getHeight());
+		// // System.out.println("HX: " + coor[0] + " HY: " + coor[1]);
+		// final float h = 10;
+		if (a != null) {
+			if (a.getTextureRegion() != null) {
+				System.out.println("Good");
+				hero.setPosition(hero.getX(), a.getTileY() - hero.getHeight());
+			} else {
+				hero.setPosition(hero.getX(), hero.getY() + 1);
+				System.out.println("No texture");
+			}
 		} else {
 			hero.setPosition(hero.getX(), hero.getY() + 1);
-		}	} else {
-			hero.setPosition(hero.getX(), hero.getY() + 1);
+			System.out.println("No tile");
+		}
+		if (hero.getY() + hero.getHeight() > Options.cameraHeight - 2) {
+			hero.setPosition(hero.getX(), Options.cameraHeight - 2 - hero.getHeight());
 		}
 	}
 
