@@ -3,6 +3,9 @@ package com.tooflya.bouncekid.entity;
 import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
+import com.tooflya.bouncekid.GameActivity;
+import com.tooflya.bouncekid.Screen;
+
 /**
  * @author Tooflya.com
  * @since
@@ -31,8 +34,10 @@ public abstract class Entity extends AnimatedSprite {
 	public Entity(final TiledTextureRegion pTiledTextureRegion) {
 		super(0, 0, pTiledTextureRegion.deepCopy());
 
-		setVisible(false);
-		setCullingEnabled(false);
+		this.setVisible(false);
+		this.setCullingEnabled(false);
+
+		GameActivity.screens.get(Screen.MAIN).attachChild(this);
 	}
 
 	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion) {
@@ -45,22 +50,10 @@ public abstract class Entity extends AnimatedSprite {
 	// Methods
 	// ===========================================================
 
-	public boolean isDie() {
-		if (health <= 0) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public Entity create() {
+		this.setVisible(true);
+
 		return this;
-	}
-
-	public void reset() {
-	}
-
-	public void move() {
 	}
 
 	public void delete() {
@@ -138,6 +131,11 @@ public abstract class Entity extends AnimatedSprite {
 	// ===========================================================
 	// Virtual methods
 	// ===========================================================
+
+	@Override
+	public void reset() {
+		this.setVisible(true);
+	}
 
 	/*
 	 * (non-Javadoc)

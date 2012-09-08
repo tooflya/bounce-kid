@@ -36,15 +36,15 @@ public class Personage extends Entity {
 
 		this.currentStates = ActionHelper.Running;
 
-		this.jumpPower = this.maxJumpPower = 40;
+		this.jumpPower = 0;
+		this.maxJumpPower = 40;
 		this.jumpStep = 4f;
 
-		this.setFlippedHorizontal(true);
 		this.setScaleCenter(0, 0);
-		this.setScale(0.5f);
+		this.setScale(0.6f);
+		this.setFlippedHorizontal(true);
 
-		this.setVisible(true);
-		this.setIgnoreUpdate(false);
+		this.reset();
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
@@ -113,7 +113,7 @@ public class Personage extends Entity {
 	}
 
 	public boolean IsState(byte state) {
-		return (this.state & state) == state;
+		return (this.currentStates & state) == state;
 	}
 
 	public void ChangeStates(byte settingMaskActions, byte unsettingMaskActions) {

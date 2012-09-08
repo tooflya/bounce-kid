@@ -30,26 +30,12 @@ public class BlocksManager {
 		return this.count + 1;
 	}
 
-	public int getScenarioCount() {
-		return this.scenarioCount;
-	}
-
 	public int getCapacity() {
 		return capacity;
 	}
 
 	public Entity getByIndex(final int index) {
 		return elements[index];
-	}
-
-	public Entity create(final boolean scenario) {
-		if (count + 1 < capacity) {
-			count++;
-			scenarioCount++;
-
-			return elements[count];
-		}
-		return null;
 	}
 
 	public Entity create() throws NullPointerException {
