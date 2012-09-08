@@ -93,19 +93,6 @@ public class Personage extends Entity {
 			if (!this.isAnimationRunning()) {
 				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80 }, 0, 7, true);
 			}
-			int k = GameActivity.random.nextInt(11) - 5;
-			a += k;
-			if (a < -Options.someDistance) {
-				a = -Options.someDistance;
-			}
-			else {
-				if (Options.someDistance < a) {
-					a = Options.someDistance;
-				}
-				else {
-					this.setPosition(this.getX() + k, this.getY());
-				}
-			}
 		} else {
 			if (this.isAnimationRunning()) {
 				this.stopAnimation(2);

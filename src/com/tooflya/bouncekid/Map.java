@@ -39,7 +39,7 @@ public class Map extends Entity {
 		GameActivity.instance.getTextureManager().loadTextures(heroTexture);
 
 		hero = new Personage(0, 0, heroRegion);
-		hero.setPosition(Options.someDistance, Options.cameraHeight - hero.getHeightScaled() - 100);
+		hero.setPosition(0, Options.cameraHeight - hero.getHeightScaled() - 100);
 	}
 
 	/*
