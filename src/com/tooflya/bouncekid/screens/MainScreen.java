@@ -72,7 +72,8 @@ public class MainScreen extends Screen {
 
 		autoParallaxBackground.setParallaxChangePerSecond(40);
 
-		hero = new Personage(220, Options.cameraHeight - 285, heroRegion);
+		hero = new Personage(220, 0, heroRegion);
+		hero.setPosition(hero.getX(), Options.cameraHeight - hero.getHeight());
 		this.attachChild(hero);
 
 		this.setOnSceneTouchListener(new IOnSceneTouchListener() {
@@ -126,10 +127,14 @@ public class MainScreen extends Screen {
 		heroX += 5;
 
 		TMXTile a = tmxLayer.getTMXTileAt(heroX, hero.getY()+285);
-		if (a != null) {
+		System.out.println("HX: " + heroX + " HY: " + hero.getY());
+		if(a != null) {
+		if (a.getTextureRegion() != null) {
 			System.out.println(a.getTileY()+"");
 			hero.setPosition(hero.getX(), a.getTileY());
 		} else {
+			hero.setPosition(hero.getX(), hero.getY() + 1);
+		}	} else {
 			hero.setPosition(hero.getX(), hero.getY() + 1);
 		}
 	}
