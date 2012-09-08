@@ -17,7 +17,6 @@ import org.anddev.andengine.extension.input.touch.controller.MultiTouchControlle
 import org.anddev.andengine.extension.input.touch.exception.MultiTouchException;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.sensor.accelerometer.AccelerometerData;
-import org.anddev.andengine.sensor.accelerometer.IAccelerometerListener;
 import org.anddev.andengine.ui.activity.LayoutGameActivity;
 
 import android.app.Activity;
@@ -37,7 +36,7 @@ import com.tooflya.bouncekid.ui.CustomCamera;
  * @author Tooflya.com
  * @since
  */
-public class GameActivity extends LayoutGameActivity implements IAsyncCallback, IAccelerometerListener {
+public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 
 	// ===========================================================
 	// Constants
@@ -410,7 +409,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback, 
 		 * 
 		 */
 
-		this.enableAccelerometerSensor(this);
+		//this.enableAccelerometerSensor(this);
 	}
 
 	/*
@@ -430,7 +429,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback, 
 		 * 
 		 */
 
-		this.disableAccelerometerSensor();
+		//this.disableAccelerometerSensor();
 	}
 
 	/*
@@ -455,21 +454,6 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback, 
 		}
 
 		return super.onKeyDown(keyCode, event);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.anddev.andengine.sensor.accelerometer.IAccelerometerListener#
-	 * onAccelerometerChanged
-	 * (org.anddev.andengine.sensor.accelerometer.AccelerometerData)
-	 */
-	@Override
-	public void onAccelerometerChanged(AccelerometerData pAccelerometerData) {
-		float sensivity = 0.9f;
-
-		accelerometerX = (sensivity * accelerometerX + (1.0f - sensivity) * pAccelerometerData.getX());
-		accelerometerY = (sensivity * accelerometerY + (1.0f - sensivity) * pAccelerometerData.getY());
 	}
 
 	/*
