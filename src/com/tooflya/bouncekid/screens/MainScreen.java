@@ -27,7 +27,7 @@ public class MainScreen extends Screen {
 	// Fields
 	// ===========================================================
 
-	private Personage hero;
+	public static Personage hero;
 	private BitmapTextureAtlas heroTexture;
 	private TiledTextureRegion heroRegion;
 
@@ -54,12 +54,12 @@ public class MainScreen extends Screen {
 
 				switch (arg1.getAction()) {
 				case TouchEvent.ACTION_DOWN:
-					if (!hero.IsState(ActionHelper.Jump) && !hero.IsState(ActionHelper.Fall)) {
-						hero.ChangeStates(ActionHelper.Jump, (byte) 0);
+					if (!hero.IsState(ActionHelper.Jump)) {
+						hero.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
 					}
 					break;
 				case TouchEvent.ACTION_UP:
-					hero.ChangeStates((byte) 0, ActionHelper.Jump);
+					hero.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
 					break;
 				}
 				return false;

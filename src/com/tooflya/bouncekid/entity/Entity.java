@@ -30,7 +30,7 @@ public abstract class Entity extends AnimatedSprite {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-
+	
 	public Entity(final TiledTextureRegion pTiledTextureRegion) {
 		super(0, 0, pTiledTextureRegion.deepCopy());
 

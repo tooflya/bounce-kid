@@ -36,12 +36,9 @@ public class Personage extends Entity {
 
 		this.currentStates = ActionHelper.Running;
 
-		this.jumpPower = 0;
-		this.maxJumpPower = 40;
+		this.jumpPower = this.maxJumpPower = 40;
 		this.jumpStep = 4f;
 
-		this.setScaleCenter(0, 0);
-		this.setScale(0.6f);
 		this.setFlippedHorizontal(true);
 
 		this.reset();
@@ -104,7 +101,7 @@ public class Personage extends Entity {
 			this.setPosition(this.getX(), this.getY() - this.jumpStep);
 		} else {
 			this.jumpPower = this.maxJumpPower;
-			this.currentStates = ActionHelper.Fall;
+			this.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
 		}
 	}
 
@@ -117,6 +114,6 @@ public class Personage extends Entity {
 	}
 
 	public void ChangeStates(byte settingMaskActions, byte unsettingMaskActions) {
-		this.currentStates = (byte) (this.currentStates | settingMaskActions & ~unsettingMaskActions); // And what I need to do if I don't want to have operation with int?
+		this.currentStates = (byte) ((this.currentStates | settingMaskActions) & ~unsettingMaskActions); // And what I need to do if I don't want to have operation with int?
 	}
 }

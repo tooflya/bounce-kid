@@ -28,8 +28,6 @@ import android.view.KeyEvent;
 
 import com.tooflya.bouncekid.background.AsyncTaskLoader;
 import com.tooflya.bouncekid.background.IAsyncCallback;
-import com.tooflya.bouncekid.entity.Block;
-import com.tooflya.bouncekid.managers.BlocksManager;
 import com.tooflya.bouncekid.managers.LevelManager;
 import com.tooflya.bouncekid.managers.ScreenManager;
 import com.tooflya.bouncekid.screens.LoadingScreen;
@@ -154,7 +152,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	 * 
 	 * 
 	 */
-	public static BlocksManager boxes;
+	public static Map map;
 
 	/**
 	 * 
@@ -299,19 +297,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 		screens = new ScreenManager();
 		((MainScreen) screens.get(Screen.MAIN)).after();
 
-		/**
-		 * 
-		 * 
-		 * 
-		 */
-		boxes = new BlocksManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(resourcesAtlas, getApplicationContext(), "block.png", 0, 0, 1, 1)));
-		GameActivity.boxes.create().setPosition(0, Options.cameraHeight - 64);
-		GameActivity.boxes.create().setPosition(64, Options.cameraHeight - 64);
-		GameActivity.boxes.create().setPosition(64*2, Options.cameraHeight - 64);
-		GameActivity.boxes.create().setPosition(64*3, Options.cameraHeight - 64);
-		GameActivity.boxes.create().setPosition(64*4, Options.cameraHeight - 64);
-		GameActivity.boxes.create().setPosition(64*6, Options.cameraHeight - 64);
-		GameActivity.boxes.create().setPosition(64*7, Options.cameraHeight - 64);
+		map = new Map();
 
 		/**
 		 * 

@@ -1,21 +1,31 @@
 package com.tooflya.bouncekid;
 
 import org.anddev.andengine.entity.Entity;
+import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
 import com.tooflya.bouncekid.entity.Block;
 import com.tooflya.bouncekid.entity.Personage;
 import com.tooflya.bouncekid.helpers.ActionHelper;
+import com.tooflya.bouncekid.managers.BlocksManager;
+import com.tooflya.bouncekid.screens.MainScreen;
 
 public class Map extends Entity {
 
-	private Block tempBlock = null; // TODO: Question(Igor): Micro-optimization. To do or not to do?
+	private BlocksManager blocks;
+
+	private Block tempBlock = null;
 	private Block lastBlock = null;
 
-	private int count = 100; // TODO: Correct count of block on screen.
-	private Block[] blocks = new Block[count]; // TODO: Correct array of block on screen.
-
 	public Map() {
-		this.GenerateStartBlocks(); // TODO: Question(Igor): Is it place for this function.
+		super();
+
+		this.blocks = new BlocksManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "block.png", 0, 0, 1, 1)));
+
+		this.GenerateStartBlocks();
+
+		this.reset();
+
+		GameActivity.screens.get(Screen.MAIN).attachChild(this);
 	}
 
 	/*
@@ -26,42 +36,39 @@ public class Map extends Entity {
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
-
-		for (int i = 0; i < this.count; i++) {
-			this.blocks[i].setPosition(this.blocks[i].getX() + Options.blockStep, this.blocks[i].getY());
-			if (this.blocks[i].getX() + this.blocks[i].getWidth() < 0) {
-				this.blocks[i].delete();
+	
+		for (int i = 0; i < this.blocks.getCount(); i++) {
+			this.blocks.getByIndex(i).setPosition(this.blocks.getByIndex(i).getX() - Options.blockStep, this.blocks.getByIndex(i).getY());
+			if (this.blocks.getByIndex(i).getX() + this.blocks.getByIndex(i).getWidth() < 0) {
+				this.blocks.delete(i);
 				// TODO: Is it need to do other actions? Delete from this.blocks?
 			}
 		}
 		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth) {
 			this.GenerateNextBlock();
 		}
-	}
-
-	// TODO: Delete or correct function.
-	private Block GetBlock() {
-		return null;
+		this.CheckCollision(MainScreen.hero);
 	}
 
 	private void GenerateStartBlocks() {
 		// TODO: Clear all blocks.
-		this.lastBlock = this.GetBlock(); // TODO: Replace for right function.
-		this.lastBlock.setPosition(0, Options.cameraHeight - Options.blockHeight); // TODO: Question(Igor): Do hero start from bottom of screen or middle?
+		this.lastBlock = (Block) this.blocks.create();
+		this.lastBlock.setPosition(0, Options.cameraHeight - Options.blockHeight);
 		float y = this.lastBlock.getY();
 		float x = this.lastBlock.getX() + Options.blockWidth;
 		while (x < Options.cameraWidth) {
-			this.lastBlock = this.GetBlock(); // TODO: Replace for right function.
+			this.lastBlock = (Block) this.blocks.create(); // TODO: Replace for right function.
 			this.lastBlock.setPosition(x, y);
 			x += Options.blockWidth;
 		}
 	}
 
 	private void GenerateNextBlock() {
-		this.tempBlock = this.GetBlock(); // TODO: Replace for right function.
-		float offsetX = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksX;
-		float offsetY = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksY; // TODO: Add negative offsetY.
-		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight() + offsetX, this.lastBlock.getY() + offsetY);
+		this.tempBlock = (Block) this.blocks.create(); // TODO: Replace for right function.
+		//float offsetX = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksX;
+		//float offsetY = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksY; // TODO: Add negative offsetY.
+		//this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight() + offsetX, this.lastBlock.getY() + offsetY);
+		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight(), this.lastBlock.getY()); // TODO: remove this
 		this.lastBlock = this.tempBlock;
 	}
 
@@ -76,17 +83,17 @@ public class Map extends Entity {
 		float bTop = block.getY();
 		float bBottom = bTop + block.getHeight();
 
-		return !(pRight < bLeft || bRight < pLeft) &&
-				!(pBottom < bTop || bBottom < pTop);
+		return !(pRight <= bLeft || bRight <= pLeft) &&
+				!(pBottom <= bTop || bBottom <= pTop);
 	}
 
 	public void CheckCollision(Personage personage) {
 		if (!personage.IsState(ActionHelper.Jump)) {
-			personage.ChangeStates(ActionHelper.Fall, (byte) 0);
-			for (int i = 0; i < this.count && personage.IsState(ActionHelper.Fall); i++) {
+			//personage.ChangeStates(ActionHelper.Fall, (byte) 0);
+			for (int i = 0; i < this.blocks.getCount(); i++) { // TODO: && personage.IsState(ActionHelper.Fall)
 				// TODO: Maybe need other function of correct collision detection.
-				if (this.IsBottomCollide(personage, blocks[i])) {
-					personage.setPosition(personage.getX(), this.blocks[i].getY() - personage.getHeight());
+				if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
+					personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeight());
 					personage.ChangeStates((byte) 0, ActionHelper.Fall);
 				}
 			}
