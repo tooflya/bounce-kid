@@ -2,6 +2,8 @@ package com.tooflya.bouncekid.entity;
 
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
+import com.tooflya.bouncekid.GameActivity;
+import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 
 public class Personage extends Entity {
@@ -83,10 +85,25 @@ public class Personage extends Entity {
 	// Methods
 	// ===========================================================
 
+	private int a = 0;
+
 	private void runningProceed() {
 		if (!this.IsState(ActionHelper.Jump) && !this.IsState(ActionHelper.Fall)) {
 			if (!this.isAnimationRunning()) {
 				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80 }, 0, 7, true);
+			}
+			int k = GameActivity.random.nextInt(11) - 5;
+			a += k;
+			if (a < -Options.someDistance) {
+				a = -Options.someDistance;
+			}
+			else {
+				if (Options.someDistance < a) {
+					a = Options.someDistance;
+				}
+				else {
+					this.setPosition(this.getX() + k, this.getY());
+				}
 			}
 		} else {
 			if (this.isAnimationRunning()) {
@@ -106,7 +123,8 @@ public class Personage extends Entity {
 	}
 
 	private void fallProceed() {
-		this.jumpPower = 40;;
+		this.jumpPower = 40;
+		;
 		this.setPosition(this.getX(), this.getY() + this.jumpStep);
 	}
 

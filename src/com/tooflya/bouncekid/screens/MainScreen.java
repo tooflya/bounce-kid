@@ -43,7 +43,7 @@ public class MainScreen extends Screen {
 		heroRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(heroTexture, GameActivity.context, "sprite_running.png", 0, 0, 5, 2);
 
 		hero = new Personage(0, 0, heroRegion);
-		hero.setPosition(0, Options.cameraHeight - hero.getHeightScaled());
+		hero.setPosition(Options.someDistance, Options.cameraHeight - hero.getHeightScaled() - 100);
 
 		GameActivity.instance.getTextureManager().loadTextures(heroTexture);
 

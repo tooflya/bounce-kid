@@ -30,14 +30,20 @@ public class Options {
 	// Map options
 	// ===========================================================
 
-	public static final int maxDistanceBetweenBlocksX = 100;
-	public static final int maxDistanceBetweenBlocksY = 100;
+	public static final int maxDistanceBetweenBlocksX = 0;
+	public static final int maxDistanceBetweenBlocksY = 0;
 
 	// ===========================================================
-	// Map options
+	// Block options
 	// ===========================================================
 
 	public static final int blockHeight = 64;
 	public static final int blockWidth = 64;
 	public static final float blockStep = 5;
+
+	// ===========================================================
+	// Personage options
+	// ===========================================================
+
+	public static final int someDistance = 100;
 }

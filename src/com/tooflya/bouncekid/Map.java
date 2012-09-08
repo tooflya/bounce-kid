@@ -87,8 +87,13 @@ public class Map extends Entity {
 		float bTop = block.getY();
 		float bBottom = bTop + block.getHeight();
 
-		return !(pRight <= bLeft || bRight <= pLeft) &&
-				!(pBottom <= bTop || bBottom <= pTop);
+		// TODO: Some stupid code. Correct this function.
+		if (!(pRight <= bLeft || bRight <= pLeft) && !(pBottom <= bTop || bBottom <= pTop)) {
+			if (personage.getY() + personage.getHeight() - 5 < block.getY()) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public void CheckCollision(Personage personage) {
