@@ -30,7 +30,7 @@ public class Options {
 	// Map options
 	// ===========================================================
 
-	public static final int maxDistanceBetweenBlocksX = 100;
+	public static final int maxDistanceBetweenBlocksX = 300;
 	public static final int maxDistanceBetweenBlocksY = 100;
 
 	// ===========================================================

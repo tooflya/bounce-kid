@@ -1,16 +1,18 @@
 package com.tooflya.bouncekid.screens;
 
 import org.anddev.andengine.entity.scene.Scene;
+import org.anddev.andengine.entity.scene.background.AutoParallaxBackground;
+import org.anddev.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
+import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
+import org.anddev.andengine.opengl.texture.region.TextureRegion;
 
 import com.tooflya.bouncekid.GameActivity;
 import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.Screen;
-import com.tooflya.bouncekid.entity.Personage;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 
 /**
@@ -27,9 +29,13 @@ public class MainScreen extends Screen {
 	// Fields
 	// ===========================================================
 
-	public static Personage hero;
-	private BitmapTextureAtlas heroTexture;
-	private TiledTextureRegion heroRegion;
+	private BitmapTextureAtlas mAutoParallaxBackgroundTexture;
+
+	private TextureRegion mParallaxLayerBack;
+	private TextureRegion mParallaxLayerMid;
+	private TextureRegion mParallaxLayerFront;
+
+	private AutoParallaxBackground autoParallaxBackground;
 
 	// ===========================================================
 	// Constructors
@@ -39,13 +45,24 @@ public class MainScreen extends Screen {
 	}
 
 	public void after() {
-		heroTexture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
-		heroRegion = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(heroTexture, GameActivity.context, "sprite_running.png", 0, 0, 5, 2);
+		this.mAutoParallaxBackgroundTexture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 
-		hero = new Personage(0, 0, heroRegion);
-		hero.setPosition(0, Options.cameraHeight - hero.getHeightScaled());
+		this.mParallaxLayerFront = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, GameActivity.context, "parallax_background_layer_front.png", 0, 0);
+		this.mParallaxLayerBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, GameActivity.context, "parallax_background_layer_back.png", 0, 188);
+		this.mParallaxLayerMid = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, GameActivity.context, "parallax_background_layer_mid.png", 0, 669);
 
-		GameActivity.instance.getTextureManager().loadTextures(heroTexture);
+		GameActivity.instance.getTextureManager().loadTextures(this.mAutoParallaxBackgroundTexture);
+
+		autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.3f, new Sprite(0, Options.cameraHeight - this.mParallaxLayerBack.getHeight(), this.mParallaxLayerBack)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-5.0f, new Sprite(0, 80, this.mParallaxLayerMid)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-10.0f, new Sprite(0, Options.cameraHeight - this.mParallaxLayerFront.getHeight(), this.mParallaxLayerFront)));
+
+		this.setBackground(autoParallaxBackground);
+
+		autoParallaxBackground.setParallaxChangePerSecond(40);
+
+		GameActivity.instance.getTextureManager().loadTextures(mAutoParallaxBackgroundTexture);
 
 		this.setOnSceneTouchListener(new IOnSceneTouchListener() {
 
@@ -54,12 +71,12 @@ public class MainScreen extends Screen {
 
 				switch (arg1.getAction()) {
 				case TouchEvent.ACTION_DOWN:
-					if (!hero.IsState(ActionHelper.Jump) && !hero.IsState(ActionHelper.Fall)) {
-						hero.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
+					if (!GameActivity.map.hero.IsState(ActionHelper.Jump) && !GameActivity.map.hero.IsState(ActionHelper.Fall)) {
+						GameActivity.map.hero.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
 					}
 					break;
 				case TouchEvent.ACTION_UP:
-					hero.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
+					GameActivity.map.hero.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
 					break;
 				}
 				return false;
