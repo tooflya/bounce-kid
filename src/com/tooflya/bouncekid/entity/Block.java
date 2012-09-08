@@ -14,4 +14,8 @@ public class Block extends Entity {
 		// TODO Auto-generated constructor stub
 	}
 
+	@Override
+	public Entity deepCopy() {
+		return new Block(getTextureRegion());
+	}
 }

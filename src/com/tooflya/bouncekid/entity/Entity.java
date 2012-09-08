@@ -3,11 +3,14 @@ package com.tooflya.bouncekid.entity;
 import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
+import com.tooflya.bouncekid.GameActivity;
+import com.tooflya.bouncekid.Screen;
+
 /**
  * @author Tooflya.com
  * @since
  */
-public class Entity extends AnimatedSprite {
+public abstract class Entity extends AnimatedSprite {
 
 	// ===========================================================
 	// Constants
@@ -31,8 +34,10 @@ public class Entity extends AnimatedSprite {
 	public Entity(final TiledTextureRegion pTiledTextureRegion) {
 		super(0, 0, pTiledTextureRegion.deepCopy());
 
-		setVisible(false);
-		setCullingEnabled(false);
+		this.setVisible(false);
+		this.setCullingEnabled(false);
+
+		GameActivity.screens.get(Screen.MAIN).attachChild(this);
 	}
 
 	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion) {
@@ -45,22 +50,10 @@ public class Entity extends AnimatedSprite {
 	// Methods
 	// ===========================================================
 
-	public boolean isDie() {
-		if (health <= 0) {
-			return true;
-		}
-
-		return false;
-	}
-
 	public Entity create() {
+		this.setVisible(true);
+
 		return this;
-	}
-
-	public void reset() {
-	}
-
-	public void move() {
 	}
 
 	public void delete() {
@@ -139,11 +132,15 @@ public class Entity extends AnimatedSprite {
 	// Virtual methods
 	// ===========================================================
 
+	@Override
+	public void reset() {
+		this.setVisible(true);
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.anddev.andengine.entity.sprite.AnimatedSprite#onManagedUpdate
-	 * (float)
+	 * @see org.anddev.andengine.entity.sprite.AnimatedSprite#onManagedUpdate (float)
 	 */
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed) {
@@ -161,4 +158,10 @@ public class Entity extends AnimatedSprite {
 
 		this.setIgnoreUpdate(!visible);
 	}
+
+	// ===========================================================
+	// Abstract methods
+	// ===========================================================
+
+	public abstract Entity deepCopy();
 }

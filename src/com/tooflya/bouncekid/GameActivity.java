@@ -15,8 +15,9 @@ import org.anddev.andengine.entity.util.FPSCounter;
 import org.anddev.andengine.extension.input.touch.controller.MultiTouch;
 import org.anddev.andengine.extension.input.touch.controller.MultiTouchController;
 import org.anddev.andengine.extension.input.touch.exception.MultiTouchException;
+import org.anddev.andengine.opengl.texture.TextureOptions;
+import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.anddev.andengine.sensor.accelerometer.AccelerometerData;
 import org.anddev.andengine.ui.activity.LayoutGameActivity;
 
 import android.app.Activity;
@@ -27,9 +28,12 @@ import android.view.KeyEvent;
 
 import com.tooflya.bouncekid.background.AsyncTaskLoader;
 import com.tooflya.bouncekid.background.IAsyncCallback;
+import com.tooflya.bouncekid.entity.Block;
+import com.tooflya.bouncekid.managers.BlocksManager;
 import com.tooflya.bouncekid.managers.LevelManager;
 import com.tooflya.bouncekid.managers.ScreenManager;
 import com.tooflya.bouncekid.screens.LoadingScreen;
+import com.tooflya.bouncekid.screens.MainScreen;
 import com.tooflya.bouncekid.ui.CustomCamera;
 
 /**
@@ -145,6 +149,20 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	 */
 	private long screenChangeTime = 0;
 
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static BlocksManager boxes;
+
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public static BitmapTextureAtlas resourcesAtlas = new BitmapTextureAtlas(1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
 	// ===========================================================
 	// Virtual methods
 	// ===========================================================
@@ -198,8 +216,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 
 		/**
 		 * 
-		 * Disable extension vertex buffer objects. This extension usually has a
-		 * problems with HTC phones
+		 * Disable extension vertex buffer objects. This extension usually has a problems with HTC phones
 		 * 
 		 */
 		options.getRenderOptions().disableExtensionVertexBufferObjects();
@@ -249,7 +266,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	public void onLoadResources() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
-		this.mEngine.getTextureManager().loadTextures();
+		this.mEngine.getTextureManager().loadTextures(resourcesAtlas);
 	}
 
 	/*
@@ -280,6 +297,21 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 		 * 
 		 */
 		screens = new ScreenManager();
+		((MainScreen) screens.get(Screen.MAIN)).after();
+
+		/**
+		 * 
+		 * 
+		 * 
+		 */
+		boxes = new BlocksManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(resourcesAtlas, getApplicationContext(), "block.png", 0, 0, 1, 1)));
+		GameActivity.boxes.create().setPosition(0, Options.cameraHeight - 64);
+		GameActivity.boxes.create().setPosition(64, Options.cameraHeight - 64);
+		GameActivity.boxes.create().setPosition(64*2, Options.cameraHeight - 64);
+		GameActivity.boxes.create().setPosition(64*3, Options.cameraHeight - 64);
+		GameActivity.boxes.create().setPosition(64*4, Options.cameraHeight - 64);
+		GameActivity.boxes.create().setPosition(64*6, Options.cameraHeight - 64);
+		GameActivity.boxes.create().setPosition(64*7, Options.cameraHeight - 64);
 
 		/**
 		 * 
@@ -346,8 +378,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 
 		/**
 		 * 
-		 * Create loading screen and return her scene for attaching to the
-		 * activity
+		 * Create loading screen and return her scene for attaching to the activity
 		 * 
 		 */
 		return new LoadingScreen();
@@ -364,8 +395,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 
 		/**
 		 * 
-		 * Here we need to correctly shutdown our application and unload all
-		 * resources
+		 * Here we need to correctly shutdown our application and unload all resources
 		 * 
 		 * @author igor.mats
 		 * 
@@ -374,20 +404,12 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 		getTextureManager().unloadTextures();
 
 		/*
-		 * Notify the system to finalize and collect all objects of the
-		 * application on exit so that the process running the application can
-		 * be killed by the system without causing issues. NOTE: If this is set
-		 * to true then the process will not be killed until all of its threads
-		 * have closed.
+		 * Notify the system to finalize and collect all objects of the application on exit so that the process running the application can be killed by the system without causing issues. NOTE: If this is set to true then the process will not be killed until all of its threads have closed.
 		 */
 		System.runFinalizersOnExit(true);
 
 		/*
-		 * Force the system to close the application down completely instead of
-		 * retaining it in the background. The process that runs the application
-		 * will be killed. The application will be completely created as a new
-		 * application in a new process if the user starts the application
-		 * again.
+		 * Force the system to close the application down completely instead of retaining it in the background. The process that runs the application will be killed. The application will be completely created as a new application in a new process if the user starts the application again.
 		 */
 		System.exit(0);
 	}
@@ -409,7 +431,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 		 * 
 		 */
 
-		//this.enableAccelerometerSensor(this);
+		// this.enableAccelerometerSensor(this);
 	}
 
 	/*
@@ -429,7 +451,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 		 * 
 		 */
 
-		//this.disableAccelerometerSensor();
+		// this.disableAccelerometerSensor();
 	}
 
 	/*
@@ -469,9 +491,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see
-	 * org.anddev.andengine.ui.activity.LayoutGameActivity#getRenderSurfaceViewID
-	 * ()
+	 * @see org.anddev.andengine.ui.activity.LayoutGameActivity#getRenderSurfaceViewID ()
 	 */
 	@Override
 	protected int getRenderSurfaceViewID() {
