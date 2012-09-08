@@ -44,24 +44,18 @@ public class LoadingScreen extends Screen {
 		 * Creating of texture atlases
 		 * 
 		 */
-		mBackgroundTextureAtlas = new BitmapTextureAtlas(1024, 1024,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		mBackgroundTextureAtlas = new BitmapTextureAtlas(1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		mProgressBarTextureAtlas = new BitmapTextureAtlas(512, 64,
-				TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		mProgressBarTextureAtlas = new BitmapTextureAtlas(512, 64, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		GameActivity.instance.getTextureManager().loadTextures(
-				mBackgroundTextureAtlas, mProgressBarTextureAtlas);
+		GameActivity.instance.getTextureManager().loadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 
 		/**
 		 * 
 		 * Creating of sprites
 		 * 
 		 */
-		Sprite background = new Sprite(0, 0,
-				BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-						mBackgroundTextureAtlas, GameActivity.context,
-						"tooflya_hd.png", 0, 0)) {
+		Sprite background = new Sprite(0, 0, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, GameActivity.context, "tooflya_hd.png", 0, 0)) {
 			@Override
 			protected void onInitDraw(final GL10 pGL) {
 				super.onInitDraw(pGL);
@@ -72,10 +66,7 @@ public class LoadingScreen extends Screen {
 		};
 		setBackground(new SpriteBackground(background));
 
-		progressBar = new Sprite(228, 421,
-				BitmapTextureAtlasTextureRegionFactory.createFromAsset(
-						mProgressBarTextureAtlas, GameActivity.context,
-						"loaderbar_full_hd.png", 0, 0));
+		progressBar = new Sprite(228, 421, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mProgressBarTextureAtlas, GameActivity.context, "loaderbar_full_hd.png", 0, 0));
 		progressBar.setWidth(1);
 		progressBar.getTextureRegion().setWidth(1);
 		attachChild(progressBar);
@@ -85,36 +76,31 @@ public class LoadingScreen extends Screen {
 		 * Register timer of loading progressbar changes
 		 * 
 		 */
-		registerUpdateHandler(new TimerHandler(1f / 15.0f, true,
-				new ITimerCallback() {
-					@Override
-					public void onTimePassed(TimerHandler pTimerHandler) {
+		registerUpdateHandler(new TimerHandler(1f / 15.0f, true, new ITimerCallback() {
+			@Override
+			public void onTimePassed(TimerHandler pTimerHandler) {
 
-						/**
-						 * 
-						 * Changing size of progressbar
-						 * 
-						 */
-						if (progressBar.getWidth() < 337) {
+				/**
+				 * 
+				 * Changing size of progressbar
+				 * 
+				 */
+				if (progressBar.getWidth() < 337) {
 
-							progressBar.getTextureRegion()
-									.setWidth(
-											progressBar.getTextureRegion()
-													.getWidth() + 3);
+					progressBar.getTextureRegion().setWidth(progressBar.getTextureRegion().getWidth() + 3);
 
-							progressBar.setWidth(progressBar.getTextureRegion()
-									.getWidth() + 3);
-						} else {
+					progressBar.setWidth(progressBar.getTextureRegion().getWidth() + 3);
+				} else {
 
-							/**
-							 * 
-							 * if progressbar is full
-							 * 
-							 */
-							GameActivity.isGameLoaded = true;
-						}
-					}
-				}));
+					/**
+					 * 
+					 * if progressbar is full
+					 * 
+					 */
+					GameActivity.isGameLoaded = true;
+				}
+			}
+		}));
 	}
 
 	// ===========================================================
@@ -132,8 +118,7 @@ public class LoadingScreen extends Screen {
 
 		clearUpdateHandlers();
 
-		GameActivity.instance.getTextureManager().unloadTextures(
-				mBackgroundTextureAtlas, mProgressBarTextureAtlas);
+		GameActivity.instance.getTextureManager().unloadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 	}
 
 	/*

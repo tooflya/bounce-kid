@@ -35,8 +35,7 @@ public class Entity extends AnimatedSprite {
 		setCullingEnabled(false);
 	}
 
-	public Entity(final int x, final int y,
-			final TiledTextureRegion pTiledTextureRegion) {
+	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion) {
 		this(pTiledTextureRegion.deepCopy());
 
 		this.setCenterPosition(x, y);

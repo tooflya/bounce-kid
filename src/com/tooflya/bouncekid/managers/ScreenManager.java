@@ -63,8 +63,7 @@ public class ScreenManager {
 		 * 
 		 * 
 		 */
-		casper = (RelativeLayout) GameActivity.activity
-				.findViewById(R.id.casper);
+		casper = (RelativeLayout) GameActivity.activity.findViewById(R.id.casper);
 
 		/**
 		 * 
@@ -72,10 +71,8 @@ public class ScreenManager {
 		 * 
 		 * 
 		 */
-		animationIn = AnimationUtils.loadAnimation(GameActivity.context,
-				R.anim.fadein);
-		animationOut = AnimationUtils.loadAnimation(GameActivity.context,
-				R.anim.fadeout);
+		animationIn = AnimationUtils.loadAnimation(GameActivity.context, R.anim.fadein);
+		animationOut = AnimationUtils.loadAnimation(GameActivity.context, R.anim.fadeout);
 	}
 
 	// ===========================================================
@@ -100,29 +97,24 @@ public class ScreenManager {
 					@Override
 					public void onAnimationEnd(Animation animation) {
 
-						animationOut
-								.setAnimationListener(new AnimationListener() {
-									@Override
-									public void onAnimationStart(
-											Animation animation) {
-										screens[pScreen]
-												.setScene(GameActivity.instance);
-										screens[pScreen].onAttached();
-									}
+						animationOut.setAnimationListener(new AnimationListener() {
+							@Override
+							public void onAnimationStart(Animation animation) {
+								screens[pScreen].setScene(GameActivity.instance);
+								screens[pScreen].onAttached();
+							}
 
-									@Override
-									public void onAnimationRepeat(
-											Animation animation) {
-									}
+							@Override
+							public void onAnimationRepeat(Animation animation) {
+							}
 
-									@Override
-									public void onAnimationEnd(
-											Animation animation) {
-										casper.setVisibility(View.INVISIBLE);
+							@Override
+							public void onAnimationEnd(Animation animation) {
+								casper.setVisibility(View.INVISIBLE);
 
-										Screen.screen = pScreen;
-									}
-								});
+								Screen.screen = pScreen;
+							}
+						});
 
 						casper.startAnimation(animationOut);
 					}

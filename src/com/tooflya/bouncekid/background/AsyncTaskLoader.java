@@ -2,8 +2,7 @@ package com.tooflya.bouncekid.background;
 
 import android.os.AsyncTask;
 
-public class AsyncTaskLoader extends
-		AsyncTask<IAsyncCallback, Integer, Boolean> {
+public class AsyncTaskLoader extends AsyncTask<IAsyncCallback, Integer, Boolean> {
 
 	// ===========================================================
 	// Fields

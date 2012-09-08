@@ -11,7 +11,7 @@ public class Box extends Entity {
 
 		this.setVisible(true);
 		this.setIgnoreUpdate(false);
-		
+
 		this.speed = 4;
 	}
 
@@ -27,8 +27,8 @@ public class Box extends Entity {
 
 		this.setPosition(this.getX() - this.speed, this.getY());
 
-		if (this.getX() <-110) {
-			this.setPosition(Options.cameraWidth +264, this.getY());
+		if (this.getX() < -110) {
+			this.setPosition(Options.cameraWidth + 264, this.getY());
 		}
 	}
 
