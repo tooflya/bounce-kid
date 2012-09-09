@@ -39,7 +39,10 @@ public class Map extends Entity {
 		GameActivity.instance.getTextureManager().loadTextures(heroTexture);
 
 		hero = new Personage(0, 0, heroRegion);
-		hero.setPosition(0, Options.cameraHeight - hero.getHeightScaled() - 100);
+		hero.setPosition(100, Options.cameraHeight - hero.getHeightScaled() - 100);
+		GameActivity.camera.setBounds(0, Options.cameraWidth, -1000, 1000);
+		GameActivity.camera.setBoundsEnabled(true);
+		GameActivity.camera.setChaseEntity(hero);
 	}
 
 	/*

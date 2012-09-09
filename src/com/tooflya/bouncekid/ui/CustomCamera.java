@@ -1,12 +1,12 @@
 package com.tooflya.bouncekid.ui;
 
-import org.anddev.andengine.engine.camera.Camera;
+import org.anddev.andengine.engine.camera.BoundCamera;
 
 /**
  * @author Tooflya.com
  * @since
  */
-public class CustomCamera extends Camera {
+public class CustomCamera extends BoundCamera {
 
 	// ===========================================================
 	// Constants

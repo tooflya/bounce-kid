@@ -44,6 +44,7 @@ public class Personage extends Entity {
 		this.setFlippedHorizontal(true);
 
 		this.reset();
+
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
