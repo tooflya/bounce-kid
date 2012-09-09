@@ -38,8 +38,7 @@ public class Map extends Entity {
 
 		GameActivity.instance.getTextureManager().loadTextures(heroTexture);
 
-		hero = new Personage(0, 0, heroRegion);
-		hero.setPosition(0, Options.cameraHeight - hero.getHeightScaled() - 100);
+		this.hero = new Personage(Options.startX, Options.startY, heroRegion);
 	}
 
 	/*
@@ -55,13 +54,16 @@ public class Map extends Entity {
 			this.blocks.getByIndex(i).setPosition(this.blocks.getByIndex(i).getX() - Options.blockStep, this.blocks.getByIndex(i).getY());
 			if (this.blocks.getByIndex(i).getX() + this.blocks.getByIndex(i).getWidth() < 0) {
 				this.blocks.delete(i);
-				// TODO: Is it need to do other actions? Delete from this.blocks?
 			}
 		}
 		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth) {
 			this.GenerateNextBlock();
 		}
-		this.CheckCollision(hero);
+		this.CheckCollision(this.hero);
+
+		this.AI(this.hero);
+
+		// TODO: Translate camera up or down.
 	}
 
 	private void GenerateStartBlocks() {
@@ -89,7 +91,7 @@ public class Map extends Entity {
 		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight() + offsetX, this.lastBlock.getY() + offsetY);
 		this.lastBlock = this.tempBlock;
 		offsetX = GameActivity.random.nextFloat() * Options.blockWidth;
-		offsetY = GameActivity.random.nextFloat() * Options.cameraHeight;
+		offsetY = GameActivity.random.nextFloat() * Options.cameraHeight - (this.hero.getY() + this.heroRegion.getHeight() / 2);
 		this.tempBlock = (Block) this.blocks.create();
 		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
 	}
@@ -112,6 +114,12 @@ public class Map extends Entity {
 			}
 		}
 		return false;
+	}
+
+	private void AI(Personage personage) {
+		for (int i = 0; i < this.blocks.getCount() && personage.IsState(ActionHelper.Fall); i++) {
+			// TODO: AI: If personage can land at block that situated upper then personage should jump.
+		}
 	}
 
 	public void CheckCollision(Personage personage) {

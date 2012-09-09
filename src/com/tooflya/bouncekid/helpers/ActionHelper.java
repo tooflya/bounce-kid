@@ -6,4 +6,5 @@ public class ActionHelper {
 	public static final byte Running = 1; // 0b00000001;
 	public static final byte Jump = 2; // 0b00000010;
 	public static final byte Fall = 4; // 0b00000100;
+	public static final byte JumpOrFall = 6; // 0b00000110;
 }

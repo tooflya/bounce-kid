@@ -45,5 +45,7 @@ public class Options {
 	// Personage options
 	// ===========================================================
 
+	public static final int startX = 50;
+	public static final int startY = 300;
 	public static final int someDistance = 100;
 }
