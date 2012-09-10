@@ -1,7 +1,5 @@
 package com.tooflya.bouncekid.entity;
 
-import org.anddev.andengine.entity.IEntity;
-import org.anddev.andengine.entity.modifier.MoveModifier;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 public class Star extends Entity {
@@ -32,29 +30,5 @@ public class Star extends Entity {
 	@Override
 	public Entity deepCopy() {
 		return new Star(getTextureRegion());
-	}
-	
-	public void mo() {
-
-
-		final MoveModifier right = new MoveModifier(100, this.getX(), this.getX() - 60, this.getY(), this.getY()) {
-			@Override
-			protected void onModifierFinished(IEntity pItem) {
-				super.onModifierFinished(pItem);
-
-			}
-		};
-
-		MoveModifier left = new MoveModifier(100, this.getX(), this.getX() + 60, this.getY(), this.getY()) {
-			@Override
-			protected void onModifierFinished(IEntity pItem) {
-				super.onModifierFinished(pItem);
-				
-				registerEntityModifier(right);
-			}
-		};
-
-		this.registerEntityModifier(left);
-		
 	}
 }

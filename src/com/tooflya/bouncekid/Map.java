@@ -29,9 +29,9 @@ public class Map extends org.anddev.andengine.entity.Entity {
 	public Map() {
 		super();
 
-		this.blocks = new EntityManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "block.jpg", 0, 0, 1, 1)));
-		this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "stars.png", 65, 65, 1, 18)));
-		this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "obj_star_disappear.png", 300, 0, 1, 10)));
+		this.blocks = new EntityManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "block.jpg", 0, 0, 1, 3)));
+		this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "stars.png", 65, 0, 1, 18)));
+		this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "obj_star_disappear.png", 100, 0, 1, 11)));
 
 		this.GenerateStartBlocks();
 
@@ -100,11 +100,15 @@ public class Map extends org.anddev.andengine.entity.Entity {
 		// TODO: Clear all blocks.
 		this.lastBlock = (Block) this.blocks.create();
 		this.lastBlock.setPosition(0, Options.cameraHeight - Options.blockHeight);
+		this.lastBlock.setType(1);
+		this.lastBlock.setCurrentTileIndex(1);
 		float y = this.lastBlock.getY();
 		float x = this.lastBlock.getX() + Options.blockWidth;
 		while (x < Options.cameraWidth) {
 			this.lastBlock = (Block) this.blocks.create();
 			this.lastBlock.setPosition(x, y);
+			this.lastBlock.setType(1);
+			this.lastBlock.setCurrentTileIndex(1);
 			x += Options.blockWidth;
 		}
 	}
@@ -121,17 +125,30 @@ public class Map extends org.anddev.andengine.entity.Entity {
 			offsetY = this.lastBlock.getY() - hero.getHeight();
 		}
 		this.tempBlock.setPosition(this.lastBlock.getX() + Options.blockWidth + offsetX - Options.blockStep, this.lastBlock.getY() + offsetY);
+		this.tempBlock.setType(1);
+		this.tempBlock.setCurrentTileIndex(1);
+
 		this.lastBlock = this.tempBlock;
 
 		offsetX = GameActivity.random.nextFloat() * Options.blockWidth;
 		offsetY = this.hero.getHeight() / 2 + Options.cameraHeight / 2 + this.hero.getY() - GameActivity.random.nextFloat() * Options.cameraHeight - Options.blockHeight;
 
+		if (offsetY > Options.cameraHeight - Options.blockStep) {
+			offsetY = Options.cameraHeight - Options.blockStep - 20;
+		}
+
 		this.tempBlock = (Block) this.blocks.create();
 		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
+		
+		if(GameActivity.random.nextInt(5) == 1) {
+			this.tempBlock.setType(2);
+			this.tempBlock.setCurrentTileIndex(2);
+		} else {
+			this.tempBlock.setType(0);
+			this.tempBlock.setCurrentTileIndex(0);
+		}
 
-		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
-		// star.mo();
-
+		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 60);
 	}
 
 	private boolean IsBottomCollide(Personage personage, Block block) {
@@ -171,6 +188,16 @@ public class Map extends org.anddev.andengine.entity.Entity {
 				}
 			}
 		}
+		
+		for (int i = 0; i < this.blocks.getCount(); i++) {
+			// TODO: Maybe need other function of correct collision detection.
+			if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
+				if(this.blocks.getByIndex(i).getType() == 2) {
+					Map.hero.jumpPower = 150;
+					GameActivity.map.hero.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
+				}
+			}
+		}
 
 		for (int i = 0; i < this.stars.getCount(); i++) {
 			Entity block = this.stars.getByIndex(i);
@@ -179,7 +206,7 @@ public class Map extends org.anddev.andengine.entity.Entity {
 				block.delete();
 
 				Entity a = this.starsd.create();
-				a.setPosition(block.getX(), block.getY());
+				a.setPosition(block.getX() - 15, block.getY() - 15);
 			}
 		}
 	}
