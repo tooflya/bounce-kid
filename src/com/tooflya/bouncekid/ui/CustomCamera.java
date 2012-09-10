@@ -31,9 +31,6 @@ public class CustomCamera extends BoundCamera {
 	public CustomCamera(float pX, float pY, float pWidth, float pHeight) {
 		super(pX, pY, pWidth, pHeight);
 		mShaking = false;
-
-		mX = this.getCenterX();
-		mY = this.getCenterY();
 	}
 
 	// ===========================================================
@@ -45,6 +42,9 @@ public class CustomCamera extends BoundCamera {
 		super.onUpdate(pSecondsElapsed);
 
 		if (mShaking) {
+			mX = this.getCenterX();
+			mY = this.getCenterY();
+
 			mCurrentDuration += pSecondsElapsed;
 			if (mCurrentDuration > mDuration) {
 				mShaking = false;

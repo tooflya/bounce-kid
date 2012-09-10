@@ -139,8 +139,8 @@ public class Map extends org.anddev.andengine.entity.Entity {
 
 		this.tempBlock = (Block) this.blocks.create();
 		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
-		
-		if(GameActivity.random.nextInt(5) == 1) {
+
+		if (GameActivity.random.nextInt(5) == 1) {
 			this.tempBlock.setType(2);
 			this.tempBlock.setCurrentTileIndex(2);
 		} else {
@@ -188,13 +188,14 @@ public class Map extends org.anddev.andengine.entity.Entity {
 				}
 			}
 		}
-		
+
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			// TODO: Maybe need other function of correct collision detection.
 			if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
-				if(this.blocks.getByIndex(i).getType() == 2) {
+				if (this.blocks.getByIndex(i).getType() == 2) {
 					Map.hero.jumpPower = 150;
 					GameActivity.map.hero.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
+					GameActivity.camera.shake(3, 10);
 				}
 			}
 		}
