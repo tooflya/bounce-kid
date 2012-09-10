@@ -5,6 +5,7 @@ import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.tooflya.bouncekid.GameActivity;
 import com.tooflya.bouncekid.Screen;
+import com.tooflya.bouncekid.managers.EntityManager;
 
 /**
  * @author Tooflya.com
@@ -27,10 +28,12 @@ public abstract class Entity extends AnimatedSprite {
 	protected int type;
 	protected float speed;
 
+	protected EntityManager manager;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-	
+
 	public Entity(final TiledTextureRegion pTiledTextureRegion) {
 		super(0, 0, pTiledTextureRegion.deepCopy());
 
@@ -51,12 +54,15 @@ public abstract class Entity extends AnimatedSprite {
 	// ===========================================================
 
 	public Entity create() {
-		this.setVisible(true);
+		this.reset();
 
 		return this;
 	}
 
 	public void delete() {
+		if (this.manager != null) {
+			this.manager.delete(this.id);
+		}
 		setVisible(false);
 	}
 
@@ -96,6 +102,10 @@ public abstract class Entity extends AnimatedSprite {
 		this.setPosition(centerX - getWidth() / 2, centerY - getHeight() / 2);
 	}
 
+	public void setManager(final EntityManager manager) {
+		this.manager = manager;
+	}
+
 	// ===========================================================
 	// Getters
 	// ===========================================================
@@ -126,6 +136,10 @@ public abstract class Entity extends AnimatedSprite {
 
 	public float getCenterY() {
 		return getY() + getHeight() / 2;
+	}
+
+	public EntityManager getManager(final EntityManager manager) {
+		return manager;
 	}
 
 	// ===========================================================

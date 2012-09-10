@@ -2,16 +2,30 @@ package com.tooflya.bouncekid.managers;
 
 import com.tooflya.bouncekid.entity.Entity;
 
-public class BlocksManager {
-	public int scenarioCount;
+/**
+ * @author Tooflya.com
+ * @since
+ */
+public class EntityManager {
 
-	private int count;
-	private int capacity;
+	// ===========================================================
+	// Constants
+	// ===========================================================
 
-	public Entity[] elements;
+	// ===========================================================
+	// Fields
+	// ===========================================================
 
-	public BlocksManager(final int capacity, Entity element) {
-		this.scenarioCount = 0;
+	protected int count;
+	protected int capacity;
+
+	protected Entity[] elements;
+
+	// ===========================================================
+	// Constructors
+	// ===========================================================
+
+	public EntityManager(final int capacity, Entity element) {
 		this.count = -1;
 
 		this.capacity = capacity;
@@ -20,11 +34,18 @@ public class BlocksManager {
 
 		for (int i = elements.length - 1; i > 0; --i) {
 			elements[i] = element.deepCopy();
+			elements[i].setManager(this);
 			elements[i].setID(i);
 		}
+
 		elements[0] = element;
+		elements[0].setManager(this);
 		elements[0].setID(0);
 	}
+
+	// ===========================================================
+	// Methods
+	// ===========================================================
 
 	public int getCount() {
 		return this.count + 1;
@@ -46,6 +67,7 @@ public class BlocksManager {
 
 			return elements[count];
 		}
+		
 		return null;
 	}
 
@@ -62,29 +84,10 @@ public class BlocksManager {
 
 	public void clear() {
 		this.count = -1;
-		this.scenarioCount = 0;
 
 		for (int i = 0; i < elements.length; ++i) {
 			elements[i].reset();
 			elements[i].setVisible(false);
-		}
-	}
-
-	public void setType(final int type) {
-		for (int i = 0; i < elements.length; ++i) {
-			elements[i].setType(type);
-		}
-	}
-
-	public void setSpeed(final int speed) {
-		for (int i = 0; i < elements.length; ++i) {
-			elements[i].setSpeed(speed);
-		}
-	}
-
-	public void setHealth(final int health) {
-		for (int i = 0; i < elements.length; ++i) {
-			elements[i].setHealth(health);
 		}
 	}
 }

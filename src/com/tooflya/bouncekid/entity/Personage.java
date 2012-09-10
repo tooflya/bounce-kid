@@ -76,6 +76,8 @@ public class Personage extends Entity {
 		}
 		
 		dieProceed();
+		
+		System.out.println("X: " + this.getX() + " /  Y: " + this.getY());
 	}
 
 	@Override

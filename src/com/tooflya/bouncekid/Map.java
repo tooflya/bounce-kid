@@ -1,19 +1,19 @@
 package com.tooflya.bouncekid;
 
-import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.tooflya.bouncekid.entity.Block;
+import com.tooflya.bouncekid.entity.Entity;
 import com.tooflya.bouncekid.entity.Personage;
 import com.tooflya.bouncekid.helpers.ActionHelper;
-import com.tooflya.bouncekid.managers.BlocksManager;
+import com.tooflya.bouncekid.managers.EntityManager;
 
-public class Map extends Entity {
+public class Map extends org.anddev.andengine.entity.Entity {
 
-	private BlocksManager blocks;
+	private EntityManager blocks;
 
 	private Block tempBlock = null;
 	private Block lastBlock = null;
@@ -25,7 +25,7 @@ public class Map extends Entity {
 	public Map() {
 		super();
 
-		this.blocks = new BlocksManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "block.png", 0, 0, 1, 1)));
+		this.blocks = new EntityManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "block.jpg", 0, 0, 1, 1)));
 
 		this.GenerateStartBlocks();
 
@@ -40,7 +40,7 @@ public class Map extends Entity {
 
 		this.hero = new Personage(Options.startX, Options.startY, heroRegion);
 		hero.setPosition(100, Options.cameraHeight - hero.getHeightScaled() - 100);
-		GameActivity.camera.setBounds(0, Options.cameraWidth, -1000, 1000);
+		GameActivity.camera.setBounds(0, Options.cameraWidth, -10000, 480);
 		GameActivity.camera.setBoundsEnabled(true);
 		GameActivity.camera.setChaseEntity(hero);
 
@@ -56,14 +56,17 @@ public class Map extends Entity {
 		super.onManagedUpdate(pSecondsElapsed);
 
 		for (int i = 0; i < this.blocks.getCount(); i++) {
-			this.blocks.getByIndex(i).setPosition(this.blocks.getByIndex(i).getX() - Options.blockStep, this.blocks.getByIndex(i).getY());
-			if (this.blocks.getByIndex(i).getX() + this.blocks.getByIndex(i).getWidth() < 0) {
-				this.blocks.delete(i);
+			Entity block = this.blocks.getByIndex(i);
+			block.setPosition(block.getX() - Options.blockStep, block.getY());
+			if (block.getX() + block.getWidth() < 0) {
+				block.delete();
 			}
 		}
+
 		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth) {
 			this.GenerateNextBlock();
 		}
+
 		this.CheckCollision(this.hero);
 
 		this.AI(this.hero);
@@ -86,19 +89,22 @@ public class Map extends Entity {
 
 	private void GenerateNextBlock() {
 		this.tempBlock = (Block) this.blocks.create();
-		float offsetX = GameActivity.random.nextFloat() * Options.maxDistanceBetweenBlocksX;
+		float offsetX = Options.maxDistanceBetweenBlocksX;
 		float upY = Math.min(Options.maxDistanceBetweenBlocksY, this.lastBlock.getY() - hero.getHeight());
 		float downY = Options.cameraHeight - this.lastBlock.getY() - this.lastBlock.getHeight();
-		float offsetY = GameActivity.random.nextFloat() * (upY + downY) - upY;
+		float offsetY = 0;// GameActivity.random.nextFloat() * (upY + downY) - upY;
 		if (this.lastBlock.getY() - offsetY < hero.getHeight()) {
 			offsetY = this.lastBlock.getY() - hero.getHeight();
 		}
-		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getHeight() + offsetX, this.lastBlock.getY() + offsetY);
+		this.tempBlock.setPosition(this.lastBlock.getX() + Options.blockWidth + offsetX-Options.blockStep, this.lastBlock.getY() + offsetY);
 		this.lastBlock = this.tempBlock;
+
 		offsetX = GameActivity.random.nextFloat() * Options.blockWidth;
-		offsetY = GameActivity.random.nextFloat() * Options.cameraHeight - (this.hero.getY() + this.heroRegion.getHeight() / 2);
-		this.tempBlock = (Block) this.blocks.create();
-		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
+		offsetY = this.hero.getHeight() / 2 + Options.cameraHeight / 2 + this.hero.getY() - GameActivity.random.nextFloat() * Options.cameraHeight;
+
+		// this.tempBlock = (Block) this.blocks.create();
+		// this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
+
 	}
 
 	private boolean IsBottomCollide(Personage personage, Block block) {
