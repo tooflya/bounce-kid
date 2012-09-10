@@ -59,6 +59,10 @@ public abstract class Entity extends AnimatedSprite {
 		return this;
 	}
 
+	public void update() {
+
+	}
+
 	public void delete() {
 		if (this.manager != null) {
 			this.manager.delete(this.id);

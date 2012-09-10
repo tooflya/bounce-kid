@@ -63,8 +63,7 @@ public class Personage extends Entity {
 	 * @see org.anddev.andengine.entity.sprite.AnimatedSprite#onManagedUpdate (float)
 	 */
 	@Override
-	protected void onManagedUpdate(final float pSecondsElapsed) {
-		super.onManagedUpdate(pSecondsElapsed);
+	public void update() {
 
 		runningProceed();
 

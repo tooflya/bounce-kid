@@ -37,8 +37,6 @@ public class Options {
 	// Block options
 	// ===========================================================
 
-	public static final int blockHeight = 64;
-	public static final int blockWidth = 64;
 	public static final float blockStep = 5;
 
 	// ===========================================================

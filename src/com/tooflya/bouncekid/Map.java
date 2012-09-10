@@ -52,15 +52,7 @@ public class Map extends org.anddev.andengine.entity.Entity {
 
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.anddev.andengine.entity.sprite.AnimatedSprite#onManagedUpdate (float)
-	 */
-	@Override
-	protected void onManagedUpdate(final float pSecondsElapsed) {
-		super.onManagedUpdate(pSecondsElapsed);
-
+	public void update() {
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			Entity block = this.blocks.getByIndex(i);
 			// block.setPosition(block.getX() - Options.blockStep, block.getY());
@@ -89,9 +81,9 @@ public class Map extends org.anddev.andengine.entity.Entity {
 			this.GenerateNextBlock();
 		}
 
-		this.CheckCollision(this.hero);
+		this.CheckCollision(hero);
 
-		this.AI(this.hero);
+		this.AI(hero);
 
 		// TODO: Translate camera up or down.
 	}
@@ -99,17 +91,17 @@ public class Map extends org.anddev.andengine.entity.Entity {
 	private void GenerateStartBlocks() {
 		// TODO: Clear all blocks.
 		this.lastBlock = (Block) this.blocks.create();
-		this.lastBlock.setPosition(0, Options.cameraHeight - Options.blockHeight);
+		this.lastBlock.setPosition(0, Options.cameraHeight - this.lastBlock.getHeight());
 		this.lastBlock.setType(1);
 		this.lastBlock.setCurrentTileIndex(1);
 		float y = this.lastBlock.getY();
-		float x = this.lastBlock.getX() + Options.blockWidth;
+		float x = this.lastBlock.getX() + this.lastBlock.getWidth();
 		while (x < Options.cameraWidth) {
 			this.lastBlock = (Block) this.blocks.create();
 			this.lastBlock.setPosition(x, y);
 			this.lastBlock.setType(1);
 			this.lastBlock.setCurrentTileIndex(1);
-			x += Options.blockWidth;
+			x += this.lastBlock.getWidth();
 		}
 	}
 
@@ -124,14 +116,14 @@ public class Map extends org.anddev.andengine.entity.Entity {
 		if (this.lastBlock.getY() - offsetY < hero.getHeight()) {
 			offsetY = this.lastBlock.getY() - hero.getHeight();
 		}
-		this.tempBlock.setPosition(this.lastBlock.getX() + Options.blockWidth + offsetX - Options.blockStep, this.lastBlock.getY() + offsetY);
+		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getWidth() + offsetX - Options.blockStep, this.lastBlock.getY() + offsetY);
 		this.tempBlock.setType(1);
 		this.tempBlock.setCurrentTileIndex(1);
 
 		this.lastBlock = this.tempBlock;
 
-		offsetX = GameActivity.random.nextFloat() * Options.blockWidth;
-		offsetY = this.hero.getHeight() / 2 + Options.cameraHeight / 2 + this.hero.getY() - GameActivity.random.nextFloat() * Options.cameraHeight - Options.blockHeight;
+		offsetX = GameActivity.random.nextFloat() * this.lastBlock.getWidth();
+		offsetY = this.hero.getHeight() / 2 + Options.cameraHeight / 2 + this.hero.getY() - GameActivity.random.nextFloat() * Options.cameraHeight - this.lastBlock.getHeight();
 
 		if (offsetY > Options.cameraHeight - Options.blockStep) {
 			offsetY = Options.cameraHeight - Options.blockStep - 20;

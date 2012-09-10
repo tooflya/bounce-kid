@@ -128,6 +128,8 @@ public class MainScreen extends Screen {
 	@Override
 	public void onAttached() {
 		super.onAttached();
+		
+		registerUpdateHandler(GameActivity.GameTimer);
 	}
 
 	/*

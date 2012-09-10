@@ -187,7 +187,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	public void workToDo() {
 
 		/** Create game timer */
-		GameTimer = new TimerHandler(1f / 15.0f, true, new GameTimer());
+		GameTimer = new TimerHandler(0.02f, true, new GameTimer());
 
 		/** Create screen manager */
 		screens = new ScreenManager();
