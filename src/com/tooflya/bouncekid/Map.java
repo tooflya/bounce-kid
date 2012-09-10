@@ -29,9 +29,9 @@ public class Map extends org.anddev.andengine.entity.Entity {
 	public Map() {
 		super();
 
-		this.blocks = new EntityManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "block.jpg", 0, 0, 1, 3)));
-		this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "stars.png", 65, 0, 1, 18)));
-		this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "obj_star_disappear.png", 100, 0, 1, 11)));
+		this.blocks = new EntityManager(100, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesBitmapTexture, GameActivity.context, "block.jpg", 0, 0, 1, 3)));
+		this.stars = new EntityManager(100, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesBitmapTexture, GameActivity.context, "stars.png", 65, 0, 1, 18)));
+		this.starsd = new EntityManager(100, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesBitmapTexture, GameActivity.context, "obj_star_disappear.png", 100, 0, 1, 11)));
 
 		this.GenerateStartBlocks();
 
@@ -46,7 +46,7 @@ public class Map extends org.anddev.andengine.entity.Entity {
 
 		this.hero = new Personage(Options.startX, Options.startY, heroRegion);
 		hero.setPosition(100, Options.cameraHeight - hero.getHeightScaled() - 100);
-		GameActivity.camera.setBounds(0, Options.cameraWidth * 100, -10000, 480);
+		GameActivity.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
 		GameActivity.camera.setBoundsEnabled(true);
 		GameActivity.camera.setChaseEntity(hero);
 

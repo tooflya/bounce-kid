@@ -90,10 +90,10 @@ public class MainScreen extends Screen {
 			}
 		});
 
-		fpsInfo = new ChangeableText(100, 160, GameActivity.mFont, "Fps      ");
+		fpsInfo = new ChangeableText(100, 160, GameActivity.font, "Fps      ");
 		fpsInfo.setPosition(15, 15);
 
-		altitudeInfo = new ChangeableText(100, 160, GameActivity.mFont, "Altitude");
+		altitudeInfo = new ChangeableText(100, 160, GameActivity.font, "Altitude");
 		altitudeInfo.setPosition(15, 40);
 
 		HUD hud = new HUD();

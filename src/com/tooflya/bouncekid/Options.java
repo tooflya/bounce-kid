@@ -12,10 +12,10 @@ public class Options {
 	 * Camera parameters
 	 * 
 	 */
-	public static int cameraWidth = 800;
-	public static int cameraHeight = 480;
-	public static int cameraCenterX = Options.cameraWidth / 2;
-	public static int cameraCenterY = Options.cameraHeight / 2;
+	public static int cameraWidth;
+	public static int cameraHeight;
+	public static int cameraCenterX;
+	public static int cameraCenterY;
 
 	// ===========================================================
 	// Some options which will be saved

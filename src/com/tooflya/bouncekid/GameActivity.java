@@ -2,7 +2,6 @@ package com.tooflya.bouncekid;
 
 import java.util.Random;
 
-import org.anddev.andengine.audio.music.MusicManager;
 import org.anddev.andengine.engine.Engine;
 import org.anddev.andengine.engine.LimitedFPSEngine;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
@@ -31,7 +30,6 @@ import android.view.KeyEvent;
 
 import com.tooflya.bouncekid.background.AsyncTaskLoader;
 import com.tooflya.bouncekid.background.IAsyncCallback;
-import com.tooflya.bouncekid.managers.LevelManager;
 import com.tooflya.bouncekid.managers.ScreenManager;
 import com.tooflya.bouncekid.screens.LoadingScreen;
 import com.tooflya.bouncekid.screens.MainScreen;
@@ -47,130 +45,55 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	// Constants
 	// ===========================================================
 
-	/**
-	 * 
-	 * Random instance for all application
-	 * 
-	 */
-	public static Random random = new Random();
+	/** Random instance for all application */
+	public final static Random random = new Random();
 
-	/**
-	 * 
-	 * Instance of engine
-	 * 
-	 */
+	/** Instance of engine */
 	public static Engine instance;
 
-	/**
-	 * 
-	 *
-	 * 
-	 */
+	/**  */
 	public static Activity activity;
 
-	/**
-	 * 
-	 * Context of main activity
-	 * 
-	 */
+	/** Context of main activity */
 	public static Context context;
 
-	/**
-	 * 
-	 * Camera of the game
-	 * 
-	 */
+	/** Camera of the game */
 	public static CustomCamera camera;
 
-	/**
-	 * 
-	 *
-	 * 
-	 */
-	public static boolean isGameLoaded;
+	/**  */
+	public static boolean isGameLoaded = false;
 
-	/**
-	 * 
-	 *
-	 * 
-	 */
-	public static Font mFont;
-	private static BitmapTextureAtlas mFontTexture = new BitmapTextureAtlas(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	/**  */
+	public static Font font;
 
-	/**
-	 * 
-	 *
-	 * 
-	 */
+	/**  */
+	public final static BitmapTextureAtlas resourcesBitmapTexture = new BitmapTextureAtlas(1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+	/**  */
+	private final static BitmapTextureAtlas fontTexture = new BitmapTextureAtlas(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+
+	/**  */
 	public static float fps;
 
-	/**
-	 * 
-	 * 
-	 * 
-	 */
+	/**  */
 	public static TimerHandler GameTimer;
 
-	/**
-	 * 
-	 * Accelerometer data
-	 * 
-	 */
+	/** Accelerometer data */
 	public static float accelerometerX = 0;
 	public static float accelerometerY = 0;
 
-	/**
-	 * 
-	 * 
-	 * 
-	 */
-	public static int levelIndex = 0;
-
-	/**
-	 * 
-	 *
-	 * 
-	 */
+	/**  */
 	public static ScreenManager screens;
 
-	/**
-	 * 
-	 *
-	 * 
-	 */
-	public static LevelManager levels;
-
-	/**
-	 * 
-	 *
-	 * 
-	 */
-	public static MusicManager sound;
+	/**  */
+	public static Map map;
 
 	// ===========================================================
 	// Fields
 	// ===========================================================
 
-	/**
-	 * 
-	 *
-	 * 
-	 */
+	/**  */
 	private long screenChangeTime = 0;
-
-	/**
-	 * 
-	 * 
-	 * 
-	 */
-	public static Map map;
-
-	/**
-	 * 
-	 * 
-	 * 
-	 */
-	public static BitmapTextureAtlas resourcesAtlas = new BitmapTextureAtlas(1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	// ===========================================================
 	// Virtual methods
@@ -193,62 +116,39 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	@Override
 	public Engine onLoadEngine() {
 
-		isGameLoaded = false;
-
-		/**
-		 * 
-		 * Let's remember Context of this activity
-		 * 
-		 */
+		/** Let's remember Context of this activity */
 		context = getApplicationContext();
 
-		/**
-		 * 
-		 * Set the position and resolution of camera
-		 * 
-		 */
-		DisplayMetrics dm = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		/** Set the position and resolution of camera */
+		final DisplayMetrics displayMetrics = new DisplayMetrics();
+		this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
+		/** Initialize camera parameters */
+		Options.cameraWidth = displayMetrics.widthPixels * 2;
+		Options.cameraHeight = displayMetrics.heightPixels * 2;
+		Options.cameraCenterX = Options.cameraWidth / 2;
+		Options.cameraCenterY = Options.cameraHeight / 2;
+
+		/** Initialize camera instance */
 		camera = new CustomCamera(0, 0, Options.cameraWidth, Options.cameraHeight);
 
-		/**
-		 * 
-		 * Initialize the configuration of engine
-		 * 
-		 */
-		final EngineOptions options = new EngineOptions(true, ScreenOrientation.LANDSCAPE, new RatioResolutionPolicy(dm.widthPixels, dm.heightPixels), camera)
+		/** Initialize the configuration of engine */
+		final EngineOptions options = new EngineOptions(true, ScreenOrientation.LANDSCAPE, new RatioResolutionPolicy(displayMetrics.widthPixels, displayMetrics.heightPixels), camera)
 				.setWakeLockOptions(WakeLockOptions.SCREEN_BRIGHT)
 				.setWakeLockOptions(WakeLockOptions.SCREEN_ON)
 				.setNeedsMusic(true)
 				.setNeedsSound(true);
 
-		/**
-		 * 
-		 * Disable extension vertex buffer objects. This extension usually has a problems with HTC phones
-		 * 
-		 */
+		/** Disable extension vertex buffer objects. This extension usually has a problems with HTC phones */
 		options.getRenderOptions().disableExtensionVertexBufferObjects();
 
-		/**
-		 * 
-		 * Auto setRunOnUpdateThread for touch events
-		 * 
-		 */
+		/** Auto setRunOnUpdateThread for touch events */
 		options.getTouchOptions().setRunOnUpdateThread(true);
 
-		/**
-		 * 
-		 * Try to init our engine
-		 * 
-		 */
+		/** Try to init our engine */
 		instance = new LimitedFPSEngine(options, Options.targerFPS);
 
-		/**
-		 * 
-		 * Trying to initialize multitouch
-		 * 
-		 */
+		/** Trying to initialize multitouch */
 		try {
 			if (MultiTouch.isSupported(this)) {
 				instance.setTouchController(new MultiTouchController());
@@ -256,11 +156,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 		} catch (final MultiTouchException e) {
 		}
 
-		/**
-		 * 
-		 *
-		 * 
-		 */
+		/**  */
 		activity = this;
 
 		return instance;
@@ -274,12 +170,12 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	@Override
 	public void onLoadResources() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
+		FontFactory.setAssetBasePath("font/");
 
-		this.mEngine.getTextureManager().loadTextures(mFontTexture, resourcesAtlas);
+		font = FontFactory.createFromAsset(fontTexture, getApplicationContext(), "casual.ttf", 14, true, Color.RED);
 
-		mFont = FontFactory.createFromAsset(mFontTexture, getApplicationContext(), "font/casual.ttf", 14, true, Color.RED);
-
-		this.mEngine.getFontManager().loadFont(mFont);
+		this.getEngine().getFontManager().loadFont(font);
+		this.getEngine().getTextureManager().loadTextures(fontTexture, resourcesBitmapTexture);
 	}
 
 	/*
@@ -290,37 +186,18 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	@Override
 	public void workToDo() {
 
-		/**
-		 * 
-		 * Create game timer
-		 * 
-		 */
+		/** Create game timer */
 		GameTimer = new TimerHandler(1f / 15.0f, true, new GameTimer());
 
-		/**
-		 * 
-		 * 
-		 * 
-		 */
-		levels = new LevelManager();
-
-		/**
-		 * 
-		 * Create screen manager
-		 * 
-		 */
+		/** Create screen manager */
 		screens = new ScreenManager();
-		((MainScreen) screens.get(Screen.MAIN)).after();
+		((MainScreen) screens.get(Screen.MAIN)).after(); // TODO: Bad code
 
 		map = new Map();
 
-		/**
-		 * 
-		 * White while progressbar is running
-		 * 
-		 */
+		/** White while progressbar is running */
 		while (!isGameLoaded) {
-		}
+		} // TODO: synchronized?
 	}
 
 	/*
@@ -370,18 +247,10 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 		};
 		this.getEngine().registerUpdateHandler(fpsCounter);
 
-		/**
-		 * 
-		 * Start background loader
-		 * 
-		 */
+		/** Start background loader */
 		new AsyncTaskLoader().execute(this);
 
-		/**
-		 * 
-		 * Create loading screen and return her scene for attaching to the activity
-		 * 
-		 */
+		/** Create loading screen and return her scene for attaching to the activity */
 		return new LoadingScreen();
 	}
 
@@ -394,24 +263,13 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	public void onDestroy() {
 		super.onDestroy();
 
-		/**
-		 * 
-		 * Here we need to correctly shutdown our application and unload all resources
-		 * 
-		 * @author igor.mats
-		 * 
-		 */
-
+		// TODO: Here we need to correctly shutdown our application and unload all resources
 		getTextureManager().unloadTextures();
 
-		/*
-		 * Notify the system to finalize and collect all objects of the application on exit so that the process running the application can be killed by the system without causing issues. NOTE: If this is set to true then the process will not be killed until all of its threads have closed.
-		 */
+		/** Notify the system to finalize and collect all objects of the application on exit so that the process running the application can be killed by the system without causing issues. NOTE: If this is set to true then the process will not be killed until all of its threads have closed. */
 		System.runFinalizersOnExit(true);
 
-		/*
-		 * Force the system to close the application down completely instead of retaining it in the background. The process that runs the application will be killed. The application will be completely created as a new application in a new process if the user starts the application again.
-		 */
+		/** Force the system to close the application down completely instead of retaining it in the background. The process that runs the application will be killed. The application will be completely created as a new application in a new process if the user starts the application again. */
 		System.exit(0);
 	}
 
@@ -424,13 +282,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	public void onResumeGame() {
 		super.onResumeGame();
 
-		/**
-		 * 
-		 * Release all music, update handlers and other active things
-		 * 
-		 * @author igor.mats
-		 * 
-		 */
+		// TODO: Release all music, update handlers and other active things
 
 		// this.enableAccelerometerSensor(this);
 	}
@@ -444,13 +296,7 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	public void onPauseGame() {
 		super.onPauseGame();
 
-		/**
-		 * 
-		 * Stop all music, update handlers and other active things
-		 * 
-		 * @author igor.mats
-		 * 
-		 */
+		// TODO: Stop all music, update handlers and other active things
 
 		// this.disableAccelerometerSensor();
 	}
