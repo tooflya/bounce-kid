@@ -1,16 +1,21 @@
 package com.tooflya.bouncekid.screens;
 
+import org.anddev.andengine.engine.camera.hud.HUD;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.background.AutoParallaxBackground;
 import org.anddev.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
 import org.anddev.andengine.entity.sprite.Sprite;
+import org.anddev.andengine.entity.text.ChangeableText;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 
+import android.util.FloatMath;
+
 import com.tooflya.bouncekid.GameActivity;
+import com.tooflya.bouncekid.Map;
 import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.Screen;
 import com.tooflya.bouncekid.helpers.ActionHelper;
@@ -36,6 +41,8 @@ public class MainScreen extends Screen {
 	private TextureRegion mParallaxLayerFront;
 
 	private AutoParallaxBackground autoParallaxBackground;
+
+	private ChangeableText fpsInfo, altitudeInfo;
 
 	// ===========================================================
 	// Constructors
@@ -82,6 +89,18 @@ public class MainScreen extends Screen {
 				return false;
 			}
 		});
+
+		fpsInfo = new ChangeableText(100, 160, GameActivity.mFont, "Fps      ");
+		fpsInfo.setPosition(15, 15);
+
+		altitudeInfo = new ChangeableText(100, 160, GameActivity.mFont, "Altitude");
+		altitudeInfo.setPosition(15, 40);
+
+		HUD hud = new HUD();
+		hud.attachChild(fpsInfo);
+		hud.attachChild(altitudeInfo);
+
+		GameActivity.camera.setHUD(hud);
 	}
 
 	// ===========================================================
@@ -97,6 +116,8 @@ public class MainScreen extends Screen {
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 
+		fpsInfo.setText(FloatMath.floor(GameActivity.fps) + "");
+		altitudeInfo.setText(FloatMath.floor(Map.hero.getY()) + "");
 	}
 
 	/*

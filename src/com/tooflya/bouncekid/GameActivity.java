@@ -15,6 +15,8 @@ import org.anddev.andengine.entity.util.FPSCounter;
 import org.anddev.andengine.extension.input.touch.controller.MultiTouch;
 import org.anddev.andengine.extension.input.touch.controller.MultiTouchController;
 import org.anddev.andengine.extension.input.touch.exception.MultiTouchException;
+import org.anddev.andengine.opengl.font.Font;
+import org.anddev.andengine.opengl.font.FontFactory;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -22,6 +24,7 @@ import org.anddev.andengine.ui.activity.LayoutGameActivity;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
@@ -85,6 +88,14 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	 * 
 	 */
 	public static boolean isGameLoaded;
+
+	/**
+	 * 
+	 *
+	 * 
+	 */
+	public static Font mFont;
+	private static BitmapTextureAtlas mFontTexture = new BitmapTextureAtlas(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	/**
 	 * 
@@ -264,7 +275,11 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	public void onLoadResources() {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 
-		this.mEngine.getTextureManager().loadTextures(resourcesAtlas);
+		this.mEngine.getTextureManager().loadTextures(mFontTexture, resourcesAtlas);
+
+		mFont = FontFactory.createFromAsset(mFontTexture, getApplicationContext(), "font/casual.ttf", 14, true, Color.RED);
+
+		this.mEngine.getFontManager().loadFont(mFont);
 	}
 
 	/*

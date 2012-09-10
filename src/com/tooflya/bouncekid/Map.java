@@ -8,12 +8,16 @@ import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import com.tooflya.bouncekid.entity.Block;
 import com.tooflya.bouncekid.entity.Entity;
 import com.tooflya.bouncekid.entity.Personage;
+import com.tooflya.bouncekid.entity.Star;
+import com.tooflya.bouncekid.entity.StarD;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 import com.tooflya.bouncekid.managers.EntityManager;
 
 public class Map extends org.anddev.andengine.entity.Entity {
 
 	private EntityManager blocks;
+	private EntityManager stars;
+	private EntityManager starsd;
 
 	private Block tempBlock = null;
 	private Block lastBlock = null;
@@ -26,6 +30,8 @@ public class Map extends org.anddev.andengine.entity.Entity {
 		super();
 
 		this.blocks = new EntityManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "block.jpg", 0, 0, 1, 1)));
+		this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "stars.png", 65, 65, 1, 18)));
+		this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesAtlas, GameActivity.context, "obj_star_disappear.png", 300, 0, 1, 10)));
 
 		this.GenerateStartBlocks();
 
@@ -40,7 +46,7 @@ public class Map extends org.anddev.andengine.entity.Entity {
 
 		this.hero = new Personage(Options.startX, Options.startY, heroRegion);
 		hero.setPosition(100, Options.cameraHeight - hero.getHeightScaled() - 100);
-		GameActivity.camera.setBounds(0, Options.cameraWidth, -10000, 480);
+		GameActivity.camera.setBounds(0, Options.cameraWidth * 100, -10000, 480);
 		GameActivity.camera.setBoundsEnabled(true);
 		GameActivity.camera.setChaseEntity(hero);
 
@@ -57,13 +63,29 @@ public class Map extends org.anddev.andengine.entity.Entity {
 
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			Entity block = this.blocks.getByIndex(i);
-			block.setPosition(block.getX() - Options.blockStep, block.getY());
-			if (block.getX() + block.getWidth() < 0) {
+			// block.setPosition(block.getX() - Options.blockStep, block.getY());
+			if (block.getX() + block.getWidth() < GameActivity.camera.getCenterX() - Options.cameraCenterX) {
 				block.delete();
 			}
 		}
 
-		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth) {
+		for (int i = 0; i < this.stars.getCount(); i++) {
+			Entity block = this.stars.getByIndex(i);
+			// block.setPosition(block.getX() - Options.blockStep, block.getY());
+			if (block.getX() + block.getWidth() < GameActivity.camera.getCenterX() - Options.cameraCenterX) {
+				block.delete();
+			}
+		}
+
+		for (int i = 0; i < this.starsd.getCount(); i++) {
+			Entity block = this.starsd.getByIndex(i);
+			// block.setPosition(block.getX() - Options.blockStep, block.getY());
+			if (block.getX() + block.getWidth() < GameActivity.camera.getCenterX() - Options.cameraCenterX) {
+				block.delete();
+			}
+		}
+
+		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth + GameActivity.camera.getCenterX()) {
 			this.GenerateNextBlock();
 		}
 
@@ -89,21 +111,26 @@ public class Map extends org.anddev.andengine.entity.Entity {
 
 	private void GenerateNextBlock() {
 		this.tempBlock = (Block) this.blocks.create();
+		Star star = (Star) this.stars.create();
+
 		float offsetX = Options.maxDistanceBetweenBlocksX;
 		float upY = Math.min(Options.maxDistanceBetweenBlocksY, this.lastBlock.getY() - hero.getHeight());
 		float downY = Options.cameraHeight - this.lastBlock.getY() - this.lastBlock.getHeight();
-		float offsetY = 0;// GameActivity.random.nextFloat() * (upY + downY) - upY;
+		float offsetY = 0;
 		if (this.lastBlock.getY() - offsetY < hero.getHeight()) {
 			offsetY = this.lastBlock.getY() - hero.getHeight();
 		}
-		this.tempBlock.setPosition(this.lastBlock.getX() + Options.blockWidth + offsetX-Options.blockStep, this.lastBlock.getY() + offsetY);
+		this.tempBlock.setPosition(this.lastBlock.getX() + Options.blockWidth + offsetX - Options.blockStep, this.lastBlock.getY() + offsetY);
 		this.lastBlock = this.tempBlock;
 
 		offsetX = GameActivity.random.nextFloat() * Options.blockWidth;
-		offsetY = this.hero.getHeight() / 2 + Options.cameraHeight / 2 + this.hero.getY() - GameActivity.random.nextFloat() * Options.cameraHeight;
+		offsetY = this.hero.getHeight() / 2 + Options.cameraHeight / 2 + this.hero.getY() - GameActivity.random.nextFloat() * Options.cameraHeight - Options.blockHeight;
 
-		// this.tempBlock = (Block) this.blocks.create();
-		// this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
+		this.tempBlock = (Block) this.blocks.create();
+		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
+
+		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
+		// star.mo();
 
 	}
 
@@ -142,6 +169,17 @@ public class Map extends org.anddev.andengine.entity.Entity {
 					personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeight() + 1);
 					personage.ChangeStates((byte) 0, ActionHelper.Fall);
 				}
+			}
+		}
+
+		for (int i = 0; i < this.stars.getCount(); i++) {
+			Entity block = this.stars.getByIndex(i);
+
+			if (block.collidesWith(personage)) {
+				block.delete();
+
+				Entity a = this.starsd.create();
+				a.setPosition(block.getX(), block.getY());
 			}
 		}
 	}

@@ -74,9 +74,9 @@ public class Personage extends Entity {
 		if (this.IsState(ActionHelper.Fall)) {
 			fallProceed();
 		}
-		
+
 		dieProceed();
-		
+
 		System.out.println("X: " + this.getX() + " /  Y: " + this.getY());
 	}
 
@@ -101,6 +101,8 @@ public class Personage extends Entity {
 				this.stopAnimation(2);
 			}
 		}
+
+		this.setPosition(this.getX() + 5, this.getY());
 	}
 
 	private void jumpProceed() {
@@ -115,12 +117,12 @@ public class Personage extends Entity {
 
 	private void fallProceed() {
 		this.jumpPower = 40;
-		;
+
 		this.setPosition(this.getX(), this.getY() + this.jumpStep);
 	}
-	
+
 	private void dieProceed() {
-		if(this.getY() > Options.cameraHeight) {
+		if (this.getY() > Options.cameraHeight) {
 			this.setPosition(this.getX(), 0);
 			this.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
 			this.ChangeStates(ActionHelper.Fall, ActionHelper.Running);
