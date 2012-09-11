@@ -3,6 +3,8 @@ package com.tooflya.bouncekid.screens;
 import org.anddev.andengine.engine.camera.hud.HUD;
 import org.anddev.andengine.entity.text.ChangeableText;
 
+import android.util.FloatMath;
+
 import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.Screen;
 
@@ -54,7 +56,7 @@ public class MainScreen extends Screen {
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 
-		// fpsInfo.setText(FloatMath.floor(Game.fps) + "");
+		fpsInfo.setText(FloatMath.floor(Game.fps) + "");
 		// altnfo.setText(FloatMath.floor(Map.hero.getY()) + "");
 	}
 

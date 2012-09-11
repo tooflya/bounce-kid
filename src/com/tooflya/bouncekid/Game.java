@@ -32,7 +32,6 @@ import com.tooflya.bouncekid.background.AsyncTaskLoader;
 import com.tooflya.bouncekid.background.IAsyncCallback;
 import com.tooflya.bouncekid.managers.ScreenManager;
 import com.tooflya.bouncekid.screens.LoadingScreen;
-import com.tooflya.bouncekid.screens.MainScreen;
 import com.tooflya.bouncekid.ui.CustomCamera;
 
 /**
@@ -186,15 +185,13 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 	@Override
 	public void workToDo() {
 
+		/** Create screen manager */
+		screens = new ScreenManager();
+
 		this.world = new World();
 
 		/** Create game timer */
 		GameTimer = new TimerHandler(0.02f, true, new GameTimer(this.world));
-
-		/** Create screen manager */
-		screens = new ScreenManager();
-
-		world = new World();
 
 		/** White while progressbar is running */
 		while (!isGameLoaded) {
