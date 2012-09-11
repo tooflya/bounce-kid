@@ -78,12 +78,14 @@ public class MainScreen extends Screen {
 
 				switch (arg1.getAction()) {
 				case TouchEvent.ACTION_DOWN:
-					if (!GameActivity.map.hero.IsState(ActionHelper.Jump) && !GameActivity.map.hero.IsState(ActionHelper.Fall)) {
-						GameActivity.map.hero.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
-					}
+					// if (!GameActivity.map.hero.IsState(ActionHelper.Jump) && !GameActivity.map.hero.IsState(ActionHelper.Fall)) {
+					// GameActivity.map.hero.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
+					// }
+					GameActivity.map.hero.ChangeStates(ActionHelper.OnPressure, (byte) 0);
 					break;
 				case TouchEvent.ACTION_UP:
-					GameActivity.map.hero.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
+					GameActivity.map.hero.ChangeStates((byte) 0, ActionHelper.OnPressure);
+					// GameActivity.map.hero.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
 					break;
 				}
 				return false;
@@ -128,7 +130,7 @@ public class MainScreen extends Screen {
 	@Override
 	public void onAttached() {
 		super.onAttached();
-		
+
 		registerUpdateHandler(GameActivity.GameTimer);
 	}
 

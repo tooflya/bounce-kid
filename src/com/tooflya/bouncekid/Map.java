@@ -72,6 +72,7 @@ public class Map extends org.anddev.andengine.entity.Entity {
 		}
 
 		this.tmxLayer = this.mTMXTiledMap.getTMXLayers().get(0);
+		this.tmxLayer.setPosition(0, Options.cameraHeight - this.tmxLayer.getHeight());
 		this.attachChild(this.tmxLayer);
 
 		/* Now we are going to create a rectangle that will always highlight the tile below the feet of the pEntity. */
@@ -103,14 +104,14 @@ public class Map extends org.anddev.andengine.entity.Entity {
 
 		/* Get the tile the feet of the player are currently waking on. */
 		final TMXTile tmxTile = tmxLayer.getTMXTileAt(playerFootCordinates[Constants.VERTEX_INDEX_X], playerFootCordinates[Constants.VERTEX_INDEX_Y] + hero.getWidth());
-		if (tmxTile != null) {
-			if (!hero.IsState(ActionHelper.Jump)) {
-				hero.ChangeStates(ActionHelper.Fall, (byte) 0);
+		if (!hero.IsState(ActionHelper.Jump)) {
+			hero.ChangeStates(ActionHelper.Fall, (byte) 0);
+			if (tmxTile != null) {
 				if (tmxTile.getTextureRegion() != null) {
 					if (this.IsBottomCollide(hero, tmxTile)) {
 						currentTileRectangle.setPosition(tmxTile.getTileX(), tmxTile.getTileY());
-						hero.setPosition(hero.getX(), hero.getY()- 4f);
-						hero.ChangeStates((byte) 0, ActionHelper.Fall);
+						hero.setPosition(hero.getX(), tmxTile.getTileY() - hero.getHeight() + 1f);
+						hero.ChangeStates(ActionHelper.Running, ActionHelper.Fall);
 					}
 				}
 			}
@@ -185,7 +186,7 @@ public class Map extends org.anddev.andengine.entity.Entity {
 
 	private boolean IsBottomCollide(Personage personage, TMXTile block) {
 		float y = personage.getY() + personage.getHeight();
-		System.out.println(block.getTileY() - y );
+		System.out.println(block.getTileY() - y);
 		if (block.getTileY() - y < 2 && block.getTileY() - y > -10) {
 			return true;
 		}

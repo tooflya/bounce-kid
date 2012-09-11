@@ -67,12 +67,13 @@ public class Personage extends Entity {
 
 		runningProceed();
 
-		if (this.IsState(ActionHelper.Jump)) {
+		if (this.IsState((byte) (ActionHelper.Running | ActionHelper.Jump & ActionHelper.OnPressure))) {
+			this.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
 			jumpProceed();
-		} else {
-			if (this.IsState(ActionHelper.Fall)) {
-				fallProceed();
-			}
+		}
+
+		if (this.IsState(ActionHelper.Fall)) {
+			fallProceed();
 		}
 	}
 
@@ -88,7 +89,7 @@ public class Personage extends Entity {
 	private int a = 0;
 
 	private void runningProceed() {
-		if (!this.IsState(ActionHelper.Jump) && !this.IsState(ActionHelper.Fall)) {
+		if (!this.IsState((byte) (ActionHelper.Jump & ActionHelper.Fall))) {
 			if (!this.isAnimationRunning()) {
 				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80 }, 0, 7, true);
 			}
@@ -112,8 +113,6 @@ public class Personage extends Entity {
 	}
 
 	private void fallProceed() {
-		this.jumpPower = 40;
-
 		this.setPosition(this.getX(), this.getY() + this.jumpStep);
 	}
 

@@ -7,4 +7,6 @@ public class ActionHelper {
 	public static final byte Jump = 2; // 0b00000010;
 	public static final byte Fall = 4; // 0b00000100;
 	public static final byte JumpOrFall = 6; // 0b00000110;
+	public static final byte OnPressure = 8; // 0b00001000;
+	
 }
