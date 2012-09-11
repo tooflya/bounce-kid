@@ -3,7 +3,7 @@ package com.tooflya.bouncekid.entity;
 import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
-import com.tooflya.bouncekid.GameActivity;
+import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.Screen;
 import com.tooflya.bouncekid.managers.EntityManager;
 
@@ -26,6 +26,7 @@ public abstract class Entity extends AnimatedSprite {
 	protected int health;
 	protected int state;
 	protected int type;
+
 	protected float speed;
 
 	protected EntityManager manager;
@@ -37,10 +38,9 @@ public abstract class Entity extends AnimatedSprite {
 	public Entity(final TiledTextureRegion pTiledTextureRegion) {
 		super(0, 0, pTiledTextureRegion.deepCopy());
 
-		this.setVisible(false);
-		this.setCullingEnabled(false);
+		this.hide();
 
-		GameActivity.screens.get(Screen.MAIN).attachChild(this);
+		Game.screens.get(Screen.MAIN).attachChild(this);
 	}
 
 	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion) {
@@ -54,20 +54,44 @@ public abstract class Entity extends AnimatedSprite {
 	// ===========================================================
 
 	public Entity create() {
-		this.reset();
+		this.show();
 
 		return this;
 	}
 
-	public void update() {
+	public void destroy() {
+		if (this.isManagerExist()) {
+			this.manager.destroy(this.id);
+		}
 
+		this.hide();
 	}
 
-	public void delete() {
+	public void update() {
+	}
+
+	public void show() {
+		this.setVisible(true);
+		this.setIgnoreUpdate(false);
+		this.setCullingEnabled(true);
+	}
+
+	public void hide() {
+		this.setVisible(false);
+		this.setIgnoreUpdate(true);
+		this.setCullingEnabled(false);
+	}
+
+	// ===========================================================
+	// Validate methods
+	// ===========================================================
+
+	public boolean isManagerExist() {
 		if (this.manager != null) {
-			this.manager.delete(this.id);
+			return false;
 		}
-		setVisible(false);
+
+		return false;
 	}
 
 	// ===========================================================
@@ -150,11 +174,6 @@ public abstract class Entity extends AnimatedSprite {
 	// Virtual methods
 	// ===========================================================
 
-	@Override
-	public void reset() {
-		this.setVisible(true);
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -163,18 +182,6 @@ public abstract class Entity extends AnimatedSprite {
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.anddev.andengine.entity.Entity#setVisible(boolean)
-	 */
-	@Override
-	public void setVisible(final boolean visible) {
-		super.setVisible(visible);
-
-		this.setIgnoreUpdate(!visible);
 	}
 
 	// ===========================================================

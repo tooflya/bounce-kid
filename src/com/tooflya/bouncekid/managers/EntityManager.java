@@ -71,7 +71,7 @@ public class EntityManager {
 		return null;
 	}
 
-	public void delete(final int i) {
+	public void destroy(final int i) {
 		Entity temp_element = elements[i];
 		elements[i] = elements[count];
 		elements[count] = temp_element;

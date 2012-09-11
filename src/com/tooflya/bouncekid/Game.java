@@ -39,7 +39,7 @@ import com.tooflya.bouncekid.ui.CustomCamera;
  * @author Tooflya.com
  * @since
  */
-public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
+public class Game extends LayoutGameActivity implements IAsyncCallback {
 
 	// ===========================================================
 	// Constants
@@ -85,15 +85,15 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	/**  */
 	public static ScreenManager screens;
 
-	/**  */
-	public static Map map;
-
 	// ===========================================================
 	// Fields
 	// ===========================================================
 
 	/**  */
 	private long screenChangeTime = 0;
+
+	/**  */
+	private World world;
 
 	// ===========================================================
 	// Virtual methods
@@ -186,14 +186,15 @@ public class GameActivity extends LayoutGameActivity implements IAsyncCallback {
 	@Override
 	public void workToDo() {
 
+		this.world = new World();
+
 		/** Create game timer */
-		GameTimer = new TimerHandler(0.02f, true, new GameTimer());
+		GameTimer = new TimerHandler(0.02f, true, new GameTimer(this.world));
 
 		/** Create screen manager */
 		screens = new ScreenManager();
-		((MainScreen) screens.get(Screen.MAIN)).after(); // TODO: Bad code
 
-		map = new Map();
+		world = new World();
 
 		/** White while progressbar is running */
 		while (!isGameLoaded) {

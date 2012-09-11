@@ -19,7 +19,7 @@
         android:icon="@drawable/icon"
         android:label="@string/app" >
         <activity
-            android:name=".GameActivity"
+            android:name=".Game"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.NoBackground" >

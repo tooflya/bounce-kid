@@ -2,10 +2,12 @@ package com.tooflya.bouncekid.entity;
 
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
-import com.tooflya.bouncekid.GameActivity;
-import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 
+/**
+ * @author Tooflya.com
+ * @since
+ */
 public class Personage extends Entity {
 
 	// ===========================================================
@@ -16,17 +18,11 @@ public class Personage extends Entity {
 	// Fields
 	// ===========================================================
 
-	/**
-	 * 
-	 * States of character
-	 * 
-	 * 0 - Is running? 1 - Is start jumping (power up)?
-	 * 
-	 */
 	private byte currentStates;
 
 	public int jumpPower;
 	private int maxJumpPower;
+
 	private float jumpStep;
 
 	// ===========================================================
@@ -44,7 +40,6 @@ public class Personage extends Entity {
 		this.setFlippedHorizontal(true);
 
 		this.reset();
-
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
@@ -65,16 +60,10 @@ public class Personage extends Entity {
 	@Override
 	public void update() {
 
-		runningProceed();
+		this.runningProceed();
+		this.jumpProceed();
+		this.fallProceed();
 
-		if (this.IsState((byte) (ActionHelper.Running | ActionHelper.Jump & ActionHelper.OnPressure))) {
-			this.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
-			jumpProceed();
-		}
-
-		if (this.IsState(ActionHelper.Fall)) {
-			fallProceed();
-		}
 	}
 
 	@Override
@@ -86,10 +75,8 @@ public class Personage extends Entity {
 	// Methods
 	// ===========================================================
 
-	private int a = 0;
-
 	private void runningProceed() {
-		if (!this.IsState((byte) (ActionHelper.Jump & ActionHelper.Fall))) {
+		if (!this.IsState(ActionHelper.Jump) && !this.IsState(ActionHelper.Fall)) {
 			if (!this.isAnimationRunning()) {
 				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80 }, 0, 7, true);
 			}

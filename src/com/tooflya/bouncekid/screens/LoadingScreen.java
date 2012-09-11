@@ -11,7 +11,7 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.util.GLHelper;
 
-import com.tooflya.bouncekid.GameActivity;
+import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.Screen;
 
 /**
@@ -48,14 +48,14 @@ public class LoadingScreen extends Screen {
 
 		mProgressBarTextureAtlas = new BitmapTextureAtlas(512, 64, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		GameActivity.instance.getTextureManager().loadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
+		Game.instance.getTextureManager().loadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 
 		/**
 		 * 
 		 * Creating of sprites
 		 * 
 		 */
-		Sprite background = new Sprite(0, 0, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, GameActivity.context, "tooflya_hd.png", 0, 0)) {
+		Sprite background = new Sprite(0, 0, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, Game.context, "tooflya_hd.png", 0, 0)) {
 			@Override
 			protected void onInitDraw(final GL10 pGL) {
 				super.onInitDraw(pGL);
@@ -66,7 +66,7 @@ public class LoadingScreen extends Screen {
 		};
 		setBackground(new SpriteBackground(background));
 
-		progressBar = new Sprite(228, 421, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mProgressBarTextureAtlas, GameActivity.context, "loaderbar_full_hd.png", 0, 0));
+		progressBar = new Sprite(228, 421, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mProgressBarTextureAtlas, Game.context, "loaderbar_full_hd.png", 0, 0));
 		progressBar.setWidth(1);
 		progressBar.getTextureRegion().setWidth(1);
 		attachChild(progressBar);
@@ -97,7 +97,7 @@ public class LoadingScreen extends Screen {
 					 * if progressbar is full
 					 * 
 					 */
-					GameActivity.isGameLoaded = true;
+					Game.isGameLoaded = true;
 				}
 			}
 		}));
@@ -118,7 +118,7 @@ public class LoadingScreen extends Screen {
 
 		clearUpdateHandlers();
 
-		GameActivity.instance.getTextureManager().unloadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
+		Game.instance.getTextureManager().unloadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 	}
 
 	/*

@@ -6,7 +6,7 @@ import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.RelativeLayout;
 
-import com.tooflya.bouncekid.GameActivity;
+import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.R;
 import com.tooflya.bouncekid.Screen;
 import com.tooflya.bouncekid.screens.MainScreen;
@@ -63,7 +63,7 @@ public class ScreenManager {
 		 * 
 		 * 
 		 */
-		casper = (RelativeLayout) GameActivity.activity.findViewById(R.id.casper);
+		casper = (RelativeLayout) Game.activity.findViewById(R.id.casper);
 
 		/**
 		 * 
@@ -71,8 +71,8 @@ public class ScreenManager {
 		 * 
 		 * 
 		 */
-		animationIn = AnimationUtils.loadAnimation(GameActivity.context, R.anim.fadein);
-		animationOut = AnimationUtils.loadAnimation(GameActivity.context, R.anim.fadeout);
+		animationIn = AnimationUtils.loadAnimation(Game.context, R.anim.fadein);
+		animationOut = AnimationUtils.loadAnimation(Game.context, R.anim.fadeout);
 	}
 
 	// ===========================================================
@@ -80,7 +80,7 @@ public class ScreenManager {
 	// ===========================================================
 
 	public void set(final int pScreen) {
-		GameActivity.activity.runOnUiThread(new Runnable() {
+		Game.activity.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				casper.setVisibility(View.VISIBLE);
@@ -100,7 +100,7 @@ public class ScreenManager {
 						animationOut.setAnimationListener(new AnimationListener() {
 							@Override
 							public void onAnimationStart(Animation animation) {
-								screens[pScreen].setScene(GameActivity.instance);
+								screens[pScreen].setScene(Game.instance);
 								screens[pScreen].onAttached();
 							}
 
