@@ -105,12 +105,12 @@ public class Map extends org.anddev.andengine.entity.Entity {
 		final TMXTile tmxTile = tmxLayer.getTMXTileAt(playerFootCordinates[Constants.VERTEX_INDEX_X], playerFootCordinates[Constants.VERTEX_INDEX_Y] + hero.getWidth());
 		if (tmxTile != null) {
 			if (!hero.IsState(ActionHelper.Jump)) {
-				//hero.ChangeStates(ActionHelper.Fall, (byte) 0);
+				hero.ChangeStates(ActionHelper.Fall, (byte) 0);
 				if (tmxTile.getTextureRegion() != null) {
 					if (this.IsBottomCollide(hero, tmxTile)) {
-						//currentTileRectangle.setPosition(tmxTile.getTileX(), tmxTile.getTileY());
+						currentTileRectangle.setPosition(tmxTile.getTileX(), tmxTile.getTileY());
 						hero.setPosition(hero.getX(), hero.getY()- 4f);
-						//hero.ChangeStates((byte) 0, ActionHelper.Fall);
+						hero.ChangeStates((byte) 0, ActionHelper.Fall);
 					}
 				}
 			}
