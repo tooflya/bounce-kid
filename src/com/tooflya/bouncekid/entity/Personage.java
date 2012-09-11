@@ -74,8 +74,6 @@ public class Personage extends Entity {
 				fallProceed();
 			}
 		}
-
-		System.out.println("X: " + this.getX() + " /  Y: " + this.getY());
 	}
 
 	@Override
@@ -100,7 +98,7 @@ public class Personage extends Entity {
 			}
 		}
 
-		this.setPosition(this.getX() + 5, this.getY());
+		this.setPosition(this.getX() + 4f, this.getY());
 	}
 
 	private void jumpProceed() {

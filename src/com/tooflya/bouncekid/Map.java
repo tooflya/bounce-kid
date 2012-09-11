@@ -1,9 +1,20 @@
 package com.tooflya.bouncekid;
 
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXLayer;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXLoader;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXLoader.ITMXTilePropertiesListener;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXProperties;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXTile;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXTileProperty;
+import org.anddev.andengine.entity.layer.tiled.tmx.TMXTiledMap;
+import org.anddev.andengine.entity.layer.tiled.tmx.util.exception.TMXLoadException;
+import org.anddev.andengine.entity.primitive.Rectangle;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
+import org.anddev.andengine.util.Debug;
+import org.anddev.andengine.util.constants.Constants;
 
 import com.tooflya.bouncekid.entity.Block;
 import com.tooflya.bouncekid.entity.Entity;
@@ -26,6 +37,9 @@ public class Map extends org.anddev.andengine.entity.Entity {
 	private BitmapTextureAtlas heroTexture;
 	private TiledTextureRegion heroRegion;
 
+	private TMXTiledMap mTMXTiledMap;
+	private TMXLayer tmxLayer;
+
 	public Map() {
 		super();
 
@@ -33,7 +47,7 @@ public class Map extends org.anddev.andengine.entity.Entity {
 		this.stars = new EntityManager(100, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesBitmapTexture, GameActivity.context, "stars.png", 65, 0, 1, 18)));
 		this.starsd = new EntityManager(100, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(GameActivity.resourcesBitmapTexture, GameActivity.context, "obj_star_disappear.png", 100, 0, 1, 11)));
 
-		this.GenerateStartBlocks();
+		// this.GenerateStartBlocks();
 
 		this.reset();
 
@@ -45,45 +59,63 @@ public class Map extends org.anddev.andengine.entity.Entity {
 		GameActivity.instance.getTextureManager().loadTextures(heroTexture);
 
 		this.hero = new Personage(Options.startX, Options.startY, heroRegion);
-		hero.setPosition(100, Options.cameraHeight - hero.getHeightScaled() - 100);
+		hero.setPosition(0, Options.cameraHeight - hero.getHeightScaled() - 100);
 		GameActivity.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
 		GameActivity.camera.setBoundsEnabled(true);
 		GameActivity.camera.setChaseEntity(hero);
 
+		try {
+			final TMXLoader tmxLoader = new TMXLoader(GameActivity.context, GameActivity.instance.getTextureManager(), TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+			this.mTMXTiledMap = tmxLoader.loadFromAsset(GameActivity.context, "levels/map.tmx");
+
+		} catch (final TMXLoadException tmxle) {
+		}
+
+		this.tmxLayer = this.mTMXTiledMap.getTMXLayers().get(0);
+		this.attachChild(this.tmxLayer);
+
+		/* Now we are going to create a rectangle that will always highlight the tile below the feet of the pEntity. */
+		currentTileRectangle = new Rectangle(0, 0, 64, 64);
+		currentTileRectangle.setColor(1, 0, 0, 0.25f);
+		this.attachChild(currentTileRectangle);
+
 	}
 
+	Rectangle currentTileRectangle;
+
 	public void update() {
-		for (int i = 0; i < this.blocks.getCount(); i++) {
-			Entity block = this.blocks.getByIndex(i);
-			// block.setPosition(block.getX() - Options.blockStep, block.getY());
-			if (block.getX() + block.getWidth() < GameActivity.camera.getCenterX() - Options.cameraCenterX) {
-				block.delete();
-			}
-		}
+		/*
+		 * for (int i = 0; i < this.blocks.getCount(); i++) { Entity block = this.blocks.getByIndex(i); // block.setPosition(block.getX() - Options.blockStep, block.getY()); if (block.getX() + block.getWidth() < GameActivity.camera.getCenterX() - Options.cameraCenterX) { block.delete(); } }
+		 * 
+		 * for (int i = 0; i < this.stars.getCount(); i++) { Entity block = this.stars.getByIndex(i); // block.setPosition(block.getX() - Options.blockStep, block.getY()); if (block.getX() + block.getWidth() < GameActivity.camera.getCenterX() - Options.cameraCenterX) { block.delete(); } }
+		 * 
+		 * for (int i = 0; i < this.starsd.getCount(); i++) { Entity block = this.starsd.getByIndex(i); // block.setPosition(block.getX() - Options.blockStep, block.getY()); if (block.getX() + block.getWidth() < GameActivity.camera.getCenterX() - Options.cameraCenterX) { block.delete(); } }
+		 * 
+		 * if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth + GameActivity.camera.getCenterX()) { this.GenerateNextBlock(); }
+		 */
 
-		for (int i = 0; i < this.stars.getCount(); i++) {
-			Entity block = this.stars.getByIndex(i);
-			// block.setPosition(block.getX() - Options.blockStep, block.getY());
-			if (block.getX() + block.getWidth() < GameActivity.camera.getCenterX() - Options.cameraCenterX) {
-				block.delete();
-			}
-		}
-
-		for (int i = 0; i < this.starsd.getCount(); i++) {
-			Entity block = this.starsd.getByIndex(i);
-			// block.setPosition(block.getX() - Options.blockStep, block.getY());
-			if (block.getX() + block.getWidth() < GameActivity.camera.getCenterX() - Options.cameraCenterX) {
-				block.delete();
-			}
-		}
-
-		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth + GameActivity.camera.getCenterX()) {
-			this.GenerateNextBlock();
-		}
-
-		this.CheckCollision(hero);
+		// this.CheckCollision(hero);
 
 		this.AI(hero);
+
+		/* Get the scene-coordinates of the players feet. */
+		final float[] playerFootCordinates = hero.convertLocalToSceneCoordinates(12, 31);
+
+		/* Get the tile the feet of the player are currently waking on. */
+		final TMXTile tmxTile = tmxLayer.getTMXTileAt(playerFootCordinates[Constants.VERTEX_INDEX_X], playerFootCordinates[Constants.VERTEX_INDEX_Y] + hero.getWidth());
+		if (tmxTile != null) {
+			if (!hero.IsState(ActionHelper.Jump)) {
+				//hero.ChangeStates(ActionHelper.Fall, (byte) 0);
+				if (tmxTile.getTextureRegion() != null) {
+					if (this.IsBottomCollide(hero, tmxTile)) {
+						//currentTileRectangle.setPosition(tmxTile.getTileX(), tmxTile.getTileY());
+						hero.setPosition(hero.getX(), hero.getY()- 4f);
+						//hero.ChangeStates((byte) 0, ActionHelper.Fall);
+					}
+				}
+			}
+
+		}
 
 		// TODO: Translate camera up or down.
 	}
@@ -143,23 +175,21 @@ public class Map extends org.anddev.andengine.entity.Entity {
 		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 60);
 	}
 
-	private boolean IsBottomCollide(Personage personage, Block block) {
-		float pLeft = personage.getX();
-		float pRight = pLeft + personage.getWidth();
-		float pTop = personage.getY();
-		float pBottom = pTop + personage.getHeight();
+	/*
+	 * private boolean IsBottomCollide(Personage personage, TMXTile block) { float pLeft = personage.getX(); float pRight = pLeft + personage.getWidth(); float pTop = personage.getY(); float pBottom = pTop + personage.getHeight();
+	 * 
+	 * float bLeft = block.getTileX(); float bRight = bLeft + block.getTileWidth(); float bTop = block.getTileY(); float bBottom = bTop + block.getTileHeight();
+	 * 
+	 * // TODO: Some stupid code. Correct this function. if (!(pRight <= bLeft || bRight <= pLeft) && !(pBottom <= bTop || bBottom <= pTop)) { if (personage.getY() + personage.getHeight() - 5 < block.getTileY()) { return true; } } return false; }
+	 */
 
-		float bLeft = block.getX();
-		float bRight = bLeft + block.getWidth();
-		float bTop = block.getY();
-		float bBottom = bTop + block.getHeight();
-
-		// TODO: Some stupid code. Correct this function.
-		if (!(pRight <= bLeft || bRight <= pLeft) && !(pBottom <= bTop || bBottom <= pTop)) {
-			if (personage.getY() + personage.getHeight() - 5 < block.getY()) {
-				return true;
-			}
+	private boolean IsBottomCollide(Personage personage, TMXTile block) {
+		float y = personage.getY() + personage.getHeight();
+		System.out.println(block.getTileY() - y );
+		if (block.getTileY() - y < 2 && block.getTileY() - y > -10) {
+			return true;
 		}
+
 		return false;
 	}
 
@@ -174,22 +204,22 @@ public class Map extends org.anddev.andengine.entity.Entity {
 			personage.ChangeStates(ActionHelper.Fall, (byte) 0);
 			for (int i = 0; i < this.blocks.getCount() && personage.IsState(ActionHelper.Fall); i++) {
 				// TODO: Maybe need other function of correct collision detection.
-				if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
-					personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeight() + 1);
-					personage.ChangeStates((byte) 0, ActionHelper.Fall);
-				}
+				// if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
+				personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeight() + 1);
+				personage.ChangeStates((byte) 0, ActionHelper.Fall);
+				// }
 			}
 		}
 
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			// TODO: Maybe need other function of correct collision detection.
-			if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
-				if (this.blocks.getByIndex(i).getType() == 2) {
-					Map.hero.jumpPower = 150;
-					GameActivity.map.hero.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
-					GameActivity.camera.shake(3, 10);
-				}
+			// if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
+			if (this.blocks.getByIndex(i).getType() == 2) {
+				Map.hero.jumpPower = 150;
+				GameActivity.map.hero.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
+				GameActivity.camera.shake(3, 10);
 			}
+			// }
 		}
 
 		for (int i = 0; i < this.stars.getCount(); i++) {

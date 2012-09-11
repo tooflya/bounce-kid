@@ -12,8 +12,8 @@ public class GameTimer implements ITimerCallback {
 	 */
 	@Override
 	public void onTimePassed(final TimerHandler pTimerHandler) {
-		GameActivity.map.update();
 		GameActivity.map.hero.update();
+		GameActivity.map.update();
 	}
 
 	public static void reset() {
