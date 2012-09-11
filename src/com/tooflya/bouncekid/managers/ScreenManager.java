@@ -100,7 +100,7 @@ public class ScreenManager {
 						animationOut.setAnimationListener(new AnimationListener() {
 							@Override
 							public void onAnimationStart(Animation animation) {
-								screens[pScreen].setScene(Game.instance);
+								screens[pScreen].setScene(Game.engine);
 								screens[pScreen].onAttached();
 							}
 

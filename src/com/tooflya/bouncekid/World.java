@@ -21,10 +21,10 @@ public class World extends org.anddev.andengine.entity.Entity {
 	public World() {
 		super();
 
-		this.reset();
+		this.personage = new Personage(0, Options.cameraHeight - 120);
+		this.personage.create();
 
 		Game.screens.get(Screen.MAIN).attachChild(this);
-
 	}
 
 	// ===========================================================

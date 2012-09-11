@@ -48,7 +48,7 @@ public class LoadingScreen extends Screen {
 
 		mProgressBarTextureAtlas = new BitmapTextureAtlas(512, 64, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		Game.instance.getTextureManager().loadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
+		Game.engine.getTextureManager().loadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 
 		/**
 		 * 
@@ -118,7 +118,7 @@ public class LoadingScreen extends Screen {
 
 		clearUpdateHandlers();
 
-		Game.instance.getTextureManager().unloadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
+		Game.engine.getTextureManager().unloadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 	}
 
 	/*

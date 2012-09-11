@@ -24,12 +24,12 @@ import org.anddev.andengine.ui.activity.LayoutGameActivity;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
 
-import com.tooflya.bouncekid.background.AsyncTaskLoader;
-import com.tooflya.bouncekid.background.IAsyncCallback;
+import com.tooflya.bouncekid.Game.IAsyncCallback;
 import com.tooflya.bouncekid.managers.ScreenManager;
 import com.tooflya.bouncekid.screens.LoadingScreen;
 import com.tooflya.bouncekid.ui.CustomCamera;
@@ -48,7 +48,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 	public final static Random random = new Random();
 
 	/** Instance of engine */
-	public static Engine instance;
+	public static Engine engine;
 
 	/**  */
 	public static Activity activity;
@@ -145,12 +145,12 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		options.getTouchOptions().setRunOnUpdateThread(true);
 
 		/** Try to init our engine */
-		instance = new LimitedFPSEngine(options, Options.targerFPS);
+		engine = new LimitedFPSEngine(options, Options.targerFPS);
 
 		/** Trying to initialize multitouch */
 		try {
 			if (MultiTouch.isSupported(this)) {
-				instance.setTouchController(new MultiTouchController());
+				engine.setTouchController(new MultiTouchController());
 			}
 		} catch (final MultiTouchException e) {
 		}
@@ -158,7 +158,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		/**  */
 		activity = this;
 
-		return instance;
+		return engine;
 	}
 
 	/*
@@ -347,4 +347,54 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 	// Methods
 	// ===========================================================
 
+	public static void loadTextures(final BitmapTextureAtlas... textures) {
+		engine.getTextureManager().loadTextures(textures);
+	}
+
+	public static Context getContext() {
+		return context;
+	}
+
+	public interface IAsyncCallback {
+
+		// ===========================================================
+		// Methods
+		// ===========================================================
+
+		public abstract void workToDo();
+
+		public abstract void onComplete();
+
+	}
+
+	public class AsyncTaskLoader extends AsyncTask<IAsyncCallback, Integer, Boolean> {
+
+		// ===========================================================
+		// Fields
+		// ===========================================================
+
+		IAsyncCallback[] _params;
+
+		// ===========================================================
+		// Inherited Methods
+		// ===========================================================
+
+		@Override
+		protected Boolean doInBackground(IAsyncCallback... params) {
+			this._params = params;
+			int count = params.length;
+			for (int i = 0; i < count; i++) {
+				params[i].workToDo();
+			}
+			return true;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			int count = this._params.length;
+			for (int i = 0; i < count; i++) {
+				this._params[i].onComplete();
+			}
+		}
+	}
 }

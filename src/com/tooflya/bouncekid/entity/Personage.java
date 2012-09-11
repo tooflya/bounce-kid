@@ -1,7 +1,11 @@
 package com.tooflya.bouncekid.entity;
 
+import org.anddev.andengine.opengl.texture.TextureOptions;
+import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
+import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
+import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 
 /**
@@ -14,13 +18,15 @@ public class Personage extends Entity {
 	// Constants
 	// ===========================================================
 
+	private static BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
+
 	// ===========================================================
 	// Fields
 	// ===========================================================
 
 	private byte currentStates;
 
-	public int jumpPower;
+	private int jumpPower;
 	private int maxJumpPower;
 
 	private float jumpStep;
@@ -37,15 +43,17 @@ public class Personage extends Entity {
 		this.jumpPower = this.maxJumpPower = 40;
 		this.jumpStep = 4f;
 
-		this.setFlippedHorizontal(true);
-
-		this.reset();
+		Game.loadTextures(texture);
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
 		this(pTiledTextureRegion);
 
 		this.setPosition(x, y);
+	}
+
+	public Personage(final float x, final float y) {
+		this(x, y, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.getContext(), "sprite_running.png", 0, 0, 5, 2));
 	}
 
 	// ===========================================================
@@ -59,16 +67,21 @@ public class Personage extends Entity {
 	 */
 	@Override
 	public void update() {
+		super.update();
 
 		this.runningProceed();
-		this.jumpProceed();
-		this.fallProceed();
-
+		// this.jumpProceed();
+		// this.fallProceed();
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.tooflya.bouncekid.entity.Entity#deepCopy()
+	 */
 	@Override
 	public Entity deepCopy() {
-		return null;
+		return new Personage(getTextureRegion().deepCopy());
 	}
 
 	// ===========================================================
