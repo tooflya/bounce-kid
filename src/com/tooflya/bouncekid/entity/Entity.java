@@ -4,6 +4,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
+import org.anddev.andengine.opengl.util.GLHelper;
 
 import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.managers.EntityManager;
@@ -42,7 +43,7 @@ public abstract class Entity extends AnimatedSprite {
 
 		this.hide();
 		this.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-		
+
 		Game.screens.get(Screen.MAIN).attachChild(this);
 	}
 
@@ -185,6 +186,18 @@ public abstract class Entity extends AnimatedSprite {
 	@Override
 	protected void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.anddev.andengine.entity.sprite.BaseSprite#onInitDraw(javax.microedition.khronos.opengles.GL10)
+	 */
+	@Override
+	protected void onInitDraw(final GL10 pGL) {
+		super.onInitDraw(pGL);
+
+		GLHelper.enableDither(pGL);
 	}
 
 	// ===========================================================

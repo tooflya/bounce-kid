@@ -1,27 +1,23 @@
 package com.tooflya.bouncekid.screens;
 
 import org.anddev.andengine.engine.camera.hud.HUD;
-import org.anddev.andengine.entity.layer.tiled.tmx.TMXLayer;
-import org.anddev.andengine.entity.layer.tiled.tmx.TMXLoader;
-import org.anddev.andengine.entity.layer.tiled.tmx.TMXTiledMap;
-import org.anddev.andengine.entity.layer.tiled.tmx.util.exception.TMXLoadException;
+import org.anddev.andengine.entity.modifier.RotationModifier;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.Scene.IOnSceneTouchListener;
 import org.anddev.andengine.entity.scene.background.AutoParallaxBackground;
 import org.anddev.andengine.entity.scene.background.ParallaxBackground.ParallaxEntity;
-import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.entity.text.ChangeableText;
 import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
-import org.anddev.andengine.util.Debug;
 
 import android.util.FloatMath;
 
 import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.Options;
+import com.tooflya.bouncekid.entity.Sprite;
 
 /**
  * @author Tooflya.com
@@ -37,14 +33,11 @@ public class MainScreen extends Screen implements IOnSceneTouchListener {
 
 	private TextureRegion mParallaxLayerBackground;
 	private TextureRegion mParallaxLayerBack;
+	private TextureRegion mParallaxLayerBack2;
 	private TextureRegion mParallaxLayerMid;
 	private TextureRegion mParallaxLayerFront;
 
 	private AutoParallaxBackground autoParallaxBackground;
-
-	public static Sprite top, bottom, center;
-
-	private TMXTiledMap mTMXTiledMap;
 
 	// ===========================================================
 	// Fields
@@ -73,38 +66,31 @@ public class MainScreen extends Screen implements IOnSceneTouchListener {
 		this.mAutoParallaxBackgroundTexture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 		this.mAutoParallaxBackgroundTexture2 = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 
-		this.mParallaxLayerBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture2, Game.getContext(), "bg_static.png", 0, 0);
-		this.mParallaxLayerFront = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, Game.getContext(), "par_up.png", 0, 0);
-		this.mParallaxLayerBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, Game.getContext(), "par_down.png", 0, 310);
-		this.mParallaxLayerMid = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, Game.getContext(), "par_centre.png", 0, 620);
+		this.mParallaxLayerBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture2, Game.getContext(), "main_bg.png", 0, 0);
+		this.mParallaxLayerFront = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, Game.getContext(), "par_front.png", 0, 0);
+		this.mParallaxLayerBack = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, Game.getContext(), "par_back.png", 0, 410);
+		this.mParallaxLayerBack2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, Game.getContext(), "oblaka.png", 0, 710);
 
-		Game.loadTextures(this.mAutoParallaxBackgroundTexture, this.mAutoParallaxBackgroundTexture2);
+		autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 30f);
 
-		autoParallaxBackground = new AutoParallaxBackground(0, 0, 0, 5);
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0, new Sprite(0, 0, this.mParallaxLayerBackground)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.3f, new Sprite(0, Options.cameraHeight - this.mParallaxLayerBack.getHeight() / 2, this.mParallaxLayerBack)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-3.0f, new Sprite(0, -this.mParallaxLayerFront.getHeight() / 2, this.mParallaxLayerFront)));
 
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(5.0f, new Sprite(0, (Options.cameraHeight - this.mParallaxLayerMid.getHeight()) / 2, this.mParallaxLayerMid)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-6.0f, new Sprite(0, 0, this.mParallaxLayerBack2)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.0f, new Sprite(0, Options.cameraHeight - this.mParallaxLayerBack.getHeight(), this.mParallaxLayerBack)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-4.0f, new Sprite(0, Options.cameraHeight - this.mParallaxLayerFront.getHeight(), this.mParallaxLayerFront)));
 
 		this.setBackground(autoParallaxBackground);
 
-		autoParallaxBackground.setParallaxChangePerSecond(20);
+		final Sprite sun = new Sprite(Options.cameraWidth - 190, 14, BitmapTextureAtlasTextureRegionFactory.createFromAsset(this.mAutoParallaxBackgroundTexture, Game.getContext(), "sun_flames.png", 0, 910));
+		final RotationModifier rotate = new RotationModifier(400000000, 0, Integer.MAX_VALUE);
+
+		sun.registerEntityModifier(rotate);
+
+		hud.attachChild(sun);
 
 		this.setOnSceneTouchListener(this);
 
-		try {
-			final TMXLoader tmxLoader = new TMXLoader(Game.getInstance(), Game.getCore().getTextureManager(), TextureOptions.NEAREST, null);
-			this.mTMXTiledMap = tmxLoader.loadFromAsset(Game.getInstance(), "levels/map.tmx");
-		} catch (final TMXLoadException tmxle) {
-			Debug.e(tmxle);
-		}
-
-		// Add the non-object layers to the scene
-		for (int i = 0; i < this.mTMXTiledMap.getTMXLayers().size(); i++) {
-			TMXLayer layer = this.mTMXTiledMap.getTMXLayers().get(i);
-			this.attachChild(layer);
-		}
+		Game.loadTextures(this.mAutoParallaxBackgroundTexture, this.mAutoParallaxBackgroundTexture2);
 	}
 
 	// ===========================================================
@@ -161,7 +147,6 @@ public class MainScreen extends Screen implements IOnSceneTouchListener {
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
 		switch (pSceneTouchEvent.getAction()) {
 		case TouchEvent.ACTION_DOWN:
-			Game.getCamera().setCenter(pSceneTouchEvent.getX(), pSceneTouchEvent.getY());
 			break;
 		}
 		return false;

@@ -76,7 +76,7 @@ public class Personage extends Entity {
 		// this.jumpProceed();
 		// this.fallProceed();
 
-		//Game.getCamera().setCenter(this.getCenterX(), this.getCenterY());
+		Game.getCamera().setCenter(this.getCenterX(), this.getCenterY());
 	}
 
 	/*

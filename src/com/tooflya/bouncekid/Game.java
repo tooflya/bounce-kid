@@ -149,12 +149,12 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		engine = new LimitedFPSEngine(options, Options.targerFPS);
 
 		/** Trying to initialize multitouch */
-		try {
+		/**try {
 			if (MultiTouch.isSupported(this)) {
 				engine.setTouchController(new MultiTouchController());
 			}
 		} catch (final MultiTouchException e) {
-		}
+		}*/
 
 		/**  */
 		instance = this;
