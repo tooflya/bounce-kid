@@ -32,6 +32,7 @@ import com.tooflya.bouncekid.background.AsyncTaskLoader;
 import com.tooflya.bouncekid.background.IAsyncCallback;
 import com.tooflya.bouncekid.managers.ScreenManager;
 import com.tooflya.bouncekid.screens.LoadingScreen;
+import com.tooflya.bouncekid.screens.Screen;
 import com.tooflya.bouncekid.ui.CustomCamera;
 
 /**
@@ -48,16 +49,16 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 	public final static Random random = new Random();
 
 	/** Instance of engine */
-	public static Engine engine;
+	private static Engine engine;
 
 	/**  */
-	public static Activity activity;
+	private static Activity instance;
 
 	/** Context of main activity */
-	public static Context context;
+	private static Context context;
 
 	/** Camera of the game */
-	public static CustomCamera camera;
+	private static CustomCamera camera;
 
 	/**  */
 	public static boolean isGameLoaded = false;
@@ -92,7 +93,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 	private long screenChangeTime = 0;
 
 	/**  */
-	private World world;
+	public static World world;
 
 	// ===========================================================
 	// Virtual methods
@@ -156,7 +157,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		}
 
 		/**  */
-		activity = this;
+		instance = this;
 
 		return engine;
 	}
@@ -171,7 +172,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		FontFactory.setAssetBasePath("font/");
 
-		font = FontFactory.createFromAsset(fontTexture, getApplicationContext(), "casual.ttf", 14, true, Color.RED);
+		font = FontFactory.createFromAsset(fontTexture, getApplicationContext(), "casual.ttf", 14, true, Color.WHITE);
 
 		this.getEngine().getFontManager().loadFont(font);
 		this.getEngine().getTextureManager().loadTextures(fontTexture, resourcesBitmapTexture);
@@ -351,7 +352,27 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		engine.getTextureManager().loadTextures(textures);
 	}
 
+	public static void unloadTextures(final BitmapTextureAtlas... textures) {
+		engine.getTextureManager().unloadTextures(textures);
+	}
+
+	public static void close() {
+		instance.finish();
+	}
+
+	public static CustomCamera getCamera() {
+		return camera;
+	}
+
 	public static Context getContext() {
 		return context;
+	}
+
+	public static Activity getInstance() {
+		return instance;
+	}
+
+	public static Engine getCore() {
+		return engine;
 	}
 }

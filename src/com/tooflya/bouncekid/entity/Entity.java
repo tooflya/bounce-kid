@@ -1,11 +1,13 @@
 package com.tooflya.bouncekid.entity;
 
+import javax.microedition.khronos.opengles.GL10;
+
 import org.anddev.andengine.entity.sprite.AnimatedSprite;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.tooflya.bouncekid.Game;
-import com.tooflya.bouncekid.Screen;
 import com.tooflya.bouncekid.managers.EntityManager;
+import com.tooflya.bouncekid.screens.Screen;
 
 /**
  * @author Tooflya.com
@@ -39,7 +41,8 @@ public abstract class Entity extends AnimatedSprite {
 		super(0, 0, pTiledTextureRegion.deepCopy());
 
 		this.hide();
-
+		this.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+		
 		Game.screens.get(Screen.MAIN).attachChild(this);
 	}
 

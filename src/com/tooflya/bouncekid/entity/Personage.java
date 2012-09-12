@@ -6,6 +6,7 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextur
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 
 /**
@@ -44,6 +45,8 @@ public class Personage extends Entity {
 		this.jumpStep = 4f;
 
 		Game.loadTextures(texture);
+		Game.getCamera().setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
+		Game.getCamera().setBoundsEnabled(true);
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
@@ -72,6 +75,8 @@ public class Personage extends Entity {
 		this.runningProceed();
 		// this.jumpProceed();
 		// this.fallProceed();
+
+		//Game.getCamera().setCenter(this.getCenterX(), this.getCenterY());
 	}
 
 	/*
@@ -91,7 +96,7 @@ public class Personage extends Entity {
 	private void runningProceed() {
 		if (!this.IsState(ActionHelper.Jump) && !this.IsState(ActionHelper.Fall)) {
 			if (!this.isAnimationRunning()) {
-				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80 }, 0, 7, true);
+				this.animate(new long[] { 80, 80, 80, 80, 80 }, 0, 4, true);
 			}
 		} else {
 			if (this.isAnimationRunning()) {

@@ -1,6 +1,7 @@
 package com.tooflya.bouncekid;
 
 import com.tooflya.bouncekid.entity.Personage;
+import com.tooflya.bouncekid.screens.Screen;
 
 public class World extends org.anddev.andengine.entity.Entity {
 
@@ -12,7 +13,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	// Fields
 	// ===========================================================
 
-	private Personage personage;
+	public Personage personage;
 
 	// ===========================================================
 	// Constructors
@@ -32,6 +33,6 @@ public class World extends org.anddev.andengine.entity.Entity {
 	// ===========================================================
 
 	public void update() {
-
+		this.personage.update();
 	}
 }

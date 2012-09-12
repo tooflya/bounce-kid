@@ -12,7 +12,6 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextur
 import org.anddev.andengine.opengl.util.GLHelper;
 
 import com.tooflya.bouncekid.Game;
-import com.tooflya.bouncekid.Screen;
 
 /**
  * @author Tooflya.com
@@ -48,14 +47,14 @@ public class LoadingScreen extends Screen {
 
 		mProgressBarTextureAtlas = new BitmapTextureAtlas(512, 64, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		Game.engine.getTextureManager().loadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
+		Game.loadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 
 		/**
 		 * 
 		 * Creating of sprites
 		 * 
 		 */
-		Sprite background = new Sprite(0, 0, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, Game.context, "tooflya_hd.png", 0, 0)) {
+		Sprite background = new Sprite(0, 0, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, Game.getContext(), "tooflya_hd.png", 0, 0)) {
 			@Override
 			protected void onInitDraw(final GL10 pGL) {
 				super.onInitDraw(pGL);
@@ -66,7 +65,7 @@ public class LoadingScreen extends Screen {
 		};
 		setBackground(new SpriteBackground(background));
 
-		progressBar = new Sprite(228, 421, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mProgressBarTextureAtlas, Game.context, "loaderbar_full_hd.png", 0, 0));
+		progressBar = new Sprite(228, 421, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mProgressBarTextureAtlas, Game.getContext(), "loaderbar_full_hd.png", 0, 0));
 		progressBar.setWidth(1);
 		progressBar.getTextureRegion().setWidth(1);
 		attachChild(progressBar);
@@ -118,7 +117,7 @@ public class LoadingScreen extends Screen {
 
 		clearUpdateHandlers();
 
-		Game.engine.getTextureManager().unloadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
+		Game.unloadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 	}
 
 	/*
