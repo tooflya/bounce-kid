@@ -75,7 +75,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	private void GenerateNextBlock() {
 		this.tempBlock = (Block) this.blocks.create();
-//		Star star = (Star) this.stars.create();
+		Star star = (Star) this.stars.create();
 
 		float offsetX = 3;
 		float upY = Math.min(3, this.lastBlock.getY() - this.personage.getHeight());
@@ -93,7 +93,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.tempBlock = (Block) this.blocks.create();
 		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
 
-//		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
+		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
 	}
 
 	public void CheckCollision(Personage personage) {
