@@ -9,10 +9,13 @@ public class ParallaxEntity extends org.anddev.andengine.entity.scene.background
 
 	private float yParallaxFactor = 0;
 	private float xParallaxFactor = 0;
+	
+	private Shape shape;
 
-	public ParallaxEntity(final float pParallaxFactor, final Shape pShape) {
-		super(pParallaxFactor, pShape);
+	public ParallaxEntity(final float pParallaxFactor, final Shape shape) {
+		super(pParallaxFactor, shape);
 
+		this.shape = shape;
 		this.xParallaxFactor = pParallaxFactor;
 	}
 
@@ -28,7 +31,7 @@ public class ParallaxEntity extends org.anddev.andengine.entity.scene.background
 		pGL.glPushMatrix();
 		{
 			final float cameraWidth = pCamera.getWidth();
-			final float shapeWidthScaled = this.mShape.getWidth();
+			final float shapeWidthScaled = this.shape.getWidth();
 			float baseOffsetX = (pParallaxValue * this.xParallaxFactor) % shapeWidthScaled;
 			float baseOffsetY = 0;
 
@@ -45,7 +48,7 @@ public class ParallaxEntity extends org.anddev.andengine.entity.scene.background
 			float currentMaxX = baseOffsetX;
 
 			do {
-				this.mShape.onDraw(pGL, pCamera);
+				this.shape.onDraw(pGL, pCamera);
 				pGL.glTranslatef(shapeWidthScaled, 0, 0);
 				currentMaxX += shapeWidthScaled;
 			} while (currentMaxX < cameraWidth);
