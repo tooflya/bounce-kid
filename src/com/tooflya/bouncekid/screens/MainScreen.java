@@ -64,9 +64,9 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 	public MainScreen() {
 		final EntitySimple sun;
-		
+
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0, new EntitySimple(Options.cameraWidth - parallaxLayerBackground.getWidth(), 0, parallaxLayerBackground)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0,  sun = new EntitySimple(Options.cameraWidth - 190, 14, BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "sun_flames.png", 0, 910))));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0, sun = new EntitySimple(Options.cameraWidth - 190, 14, BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "sun_flames.png", 0, 910))));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-6.0f, new EntitySimple(parallaxLayerMiddle)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.0f, 3.0f, new EntitySimple(0, Options.cameraHeight - parallaxLayerBack.getHeight() - 100, parallaxLayerBack)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-4.0f, 7.0f, new EntitySimple(0, Options.cameraHeight - parallaxLayerFront.getHeight(), parallaxLayerFront)));
@@ -175,13 +175,10 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 		switch (pSceneTouchEvent.getAction()) {
 		case TouchEvent.ACTION_DOWN:
-			if (!Game.world.personage.IsState(ActionHelper.Jump) && !Game.world.personage.IsState(ActionHelper.Fall)) {
-				Game.world.personage.ChangeStates(ActionHelper.Jump, ActionHelper.Running);
-			}
+			Game.world.personage.ChangeStates(ActionHelper.WantToFly, (byte) 0);
 			break;
 		case TouchEvent.ACTION_UP:
-			if (Game.world.personage.IsState(ActionHelper.Jump))
-				Game.world.personage.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
+			Game.world.personage.ChangeStates((byte) 0, ActionHelper.WantToFly);
 			break;
 		}
 

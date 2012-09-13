@@ -11,7 +11,8 @@ public class ActionHelper {
 	// ===========================================================
 
 	public static final byte None = 0;
-	public static final byte Running = 1;
-	public static final byte Jump = 2;
-	public static final byte Fall = 4;
+	public static final byte Run = 1;
+	public static final byte WantToFly = 2;
+	public static final byte Fly = 4;
+	public static final byte Fall = 8;
 }

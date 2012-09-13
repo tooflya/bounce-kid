@@ -41,7 +41,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	public World() {
 		super();
 
-		this.personage = new Personage(0, Options.cameraHeight - 20);
+		this.personage = new Personage(0, Options.cameraHeight - 200);
 		this.personage.create();
 
 		Game.screens.get(Screen.MAIN).attachChild(this);
@@ -75,7 +75,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	private void GenerateNextBlock() {
 		this.tempBlock = (Block) this.blocks.create();
-		Star star = (Star) this.stars.create();
+//		Star star = (Star) this.stars.create();
 
 		float offsetX = 3;
 		float upY = Math.min(3, this.lastBlock.getY() - this.personage.getHeight());
@@ -93,17 +93,17 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.tempBlock = (Block) this.blocks.create();
 		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
 
-		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
+//		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
 	}
 
 	public void CheckCollision(Personage personage) {
-		if (!personage.IsState(ActionHelper.Jump)) {
+		if (!personage.IsState(ActionHelper.Fly)) {
 			personage.ChangeStates(ActionHelper.Fall, (byte) 0);
 			for (int i = 0; i < this.blocks.getCount() && personage.IsState(ActionHelper.Fall); i++) {
 				// TODO: Maybe need other function of correct collision detection.
 				if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
 					personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeight() + 1);
-					personage.ChangeStates((byte) 0, ActionHelper.Fall);
+					personage.ChangeStates(ActionHelper.Run, ActionHelper.Fall);
 				}
 			}
 		}

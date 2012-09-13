@@ -19,7 +19,11 @@ public class Personage extends Entity {
 	// Constants
 	// ===========================================================
 
-	private static BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
+	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
+	private final int maxFlyPower = 50;
+	private final int runStep = 4;
+	private final int flyStep = 4;
+	private final int fallStep = 4;
 
 	// ===========================================================
 	// Fields
@@ -27,10 +31,7 @@ public class Personage extends Entity {
 
 	private byte currentStates;
 
-	private int jumpPower;
-	private int maxJumpPower;
-
-	private float jumpStep;
+	private int flyPower;
 
 	// ===========================================================
 	// Constructors
@@ -39,10 +40,9 @@ public class Personage extends Entity {
 	public Personage(final TiledTextureRegion pTiledTextureRegion) {
 		super(pTiledTextureRegion);
 
-		this.currentStates = ActionHelper.Running;
+		this.currentStates = ActionHelper.Run;
 
-		this.jumpPower = this.maxJumpPower = 40;
-		this.jumpStep = 4f;
+		this.flyPower = this.maxFlyPower;
 
 		Game.loadTextures(texture);
 		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
@@ -73,13 +73,32 @@ public class Personage extends Entity {
 	public void update() {
 		super.update();
 
-		runningProceed();
+		this.setPosition(this.getX() + this.runStep, this.getY());
 
-		if (this.IsState(ActionHelper.Jump)) {
-			jumpProceed();
+		if (this.IsState(ActionHelper.Run) && !this.isAnimationRunning()) {
+			this.animate(new long[] { 80, 80, 80, 80, 80 }, 0, 4, true);
 		}
+
+		if (!this.IsState(ActionHelper.Run) && this.isAnimationRunning()) {
+			this.stopAnimation(2);
+		}
+
+		if (this.IsState(ActionHelper.Run) && this.IsState(ActionHelper.WantToFly)) {
+			this.ChangeStates(ActionHelper.Fly, ActionHelper.Run);
+		}
+
+		if (this.IsState(ActionHelper.Fly)) {
+			if (this.flyPower > 0 &&  this.IsState(ActionHelper.WantToFly)) {
+				this.flyPower--;
+				this.setPosition(this.getX(), this.getY() - this.flyStep);
+			} else {
+				this.flyPower = this.maxFlyPower;
+				this.ChangeStates(ActionHelper.Fall, ActionHelper.Fly);
+			}
+		}
+
 		if (this.IsState(ActionHelper.Fall)) {
-			fallProceed();
+			this.setPosition(this.getX(), this.getY() + this.fallStep);
 		}
 	}
 
@@ -96,36 +115,6 @@ public class Personage extends Entity {
 	// ===========================================================
 	// Methods
 	// ===========================================================
-
-	private void runningProceed() {
-		if (!this.IsState(ActionHelper.Jump) && !this.IsState(ActionHelper.Fall)) {
-			if (!this.isAnimationRunning()) {
-				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80, 80, 80 }, 0, 9, true);
-			}
-		} else {
-			if (this.isAnimationRunning()) {
-				this.stopAnimation(2);
-			}
-		}
-
-		this.setPosition(this.getX() + 5, this.getY());
-	}
-
-	private void jumpProceed() {
-		if (this.jumpPower > 0) {
-			this.jumpPower--;
-			this.setPosition(this.getX(), this.getY() - this.jumpStep);
-		} else {
-			this.jumpPower = this.maxJumpPower;
-			this.ChangeStates(ActionHelper.Fall, ActionHelper.Jump);
-		}
-	}
-
-	private void fallProceed() {
-		this.jumpPower = 40;
-
-		this.setPosition(this.getX(), this.getY() + this.jumpStep);
-	}
 
 	public boolean IsState(byte state) {
 		return (this.currentStates & state) == state;
