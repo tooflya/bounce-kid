@@ -79,8 +79,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getWidth(), this.lastBlock.getY());
 		this.lastBlock = this.tempBlock;
 	}
-	
-	private void GenerateNextRandomBlock(){
+
+	private void GenerateNextRandomBlock() {
 		// Random blocks.
 		float offsetX = 3;
 		float upY = Math.min(3, this.lastBlock.getY() - this.personage.getHeight());
@@ -96,7 +96,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.tempBlock = (Block) this.blocks.create();
 		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
 	}
-	
+
 	private void GenerateNextStar() {
 		Star star = (Star) this.stars.create();
 
@@ -105,7 +105,6 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
 	}
-	
 
 	public void CheckCollision(Personage personage) {
 		if (!personage.IsState(ActionHelper.Fly)) {
@@ -127,6 +126,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 				Entity a = this.starsd.create();
 				a.setPosition(block.getX(), block.getY());
+				personage.flyPower += 3;
 			}
 		}
 	}

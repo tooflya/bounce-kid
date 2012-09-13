@@ -31,7 +31,7 @@ public class Personage extends Entity {
 
 	private byte currentStates;
 
-	private int flyPower;
+	public int flyPower;
 
 	// ===========================================================
 	// Constructors
@@ -88,11 +88,11 @@ public class Personage extends Entity {
 		}
 
 		if (this.IsState(ActionHelper.Fly)) {
-			if (this.flyPower > 0 &&  this.IsState(ActionHelper.WantToFly)) {
+			if (this.flyPower > 0 && this.IsState(ActionHelper.WantToFly)) {
 				this.flyPower--;
 				this.setPosition(this.getX(), this.getY() - this.flyStep);
 			} else {
-				this.flyPower = this.maxFlyPower;
+				this.flyPower = Math.max(this.maxFlyPower, this.flyPower);
 				this.ChangeStates(ActionHelper.Fall, ActionHelper.Fly);
 			}
 		}
