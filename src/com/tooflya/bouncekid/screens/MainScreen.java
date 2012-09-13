@@ -64,19 +64,18 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 	public MainScreen() {
 		final EntitySimple sun;
-
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0, new EntitySimple(Options.cameraWidth - parallaxLayerBackground.getWidth(), 0, parallaxLayerBackground)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0, sun = new EntitySimple(Options.cameraWidth - 190, 14, BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "sun_flames.png", 0, 910))));
+		EntitySimple a = new EntitySimple(Options.cameraWidth - parallaxLayerBackground.getWidth(), 0, parallaxLayerBackground);
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0,a));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0,  sun = new EntitySimple(Options.cameraWidth - 190, 14, BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "sun_flames.png", 0, 910))));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-6.0f, new EntitySimple(parallaxLayerMiddle)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.0f, 3.0f, new EntitySimple(0, Options.cameraHeight - parallaxLayerBack.getHeight() - 100, parallaxLayerBack)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-4.0f, 7.0f, new EntitySimple(0, Options.cameraHeight - parallaxLayerFront.getHeight(), parallaxLayerFront)));
 
 		this.attachChild(autoParallaxBackground);
+		
 		final RotationModifier rotate = new RotationModifier(40000000, 0, Integer.MAX_VALUE);
 
 		sun.registerEntityModifier(rotate);
-
-		this.attachChild(sun);
 
 		fpsInfo.setPosition(15, 15);
 		altnfo.setPosition(15, 40);
