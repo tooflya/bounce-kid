@@ -63,20 +63,25 @@ public class World extends org.anddev.andengine.entity.Entity {
 	private void GenerateStartBlocks() {
 		// TODO: Clear all blocks.
 		this.lastBlock = (Block) this.blocks.create();
-		this.lastBlock.setPosition(0, Options.cameraHeight - 44);
+		this.lastBlock.setPosition(0, Options.cameraHeight - this.lastBlock.getHeight());
+		float x = this.lastBlock.getX();
 		float y = this.lastBlock.getY();
-		float x = this.lastBlock.getX() + 4;
 		while (x < Options.cameraWidth) {
+			x += this.lastBlock.getWidth();
 			this.lastBlock = (Block) this.blocks.create();
 			this.lastBlock.setPosition(x, y);
-			x += 44;
 		}
 	}
 
 	private void GenerateNextBlock() {
+		// Bottom blocks.
 		this.tempBlock = (Block) this.blocks.create();
-		Star star = (Star) this.stars.create();
-
+		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getWidth(), this.lastBlock.getY());
+		this.lastBlock = this.tempBlock;
+	}
+	
+	private void GenerateNextRandomBlock(){
+		// Random blocks.
 		float offsetX = 3;
 		float upY = Math.min(3, this.lastBlock.getY() - this.personage.getHeight());
 		float downY = Options.cameraHeight - this.lastBlock.getY() - this.lastBlock.getHeight();
@@ -84,17 +89,23 @@ public class World extends org.anddev.andengine.entity.Entity {
 		if (this.lastBlock.getY() - offsetY < this.personage.getHeight()) {
 			offsetY = this.lastBlock.getY() - this.personage.getHeight();
 		}
-		this.tempBlock.setPosition(this.lastBlock.getX() + 44 + offsetX - 3, this.lastBlock.getY() + offsetY);
-		this.lastBlock = this.tempBlock;
 
 		offsetX = Game.random.nextFloat() * 44;
 		offsetY = this.personage.getHeight() / 2 + Options.cameraHeight / 2 + this.personage.getY() - Game.random.nextFloat() * Options.cameraHeight - 44;
 
 		this.tempBlock = (Block) this.blocks.create();
 		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
+	}
+	
+	private void GenerateNextStar() {
+		Star star = (Star) this.stars.create();
+
+		float offsetX = Game.random.nextFloat() * 44;
+		float offsetY = this.personage.getHeight() / 2 + Options.cameraHeight / 2 + this.personage.getY() - Game.random.nextFloat() * Options.cameraHeight - 44;
 
 		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
 	}
+	
 
 	public void CheckCollision(Personage personage) {
 		if (!personage.IsState(ActionHelper.Fly)) {
@@ -168,6 +179,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth + Game.camera.getCenterX()) {
 			this.GenerateNextBlock();
+			this.GenerateNextRandomBlock();
+			this.GenerateNextStar();
 		}
 
 		this.CheckCollision(this.personage);
