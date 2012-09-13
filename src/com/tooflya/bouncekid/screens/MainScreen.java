@@ -49,6 +49,8 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 	private final static ChangeableText fpsInfo = new ChangeableText(100, 160, Game.font, "Fps      ");
 	private final static ChangeableText altnfo = new ChangeableText(100, 160, Game.font, "Altitude");
+	
+	private static HUD hud = new HUD();
 
 	// ===========================================================
 	// Fields
@@ -69,7 +71,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0,a));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(0,  sun = new EntitySimple(Options.cameraWidth - 190, 14, BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "sun_flames.png", 0, 910))));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-6.0f, new EntitySimple(parallaxLayerMiddle)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.0f, 3.0f, new EntitySimple(0, Options.cameraHeight - parallaxLayerBack.getHeight() - 100, parallaxLayerBack)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.0f, 1.0f, new EntitySimple(0, Options.cameraHeight - parallaxLayerBack.getHeight() - 100, parallaxLayerBack)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-4.0f, 7.0f, new EntitySimple(0, Options.cameraHeight - parallaxLayerFront.getHeight(), parallaxLayerFront)));
 
 		this.attachChild(autoParallaxBackground);
@@ -81,8 +83,8 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		fpsInfo.setPosition(15, 15);
 		altnfo.setPosition(15, 40);
 
-		this.attachChild(fpsInfo);
-		this.attachChild(altnfo);
+		hud.attachChild(fpsInfo);
+		hud.attachChild(altnfo);
 
 		this.setOnSceneTouchListener(this);
 
@@ -213,7 +215,9 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	@Override
 	public void onAttached() {
 		super.onAttached();
-
+		
+		Game.camera.setHUD(hud);
+		
 		registerUpdateHandler(Game.GameTimer);
 	}
 
