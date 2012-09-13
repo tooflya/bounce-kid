@@ -1,12 +1,12 @@
 package com.tooflya.bouncekid.ui;
 
-import org.anddev.andengine.engine.camera.BoundCamera;
+import org.anddev.andengine.engine.camera.ZoomCamera;
 
 /**
  * @author Tooflya.com
  * @since
  */
-public class CustomCamera extends BoundCamera {
+public class Camera extends ZoomCamera {
 
 	// ===========================================================
 	// Constants
@@ -28,9 +28,10 @@ public class CustomCamera extends BoundCamera {
 	// Constructors
 	// ===========================================================
 
-	public CustomCamera(float pX, float pY, float pWidth, float pHeight) {
+	public Camera(float pX, float pY, float pWidth, float pHeight) {
 		super(pX, pY, pWidth, pHeight);
-		mShaking = false;
+		
+		this.mShaking = false;
 	}
 
 	// ===========================================================

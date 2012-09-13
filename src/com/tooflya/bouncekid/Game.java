@@ -27,13 +27,14 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
+import android.widget.Toast;
 
 import com.tooflya.bouncekid.background.AsyncTaskLoader;
 import com.tooflya.bouncekid.background.IAsyncCallback;
 import com.tooflya.bouncekid.managers.ScreenManager;
 import com.tooflya.bouncekid.screens.LoadingScreen;
 import com.tooflya.bouncekid.screens.Screen;
-import com.tooflya.bouncekid.ui.CustomCamera;
+import com.tooflya.bouncekid.ui.Camera;
 
 /**
  * @author Tooflya.com
@@ -49,16 +50,16 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 	public final static Random random = new Random();
 
 	/** Instance of engine */
-	private static Engine engine;
+	public static Engine engine;
 
 	/**  */
-	private static Activity instance;
+	public static Activity instance;
 
 	/** Context of main activity */
-	private static Context context;
+	public static Context context;
 
 	/** Camera of the game */
-	private static CustomCamera camera;
+	public static Camera camera;
 
 	/**  */
 	public static boolean isGameLoaded = false;
@@ -130,7 +131,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		Options.cameraCenterY = Options.cameraHeight / 2;
 
 		/** Initialize camera instance */
-		camera = new CustomCamera(0, 0, Options.cameraWidth, Options.cameraHeight);
+		camera = new Camera(0, 0, Options.cameraWidth, Options.cameraHeight);
 
 		/** Initialize the configuration of engine */
 		final EngineOptions options = new EngineOptions(true, ScreenOrientation.LANDSCAPE, new RatioResolutionPolicy(displayMetrics.widthPixels, displayMetrics.heightPixels), camera)
@@ -146,15 +147,12 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		options.getTouchOptions().setRunOnUpdateThread(true);
 
 		/** Try to init our engine */
-		engine = new LimitedFPSEngine(options, Options.targerFPS);
+		engine = new LimitedFPSEngine(options, Options.fps);
 
-		/** Trying to initialize multitouch */
-		/**try {
-			if (MultiTouch.isSupported(this)) {
+		try {
 				engine.setTouchController(new MultiTouchController());
-			}
 		} catch (final MultiTouchException e) {
-		}*/
+		}
 
 		/**  */
 		instance = this;
@@ -189,10 +187,10 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		/** Create screen manager */
 		screens = new ScreenManager();
 
-		this.world = new World();
+		world = new World();
 
 		/** Create game timer */
-		GameTimer = new TimerHandler(0.02f, true, new GameTimer(this.world));
+		GameTimer = new TimerHandler(0.02f, true, new GameTimer(world));
 
 		/** White while progressbar is running */
 		while (!isGameLoaded) {
@@ -358,21 +356,5 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 
 	public static void close() {
 		instance.finish();
-	}
-
-	public static CustomCamera getCamera() {
-		return camera;
-	}
-
-	public static Context getContext() {
-		return context;
-	}
-
-	public static Activity getInstance() {
-		return instance;
-	}
-
-	public static Engine getCore() {
-		return engine;
 	}
 }

@@ -7,6 +7,8 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextur
 import com.tooflya.bouncekid.entity.Block;
 import com.tooflya.bouncekid.entity.Entity;
 import com.tooflya.bouncekid.entity.Personage;
+import com.tooflya.bouncekid.entity.Star;
+import com.tooflya.bouncekid.entity.StarD;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 import com.tooflya.bouncekid.managers.EntityManager;
 import com.tooflya.bouncekid.screens.Screen;
@@ -20,6 +22,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 	private BitmapTextureAtlas texture;
 
 	private EntityManager blocks;
+	private EntityManager stars;
+	private EntityManager starsd;
 
 	private Block tempBlock = null;
 	private Block lastBlock = null;
@@ -37,13 +41,15 @@ public class World extends org.anddev.andengine.entity.Entity {
 	public World() {
 		super();
 
-		this.personage = new Personage(0, Options.cameraHeight - 120);
+		this.personage = new Personage(0, Options.cameraHeight - 20);
 		this.personage.create();
 
 		Game.screens.get(Screen.MAIN).attachChild(this);
 
 		texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
-		this.blocks = new EntityManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.getContext(), "ground_down.png", 0, 0, 1, 1)));
+		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground_down.png", 0, 0, 1, 1)));
+		this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 65, 65, 1, 18)));
+		this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "obj_star_disappear.png", 300, 0, 1, 11)));
 
 		Game.loadTextures(texture);
 
@@ -59,7 +65,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.lastBlock = (Block) this.blocks.create();
 		this.lastBlock.setPosition(0, Options.cameraHeight - 44);
 		float y = this.lastBlock.getY();
-		float x = this.lastBlock.getX() + 44;
+		float x = this.lastBlock.getX() + 4;
 		while (x < Options.cameraWidth) {
 			this.lastBlock = (Block) this.blocks.create();
 			this.lastBlock.setPosition(x, y);
@@ -69,7 +75,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	private void GenerateNextBlock() {
 		this.tempBlock = (Block) this.blocks.create();
-		// Star star = (Star) this.stars.create();
+		Star star = (Star) this.stars.create();
 
 		float offsetX = 3;
 		float upY = Math.min(3, this.lastBlock.getY() - this.personage.getHeight());
@@ -87,7 +93,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.tempBlock = (Block) this.blocks.create();
 		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
 
-		//star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
+		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
 	}
 
 	public void CheckCollision(Personage personage) {
@@ -99,6 +105,17 @@ public class World extends org.anddev.andengine.entity.Entity {
 					personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeight() + 1);
 					personage.ChangeStates((byte) 0, ActionHelper.Fall);
 				}
+			}
+		}
+
+		for (int i = 0; i < this.stars.getCount(); i++) {
+			Entity block = this.stars.getByIndex(i);
+
+			if (block.collidesWith(personage)) {
+				block.destroy();
+
+				Entity a = this.starsd.create();
+				a.setPosition(block.getX(), block.getY());
 			}
 		}
 	}
@@ -128,14 +145,29 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			Entity block = this.blocks.getByIndex(i);
-			if (block.getX() + block.getWidth() < Game.getCamera().getCenterX() - Options.cameraCenterX) {
+			if (block.getX() + block.getWidth() < Game.camera.getCenterX() - Options.cameraCenterX) {
 				block.destroy();
 			}
 		}
 
-		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth) {
+		for (int i = 0; i < this.stars.getCount(); i++) {
+			Entity block = this.stars.getByIndex(i);
+			// block.setPosition(block.getX() - Options.blockStep, block.getY());
+			if (block.getX() + block.getWidth() < Game.camera.getCenterX() - Options.cameraCenterX) {
+				block.destroy();
+			}
+		}
+
+		for (int i = 0; i < this.starsd.getCount(); i++) {
+			Entity block = this.starsd.getByIndex(i);
+			// block.setPosition(block.getX() - Options.blockStep, block.getY());
+			if (block.getX() + block.getWidth() < Game.camera.getCenterX() - Options.cameraCenterX) {
+				block.destroy();
+			}
+		}
+
+		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth + Game.camera.getCenterX()) {
 			this.GenerateNextBlock();
-			System.out.println("GENERATE NEW BLOCK!!!");
 		}
 
 		this.CheckCollision(this.personage);

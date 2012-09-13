@@ -63,7 +63,7 @@ public class ScreenManager {
 		 * 
 		 * 
 		 */
-		casper = (RelativeLayout) Game.getInstance().findViewById(R.id.casper);
+		casper = (RelativeLayout) Game.instance.findViewById(R.id.casper);
 
 		/**
 		 * 
@@ -71,8 +71,8 @@ public class ScreenManager {
 		 * 
 		 * 
 		 */
-		animationIn = AnimationUtils.loadAnimation(Game.getContext(), R.anim.fadein);
-		animationOut = AnimationUtils.loadAnimation(Game.getContext(), R.anim.fadeout);
+		animationIn = AnimationUtils.loadAnimation(Game.context, R.anim.fadein);
+		animationOut = AnimationUtils.loadAnimation(Game.context, R.anim.fadeout);
 	}
 
 	// ===========================================================
@@ -80,7 +80,7 @@ public class ScreenManager {
 	// ===========================================================
 
 	public void set(final int pScreen) {
-		Game.getInstance().runOnUiThread(new Runnable() {
+		Game.instance.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				casper.setVisibility(View.VISIBLE);
@@ -100,7 +100,7 @@ public class ScreenManager {
 						animationOut.setAnimationListener(new AnimationListener() {
 							@Override
 							public void onAnimationStart(Animation animation) {
-								screens[pScreen].setScene(Game.getCore());
+								screens[pScreen].setScene(Game.engine);
 								screens[pScreen].onAttached();
 							}
 
@@ -127,5 +127,9 @@ public class ScreenManager {
 
 	public Screen get(final int pScreen) {
 		return screens[pScreen];
+	}
+
+	public Screen getCurrent() {
+		return screens[Screen.screen];
 	}
 }

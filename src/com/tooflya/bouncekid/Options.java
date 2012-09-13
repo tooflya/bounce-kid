@@ -13,5 +13,17 @@ public class Options {
 	public static int cameraCenterX;
 	public static int cameraCenterY;
 
-	public static final int targerFPS = 120;
+	public static final int fps = 120;
+
+	public static final boolean zoomEnabled = false;
+	public static final boolean scrollEnabled = false;
+
+	// ===========================================================
+	// Map options
+	// ===========================================================
+
+	public static final int maxDistanceBetweenBlocksX = 300;
+	public static final int maxDistanceBetweenBlocksY = 100;
+
+	public static final float blockStep = 5;
 }

@@ -45,8 +45,8 @@ public class Personage extends Entity {
 		this.jumpStep = 4f;
 
 		Game.loadTextures(texture);
-		Game.getCamera().setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
-		Game.getCamera().setBoundsEnabled(true);
+		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
+		Game.camera.setBoundsEnabled(true);
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
@@ -56,7 +56,7 @@ public class Personage extends Entity {
 	}
 
 	public Personage(final float x, final float y) {
-		this(x, y, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.getContext(), "sprite_running.png", 0, 0, 5, 2));
+		this(x, y, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "sprite_running.png", 0, 0, 6, 3));
 	}
 
 	// ===========================================================
@@ -72,11 +72,14 @@ public class Personage extends Entity {
 	public void update() {
 		super.update();
 
-		this.runningProceed();
-		// this.jumpProceed();
-		// this.fallProceed();
+		runningProceed();
 
-		Game.getCamera().setCenter(this.getCenterX(), this.getCenterY());
+		if (this.IsState(ActionHelper.Jump)) {
+			jumpProceed();
+		}
+		if (this.IsState(ActionHelper.Fall)) {
+			fallProceed();
+		}
 	}
 
 	/*
@@ -96,7 +99,7 @@ public class Personage extends Entity {
 	private void runningProceed() {
 		if (!this.IsState(ActionHelper.Jump) && !this.IsState(ActionHelper.Fall)) {
 			if (!this.isAnimationRunning()) {
-				this.animate(new long[] { 80, 80, 80, 80, 80 }, 0, 4, true);
+				this.animate(new long[] { 80, 80, 80, 80, 80, 80, 80, 80, 80, 80 }, 0, 9, true);
 			}
 		} else {
 			if (this.isAnimationRunning()) {
@@ -104,7 +107,7 @@ public class Personage extends Entity {
 			}
 		}
 
-		this.setPosition(this.getX() + 4f, this.getY());
+		this.setPosition(this.getX() + 5, this.getY());
 	}
 
 	private void jumpProceed() {
@@ -118,6 +121,8 @@ public class Personage extends Entity {
 	}
 
 	private void fallProceed() {
+		this.jumpPower = 40;
+
 		this.setPosition(this.getX(), this.getY() + this.jumpStep);
 	}
 

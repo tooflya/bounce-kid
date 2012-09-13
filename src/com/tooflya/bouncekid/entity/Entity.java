@@ -45,6 +45,7 @@ public abstract class Entity extends AnimatedSprite {
 		this.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
 		Game.screens.get(Screen.MAIN).attachChild(this);
+		this.setZIndex(5);
 	}
 
 	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion) {
@@ -92,7 +93,7 @@ public abstract class Entity extends AnimatedSprite {
 
 	public boolean isManagerExist() {
 		if (this.manager != null) {
-			return false;
+			return true;
 		}
 
 		return false;
@@ -198,6 +199,9 @@ public abstract class Entity extends AnimatedSprite {
 		super.onInitDraw(pGL);
 
 		GLHelper.enableDither(pGL);
+		GLHelper.enableCulling(pGL);
+		GLHelper.enableTextures(pGL);
+		GLHelper.enableTexCoordArray(pGL);
 	}
 
 	// ===========================================================
