@@ -15,8 +15,8 @@ public class Options {
 
 	public static final int fps = 120;
 
-	public static final boolean zoomEnabled = false;
-	public static final boolean scrollEnabled = false;
+	public static final boolean zoomEnabled = true;
+	public static final boolean scrollEnabled = true;
 
 	// ===========================================================
 	// Map options
