@@ -1,5 +1,6 @@
 package com.tooflya.bouncekid.ui.parallax;
 
+import com.tooflya.bouncekid.Game;
 
 /**
  * @author Tooflya.com

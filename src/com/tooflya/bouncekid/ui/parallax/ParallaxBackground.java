@@ -8,6 +8,8 @@ import org.anddev.andengine.engine.camera.Camera;
 import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.shape.Shape;
 
+import com.tooflya.bouncekid.Game;
+
 /**
  * @author Tooflya.com
  * @since
@@ -137,13 +139,15 @@ public class ParallaxBackground extends Entity {
 
 				if (this.yParallaxFactor > 0) {
 					baseOffsetY = -(camera.getCenterY() - camera.getHeight() / 2) * this.yParallaxFactor / 10;
+				} else {
+					baseOffsetY = (camera.getCenterY() - camera.getHeight() / 2);
 				}
 
 				while (baseOffsetX > 0) {
 					baseOffsetX -= shapeWidthScaled;
 				}
 
-				GL.glTranslatef(baseOffsetX, baseOffsetY, 0);
+				GL.glTranslatef(baseOffsetX + Game.camera.getCenterX() - Game.camera.getWidth() / 2, baseOffsetY, 0);
 
 				float currentMaxX = baseOffsetX;
 

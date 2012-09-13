@@ -45,7 +45,6 @@ public abstract class Entity extends AnimatedSprite {
 		this.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
 		Game.screens.get(Screen.MAIN).attachChild(this);
-		this.setZIndex(5);
 	}
 
 	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion) {

@@ -41,7 +41,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	public World() {
 		super();
 
-		this.personage = new Personage(0, Options.cameraHeight - 20);
+		this.personage = new Personage(0, Options.cameraHeight - 200);
 		this.personage.create();
 
 		Game.screens.get(Screen.MAIN).attachChild(this);
