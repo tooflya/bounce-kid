@@ -76,8 +76,8 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		// autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.0f, 1.0f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerBack.getHeight() - 100), parallaxLayerBack)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-3.0f, new EntitySimple(parallaxLayerBackground)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-1.0f, 0.01f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerBack.getHeight() * Options.cameraRatioFactor), parallaxLayerBack)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.0f, 0.6f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerMiddle.getHeight() * Options.cameraRatioFactor), parallaxLayerMiddle)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-4.0f, 9.0f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerFront.getHeight() * Options.cameraRatioFactor), parallaxLayerFront)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.0f, 1.6f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerMiddle.getHeight() * Options.cameraRatioFactor), parallaxLayerMiddle)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-4.0f, 3.0f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerFront.getHeight() * Options.cameraRatioFactor), parallaxLayerFront)));
 
 		this.attachChild(autoParallaxBackground);
 
