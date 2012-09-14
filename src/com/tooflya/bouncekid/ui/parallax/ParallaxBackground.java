@@ -9,6 +9,7 @@ import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.shape.Shape;
 
 import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.Options;
 
 /**
  * @author Tooflya.com
@@ -133,12 +134,12 @@ public class ParallaxBackground extends Entity {
 			GL.glPushMatrix();
 			{
 				final float cameraWidth = camera.getWidth();
-				final float shapeWidthScaled = this.shape.getWidth();
+				final float shapeWidthScaled = this.shape.getWidthScaled();
 				float baseOffsetX = (parallaxValue * this.xParallaxFactor) % shapeWidthScaled;
 				float baseOffsetY = 0;
 
-				if (this.yParallaxFactor > 0) {
-					baseOffsetY = -(camera.getCenterY() - camera.getHeight() / 2) * this.yParallaxFactor / 10;
+				if (this.yParallaxFactor != 0) {
+					baseOffsetY = -((camera.getCenterY() - camera.getHeight() / 2) + (this.yParallaxFactor));
 				} else {
 					baseOffsetY = (camera.getCenterY() - camera.getHeight() / 2);
 				}
@@ -149,7 +150,7 @@ public class ParallaxBackground extends Entity {
 
 				GL.glTranslatef(baseOffsetX + Game.camera.getCenterX() - Game.camera.getWidth() / 2, baseOffsetY, 0);
 
-				float currentMaxX = baseOffsetX;
+				float currentMaxX = baseOffsetX * Options.cameraRatioFactor;
 
 				do {
 					this.shape.onDraw(GL, camera);
