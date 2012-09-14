@@ -139,7 +139,7 @@ public class ParallaxBackground extends Entity {
 				float baseOffsetY = 0;
 
 				if (this.yParallaxFactor != 0) {
-					baseOffsetY = -((camera.getCenterY() - camera.getHeight() / 2) + (this.yParallaxFactor));
+					baseOffsetY = -((camera.getCenterY() - camera.getHeight() / 2) * this.yParallaxFactor);
 				} else {
 					baseOffsetY = (camera.getCenterY() - camera.getHeight() / 2);
 				}

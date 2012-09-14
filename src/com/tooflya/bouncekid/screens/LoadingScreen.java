@@ -43,7 +43,7 @@ public class LoadingScreen extends Screen {
 		 */
 		mBackgroundTextureAtlas = new BitmapTextureAtlas(1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		mProgressBarTextureAtlas = new BitmapTextureAtlas(512, 64, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		mProgressBarTextureAtlas = new BitmapTextureAtlas(512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		Game.loadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 
