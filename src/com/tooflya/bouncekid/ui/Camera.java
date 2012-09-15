@@ -30,7 +30,7 @@ public class Camera extends ZoomCamera {
 
 	public Camera(float pX, float pY, float pWidth, float pHeight) {
 		super(pX, pY, pWidth, pHeight);
-		
+
 		this.mShaking = false;
 	}
 

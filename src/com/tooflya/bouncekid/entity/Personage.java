@@ -20,10 +20,10 @@ public class Personage extends Entity {
 	// ===========================================================
 
 	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
-	private final int maxFlyPower = 50;
-	private final int runStep = 4;
-	private final int flyStep = 4;
-	private final int fallStep = 4;
+	private final int maxFlyPower = 40;
+	private final int runStep = 2;
+	private final int flyStep = 2;
+	private final int fallStep = 2;
 
 	// ===========================================================
 	// Fields

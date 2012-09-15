@@ -4,6 +4,7 @@ import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
+import com.tooflya.bouncekid.entity.Bird;
 import com.tooflya.bouncekid.entity.Block;
 import com.tooflya.bouncekid.entity.Entity;
 import com.tooflya.bouncekid.entity.Personage;
@@ -11,6 +12,7 @@ import com.tooflya.bouncekid.entity.Star;
 import com.tooflya.bouncekid.entity.StarD;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 import com.tooflya.bouncekid.managers.EntityManager;
+import com.tooflya.bouncekid.screens.MainScreen;
 import com.tooflya.bouncekid.screens.Screen;
 
 public class World extends org.anddev.andengine.entity.Entity {
@@ -33,6 +35,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	// ===========================================================
 
 	public Personage personage;
+	private Bird bird;
 
 	// ===========================================================
 	// Constructors
@@ -44,12 +47,16 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.personage = new Personage(0, Options.cameraHeight - 200);
 		this.personage.create();
 
+		this.bird = new Bird(0, Options.cameraHeight - 200);
+		MainScreen.hud.attachChild(bird);
+		this.bird.create();
+
 		Game.screens.get(Screen.MAIN).attachChild(this);
 
 		texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground_down.png", 0, 0, 1, 1)));
-		this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 65, 65, 1, 18)));
-		this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "obj_star_disappear.png", 300, 0, 1, 11)));
+		this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
+		this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "obj_star_disappear.png", 140, 0, 1, 11)));
 
 		Game.loadTextures(texture);
 
@@ -63,11 +70,11 @@ public class World extends org.anddev.andengine.entity.Entity {
 	private void GenerateStartBlocks() {
 		// TODO: Clear all blocks.
 		this.lastBlock = (Block) this.blocks.create();
-		this.lastBlock.setPosition(0, Options.cameraHeight - this.lastBlock.getHeight());
+		this.lastBlock.setPosition(0, Options.cameraHeight - this.lastBlock.getHeightScaled());
 		float x = this.lastBlock.getX();
 		float y = this.lastBlock.getY();
 		while (x < Options.cameraWidth) {
-			x += this.lastBlock.getWidth();
+			x += this.lastBlock.getWidthScaled();
 			this.lastBlock = (Block) this.blocks.create();
 			this.lastBlock.setPosition(x, y);
 		}
@@ -76,7 +83,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	private void GenerateNextBlock() {
 		// Bottom blocks.
 		this.tempBlock = (Block) this.blocks.create();
-		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getWidth(), this.lastBlock.getY());
+		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getWidthScaled(), this.lastBlock.getY());
 		this.lastBlock = this.tempBlock;
 	}
 
@@ -90,8 +97,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 			offsetY = this.lastBlock.getY() - this.personage.getHeight();
 		}
 
-		offsetX = Game.random.nextFloat() * 44;
-		offsetY = this.personage.getHeight() / 2 + Options.cameraHeight / 2 + this.personage.getY() - Game.random.nextFloat() * Options.cameraHeight - 44;
+		offsetX = Game.random.nextFloat() * 82 * Options.cameraRatioFactor;
+		offsetY = this.personage.getHeight() / 2 + Options.cameraHeight / 2 + this.personage.getY() - Game.random.nextFloat() * Options.cameraHeight - 82 * Options.cameraRatioFactor;
 
 		this.tempBlock = (Block) this.blocks.create();
 		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
@@ -100,8 +107,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 	private void GenerateNextStar() {
 		Star star = (Star) this.stars.create();
 
-		float offsetX = Game.random.nextFloat() * 44;
-		float offsetY = this.personage.getHeight() / 2 + Options.cameraHeight / 2 + this.personage.getY() - Game.random.nextFloat() * Options.cameraHeight - 44;
+		float offsetX = Game.random.nextFloat() * 82 * Options.cameraRatioFactor;
+		float offsetY = this.personage.getHeight() / 2 + Options.cameraHeight / 2 + this.personage.getY() - Game.random.nextFloat() * Options.cameraHeight - 82 * Options.cameraRatioFactor;
 
 		star.setPosition(this.lastBlock.getX() + offsetX, offsetY - 80);
 	}
@@ -112,7 +119,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 			for (int i = 0; i < this.blocks.getCount() && personage.IsState(ActionHelper.Fall); i++) {
 				// TODO: Maybe need other function of correct collision detection.
 				if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
-					personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeight() + 1);
+					personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeightScaled() + 1);
 					personage.ChangeStates(ActionHelper.Run, ActionHelper.Fall);
 				}
 			}
@@ -133,18 +140,18 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	private boolean IsBottomCollide(Personage personage, Block block) {
 		float pLeft = personage.getX();
-		float pRight = pLeft + personage.getWidth();
+		float pRight = pLeft + personage.getWidthScaled();
 		float pTop = personage.getY();
-		float pBottom = pTop + personage.getHeight();
+		float pBottom = pTop + personage.getHeightScaled();
 
 		float bLeft = block.getX();
-		float bRight = bLeft + block.getWidth();
+		float bRight = bLeft + block.getWidthScaled();
 		float bTop = block.getY();
-		float bBottom = bTop + block.getHeight();
+		float bBottom = bTop + block.getHeightScaled();
 
 		// TODO: Some stupid code. Correct this function.
 		if (!(pRight <= bLeft || bRight <= pLeft) && !(pBottom <= bTop || bBottom <= pTop)) {
-			if (personage.getY() + personage.getHeight() - 5 < block.getY()) {
+			if (personage.getY() + personage.getHeightScaled() - 5 < block.getY()) {
 				return true;
 			}
 		}
@@ -153,6 +160,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	public void update() {
 		this.personage.update();
+		this.bird.update();
 
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			Entity block = this.blocks.getByIndex(i);
@@ -177,7 +185,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 			}
 		}
 
-		if (this.lastBlock.getX() + this.lastBlock.getWidth() < Options.cameraWidth + Game.camera.getCenterX()) {
+		if (this.lastBlock.getX() + this.lastBlock.getWidthScaled() < Options.cameraWidth + Game.camera.getCenterX()) {
 			this.GenerateNextBlock();
 			this.GenerateNextRandomBlock();
 			this.GenerateNextStar();

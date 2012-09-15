@@ -5,6 +5,8 @@ import javax.microedition.khronos.opengles.GL10;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.util.GLHelper;
 
+import com.tooflya.bouncekid.Options;
+
 /**
  * @author Tooflya.com
  * @since
@@ -25,6 +27,12 @@ public class EntitySimple extends org.anddev.andengine.entity.sprite.Sprite {
 
 	public EntitySimple(int x, int y, TextureRegion textureRegion) {
 		super(x, y, textureRegion);
+
+		this.setScaleCenter(0, 0);
+		this.setScaleY(Options.cameraRatioFactor);
+		this.setScaleX(Options.cameraRatioFactor);
+
+		this.setPosition(this.getX() - (this.getWidthScaled() - Options.cameraWidth) / 2, this.getY()); // TODO: YYYY
 
 		this.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 	}

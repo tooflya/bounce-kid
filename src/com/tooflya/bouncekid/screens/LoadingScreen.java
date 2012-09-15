@@ -1,7 +1,5 @@
 package com.tooflya.bouncekid.screens;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.entity.scene.background.SpriteBackground;
@@ -9,9 +7,9 @@ import org.anddev.andengine.entity.sprite.Sprite;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
-import org.anddev.andengine.opengl.util.GLHelper;
 
 import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.entity.EntitySimple;
 
 /**
  * @author Tooflya.com
@@ -45,7 +43,7 @@ public class LoadingScreen extends Screen {
 		 */
 		mBackgroundTextureAtlas = new BitmapTextureAtlas(1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-		mProgressBarTextureAtlas = new BitmapTextureAtlas(512, 64, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		mProgressBarTextureAtlas = new BitmapTextureAtlas(512, 512, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		Game.loadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 
@@ -54,16 +52,9 @@ public class LoadingScreen extends Screen {
 		 * Creating of sprites
 		 * 
 		 */
-		Sprite background = new Sprite(0, 0, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, Game.context, "tooflya_hd.png", 0, 0)) {
-			@Override
-			protected void onInitDraw(final GL10 pGL) {
-				super.onInitDraw(pGL);
-				GLHelper.enableTextures(pGL);
-				GLHelper.enableTexCoordArray(pGL);
-				GLHelper.enableDither(pGL);
-			}
-		};
-		setBackground(new SpriteBackground(background));
+		SpriteBackground background = new SpriteBackground(new EntitySimple(BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, Game.context, "tooflya_hd.png", 0, 0)));
+
+		this.setBackground(background);
 
 		progressBar = new Sprite(228, 421, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mProgressBarTextureAtlas, Game.context, "loaderbar_full_hd.png", 0, 0));
 		progressBar.setWidth(1);

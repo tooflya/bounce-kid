@@ -7,6 +7,7 @@ import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import org.anddev.andengine.opengl.util.GLHelper;
 
 import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.managers.EntityManager;
 import com.tooflya.bouncekid.screens.Screen;
 
@@ -38,19 +39,30 @@ public abstract class Entity extends AnimatedSprite {
 	// Constructors
 	// ===========================================================
 
-	public Entity(final TiledTextureRegion pTiledTextureRegion) {
+	public Entity(final TiledTextureRegion pTiledTextureRegion, final boolean needParent) {
 		super(0, 0, pTiledTextureRegion.deepCopy());
 
 		this.hide();
 		this.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
-		Game.screens.get(Screen.MAIN).attachChild(this);
+		this.setScaleCenter(0, 0);
+		this.setScaleY(Options.cameraRatioFactor);
+		this.setScaleX(Options.cameraRatioFactor);
+
+		this.setPosition(this.getX() - (this.getWidthScaled() - Options.cameraWidth) / 2, this.getY()); // TODO: YYY
+
+		if (needParent)
+			Game.screens.get(Screen.MAIN).attachChild(this);
 	}
 
 	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion) {
-		this(pTiledTextureRegion.deepCopy());
+		this(pTiledTextureRegion.deepCopy(), true);
 
 		this.setCenterPosition(x, y);
+	}
+
+	public Entity(final TiledTextureRegion pTiledTextureRegion) {
+		this(pTiledTextureRegion.deepCopy(), true);
 	}
 
 	// ===========================================================

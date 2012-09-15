@@ -10,8 +10,6 @@ public class Star extends Entity {
 		super(pTiledTextureRegion);
 
 		this.animate(70);
-		this.setScaleCenter(0, 0);
-		this.setScale(1.2f);
 	}
 
 	public Star(int x, int y, TiledTextureRegion pTiledTextureRegion) {
