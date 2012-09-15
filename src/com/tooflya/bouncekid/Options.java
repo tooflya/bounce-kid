@@ -8,11 +8,13 @@ public class Options {
 	public static float PI = 3.14159265358979f;
 
 	/** Camera parameters */
-	public static float cameraWidth;
-	public static float cameraHeight;
-	public static float cameraCenterX;
-	public static float cameraCenterY;
+	public static int cameraWidth;
+	public static int cameraHeight;
+	public static int cameraCenterX;
+	public static int cameraCenterY;
+
 	public static float cameraRatioFactor;
+	public final static float cameraOriginRatio = 577.0f;
 
 	public static final int fps = 120;
 

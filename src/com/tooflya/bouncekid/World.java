@@ -63,7 +63,6 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		// this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
 		// this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "obj_star_disappear.png", 140, 0, 1, 11)));
-
 	}
 
 	// ===========================================================
@@ -88,7 +87,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		// TODO: Add some more clever code for generating various blocks.
 		this.bottomBlock.setScale(7 * Game.random.nextFloat() + 3, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
 		// * Start of randomization x and y of block.
-		final float offsetY = -this.personage.getMaxFlyHeight() * Game.random.nextFloat(); 
+		final float offsetY = -this.personage.getMaxFlyHeight() * Game.random.nextFloat();
 		final float offsetX = (this.personage.getMaxFlyDistance() + this.personage.getMaxFallDistance()) * Game.random.nextFloat();
 		// * End of randomization x and y of block.
 		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + offsetX, this.bottomBlock.getY() + offsetY);

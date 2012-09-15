@@ -129,7 +129,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		Options.cameraCenterX = Options.cameraWidth / 2;
 		Options.cameraCenterY = Options.cameraHeight / 2;
 
-		Options.cameraRatioFactor = Options.cameraHeight / 600;
+		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatio;
 
 		/** Initialize camera instance */
 		camera = new Camera(0, 0, Options.cameraWidth, Options.cameraHeight);

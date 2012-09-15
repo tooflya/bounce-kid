@@ -45,9 +45,9 @@ public class Personage extends Entity {
 		this.flyTime = this.maxFlyTime;
 
 		Game.loadTextures(texture);
-		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
-		Game.camera.setBoundsEnabled(true);
-		Game.camera.setChaseEntity(this);
+		//Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
+		//Game.camera.setBoundsEnabled(true);
+		//Game.camera.setChaseEntity(this);
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {

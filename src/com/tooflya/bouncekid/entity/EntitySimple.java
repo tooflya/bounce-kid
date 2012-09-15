@@ -25,20 +25,28 @@ public class EntitySimple extends org.anddev.andengine.entity.sprite.Sprite {
 	// Constructors
 	// ===========================================================
 
-	public EntitySimple(int x, int y, TextureRegion textureRegion) {
+	public EntitySimple(int x, int y, TextureRegion textureRegion, final boolean changePosition) {
 		super(x, y, textureRegion);
 
 		this.setScaleCenter(0, 0);
 		this.setScaleY(Options.cameraRatioFactor);
 		this.setScaleX(Options.cameraRatioFactor);
 
-		this.setPosition(this.getX() - (this.getWidthScaled() - Options.cameraWidth) / 2, this.getY()); // TODO: YYYY
+		if (changePosition) {
+			this.setPosition(this.getX() - (this.getWidthScaled() - Options.cameraWidth) / 2, this.getY());
+		}
+	}
 
-		this.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+	public EntitySimple(int x, int y, TextureRegion textureRegion) {
+		this(x, y, textureRegion, true);
+	}
+
+	public EntitySimple(TextureRegion textureRegion, final boolean changePosition) {
+		this(0, 0, textureRegion, changePosition);
 	}
 
 	public EntitySimple(TextureRegion textureRegion) {
-		this(0, 0, textureRegion);
+		this(0, 0, textureRegion, true);
 	}
 
 	// ===========================================================
@@ -54,9 +62,8 @@ public class EntitySimple extends org.anddev.andengine.entity.sprite.Sprite {
 	protected void onInitDraw(final GL10 GL) {
 		super.onInitDraw(GL);
 
-		GLHelper.enableDither(GL);
-		GLHelper.enableCulling(GL);
 		GLHelper.enableTextures(GL);
 		GLHelper.enableTexCoordArray(GL);
+		GLHelper.enableDither(GL);
 	}
 }
