@@ -7,6 +7,7 @@ import javax.microedition.khronos.opengles.GL10;
 import org.anddev.andengine.engine.camera.Camera;
 import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.shape.Shape;
+import org.anddev.andengine.opengl.util.GLHelper;
 
 import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.Options;
@@ -112,6 +113,10 @@ public class ParallaxBackground extends Entity {
 			this.yParallaxFactor = 0;
 		}
 
+		public ParallaxEntity(final Shape shape) {
+			this(0, 0, shape);
+		}
+
 		public ParallaxEntity(final float xParallaxFactor, final float yParallaxFactor, final Shape shape) {
 			this(xParallaxFactor, shape);
 
@@ -134,7 +139,7 @@ public class ParallaxBackground extends Entity {
 			GL.glPushMatrix();
 			{
 				final float cameraWidth = camera.getWidth();
-				final float shapeWidthScaled = this.shape.getWidthScaled();
+				final float shapeWidthScaled = (float) Math.floor(this.shape.getWidthScaled());
 				float baseOffsetX = (parallaxValue * this.xParallaxFactor) % shapeWidthScaled;
 				float baseOffsetY = 0;
 
@@ -150,13 +155,13 @@ public class ParallaxBackground extends Entity {
 
 				GL.glTranslatef(baseOffsetX + Game.camera.getCenterX() - Game.camera.getWidth() / 2, baseOffsetY, 0);
 
-				float currentMaxX = baseOffsetX * Options.cameraRatioFactor;
+				float currentMaxX = baseOffsetX;
 
 				do {
 					this.shape.onDraw(GL, camera);
 					GL.glTranslatef(shapeWidthScaled, 0, 0);
 					currentMaxX += shapeWidthScaled;
-				} while (currentMaxX < cameraWidth);
+				} while (currentMaxX * Options.cameraRatioFactor < cameraWidth);
 			}
 			GL.glPopMatrix();
 		}

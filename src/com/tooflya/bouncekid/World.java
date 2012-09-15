@@ -48,7 +48,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.personage.create();
 
 		this.bird = new Bird(0, Options.cameraHeight - 200);
-		MainScreen.hud.attachChild(bird);
+		//MainScreen.hud.attachChild(bird);
 		this.bird.create();
 
 		Game.screens.get(Screen.MAIN).attachChild(this);
@@ -60,7 +60,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		Game.loadTextures(texture);
 
-		this.GenerateStartBlocks();
+		//this.GenerateStartBlocks();
 	}
 
 	// ===========================================================
