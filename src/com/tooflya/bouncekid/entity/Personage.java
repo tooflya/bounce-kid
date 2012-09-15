@@ -20,8 +20,8 @@ public class Personage extends Entity {
 	// ===========================================================
 
 	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
-	private final int maxFlyPower = 40;
-	private final int runStep = 2;
+	private final int maxFlyTime = 40;
+	private final int runStep = Options.mainStep;
 	private final int flyStep = 2;
 	private final int fallStep = 2;
 
@@ -31,7 +31,7 @@ public class Personage extends Entity {
 
 	private byte currentStates;
 
-	public int flyPower;
+	private int flyTime;
 
 	// ===========================================================
 	// Constructors
@@ -42,7 +42,7 @@ public class Personage extends Entity {
 
 		this.currentStates = ActionHelper.Run;
 
-		this.flyPower = this.maxFlyPower;
+		this.flyTime = this.maxFlyTime;
 
 		Game.loadTextures(texture);
 		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
@@ -57,7 +57,35 @@ public class Personage extends Entity {
 	}
 
 	public Personage(final float x, final float y) {
-		this(x, y, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "sprite_running.png", 0, 0, 6, 3));
+		this(x, y, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "sprite_running.png", 0, 0, 5, 3));
+	}
+
+	// ===========================================================
+	// Get and set
+	// ===========================================================
+
+	public int getFlyPower() {
+		return this.flyTime;
+	}
+
+	public void setFlyPower(int value) {
+		this.flyTime = value;
+	}
+
+	public int getMaxFlyTime() {
+		return this.maxFlyTime;
+	}
+
+	public float getMaxFlyHeight() {
+		return this.maxFlyTime * this.flyStep;
+	}
+
+	public float getMaxFlyDistance() {
+		return this.maxFlyTime * this.runStep;
+	}
+
+	public float getMaxFallDistance() {
+		return (float) this.getMaxFlyHeight() / this.fallStep * this.runStep;
 	}
 
 	// ===========================================================
@@ -88,17 +116,23 @@ public class Personage extends Entity {
 		}
 
 		if (this.IsState(ActionHelper.Fly)) {
-			if (this.flyPower > 0 && this.IsState(ActionHelper.WantToFly)) {
-				this.flyPower--;
+			if (this.flyTime > 0 && this.IsState(ActionHelper.WantToFly)) {
+				this.flyTime--;
 				this.setPosition(this.getX(), this.getY() - this.flyStep);
 			} else {
-				this.flyPower = Math.max(this.maxFlyPower, this.flyPower);
+				this.flyTime = Math.max(this.maxFlyTime, this.flyTime);
 				this.ChangeStates(ActionHelper.Fall, ActionHelper.Fly);
 			}
 		}
 
 		if (this.IsState(ActionHelper.Fall)) {
 			this.setPosition(this.getX(), this.getY() + this.fallStep);
+		}
+
+		// TODO: Code for testing. Delete.
+		if (this.getY() > Options.cameraHeight)
+		{
+			this.setPosition(this.getX(), 0);
 		}
 	}
 

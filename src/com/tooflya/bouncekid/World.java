@@ -30,6 +30,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 	private Block tempBlock = null;
 	private Block lastBlock = null;
 
+	private Block bottomBlock = null;
+
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -44,23 +46,24 @@ public class World extends org.anddev.andengine.entity.Entity {
 	public World() {
 		super();
 
-		this.personage = new Personage(0, Options.cameraHeight - 200);
-		this.personage.create();
-
-		this.bird = new Bird(0, Options.cameraHeight - 200);
-		MainScreen.hud.attachChild(bird);
-		this.bird.create();
-
 		Game.screens.get(Screen.MAIN).attachChild(this);
 
-		texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
-		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground_down.png", 0, 0, 1, 1)));
-		this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
-		this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "obj_star_disappear.png", 140, 0, 1, 11)));
-
+		this.texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 		Game.loadTextures(texture);
 
+		this.personage = new Personage(0, 0);
+		this.personage.create();
+
+		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground_down.png", 0, 0, 1, 1)));
 		this.GenerateStartBlocks();
+
+		// this.bird = new Bird(0, Options.cameraHeight - 200);
+		// MainScreen.hud.attachChild(bird);
+		// this.bird.create();
+
+		// this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
+		// this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "obj_star_disappear.png", 140, 0, 1, 11)));
+
 	}
 
 	// ===========================================================
@@ -69,22 +72,27 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	private void GenerateStartBlocks() {
 		// TODO: Clear all blocks.
-		this.lastBlock = (Block) this.blocks.create();
-		this.lastBlock.setPosition(0, Options.cameraHeight - this.lastBlock.getHeightScaled());
-		float x = this.lastBlock.getX();
-		float y = this.lastBlock.getY();
+		this.bottomBlock = (Block) this.blocks.create();
+		this.bottomBlock.setPosition(0, Options.cameraHeight - this.bottomBlock.getHeightScaled());
+		float x = this.bottomBlock.getX();
+		float y = this.bottomBlock.getY();
 		while (x < Options.cameraWidth) {
-			x += this.lastBlock.getWidthScaled();
-			this.lastBlock = (Block) this.blocks.create();
-			this.lastBlock.setPosition(x, y);
+			x += this.bottomBlock.getWidthScaled();
+			this.bottomBlock = (Block) this.blocks.create();
+			this.bottomBlock.setPosition(x, y);
 		}
 	}
 
-	private void GenerateNextBlock() {
-		// Bottom blocks.
-		this.tempBlock = (Block) this.blocks.create();
-		this.tempBlock.setPosition(this.lastBlock.getX() + this.lastBlock.getWidthScaled(), this.lastBlock.getY());
-		this.lastBlock = this.tempBlock;
+	private void GenerateNextBottomBlock() {
+		final Block tempBlock = (Block) this.blocks.create();
+		// TODO: Add some more clever code for generating various blocks.
+		this.bottomBlock.setScale(7 * Game.random.nextFloat() + 3, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
+		// * Start of randomization x and y of block.
+		final float offsetY = -this.personage.getMaxFlyHeight() * Game.random.nextFloat(); 
+		final float offsetX = (this.personage.getMaxFlyDistance() + this.personage.getMaxFallDistance()) * Game.random.nextFloat();
+		// * End of randomization x and y of block.
+		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + offsetX, this.bottomBlock.getY() + offsetY);
+		this.bottomBlock = tempBlock;
 	}
 
 	private void GenerateNextRandomBlock() {
@@ -118,40 +126,41 @@ public class World extends org.anddev.andengine.entity.Entity {
 			personage.ChangeStates(ActionHelper.Fall, (byte) 0);
 			for (int i = 0; i < this.blocks.getCount() && personage.IsState(ActionHelper.Fall); i++) {
 				// TODO: Maybe need other function of correct collision detection.
-				if (this.IsBottomCollide(personage, (Block) this.blocks.getByIndex(i))) {
-					personage.setPosition(personage.getX(), this.blocks.getByIndex(i).getY() - personage.getHeightScaled() + 1);
+				final Entity block = this.blocks.getByIndex(i);
+				if (this.isUpBottomCollide(personage, block)) {
+					personage.setPosition(personage.getX(), block.getY() - personage.getHeightScaled() + 1);
 					personage.ChangeStates(ActionHelper.Run, ActionHelper.Fall);
 				}
 			}
 		}
 
-		for (int i = 0; i < this.stars.getCount(); i++) {
-			Entity block = this.stars.getByIndex(i);
-
-			if (block.collidesWith(personage)) {
-				block.destroy();
-
-				Entity a = this.starsd.create();
-				a.setPosition(block.getX(), block.getY());
-				personage.flyPower += 3;
-			}
-		}
+		// for (int i = 0; i < this.stars.getCount(); i++) {
+		// Entity block = this.stars.getByIndex(i);
+		//
+		// if (block.collidesWith(personage)) {
+		// block.destroy();
+		//
+		// Entity a = this.starsd.create();
+		// a.setPosition(block.getX(), block.getY());
+		// personage.SetFlyPower(personage.GetFlyPower() + 3); // TODO: Make a constant.
+		// }
+		// }
 	}
 
-	private boolean IsBottomCollide(Personage personage, Block block) {
-		float pLeft = personage.getX();
-		float pRight = pLeft + personage.getWidthScaled();
-		float pTop = personage.getY();
-		float pBottom = pTop + personage.getHeightScaled();
+	private boolean isUpBottomCollide(Entity upEntity, Entity downEntity) {
+		final float pLeft = upEntity.getX();
+		final float pRight = pLeft + upEntity.getWidthScaled();
+		final float pTop = upEntity.getY();
+		final float pBottom = pTop + upEntity.getHeightScaled();
 
-		float bLeft = block.getX();
-		float bRight = bLeft + block.getWidthScaled();
-		float bTop = block.getY();
-		float bBottom = bTop + block.getHeightScaled();
+		final float bLeft = downEntity.getX();
+		final float bRight = bLeft + downEntity.getWidthScaled();
+		final float bTop = downEntity.getY();
+		final float bBottom = bTop + downEntity.getHeightScaled();
 
 		// TODO: Some stupid code. Correct this function.
 		if (!(pRight <= bLeft || bRight <= pLeft) && !(pBottom <= bTop || bBottom <= pTop)) {
-			if (personage.getY() + personage.getHeightScaled() - 5 < block.getY()) {
+			if (upEntity.getY() + upEntity.getHeightScaled() - 5 < downEntity.getY()) {
 				return true;
 			}
 		}
@@ -160,36 +169,40 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	public void update() {
 		this.personage.update();
-		this.bird.update();
 
+		// * Start of bottom blocks logic.
+		// ! Delete after add block. We can delete last block.
+		if (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() < Options.cameraWidth + Game.camera.getCenterX()) {
+			this.GenerateNextBottomBlock();
+		}
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			Entity block = this.blocks.getByIndex(i);
-			if (block.getX() + block.getWidth() < Game.camera.getCenterX() - Options.cameraCenterX) {
+			if (block.getX() + block.getWidthScaled() < Game.camera.getCenterX() - Options.cameraCenterX) {
 				block.destroy();
 			}
 		}
+		// * End of bottom blocks logic.
 
-		for (int i = 0; i < this.stars.getCount(); i++) {
-			Entity block = this.stars.getByIndex(i);
-			// block.setPosition(block.getX() - Options.blockStep, block.getY());
-			if (block.getX() + block.getWidth() < Game.camera.getCenterX() - Options.cameraCenterX) {
-				block.destroy();
-			}
-		}
+		// this.bird.update();
 
-		for (int i = 0; i < this.starsd.getCount(); i++) {
-			Entity block = this.starsd.getByIndex(i);
-			// block.setPosition(block.getX() - Options.blockStep, block.getY());
-			if (block.getX() + block.getWidth() < Game.camera.getCenterX() - Options.cameraCenterX) {
-				block.destroy();
-			}
-		}
-
-		if (this.lastBlock.getX() + this.lastBlock.getWidthScaled() < Options.cameraWidth + Game.camera.getCenterX()) {
-			this.GenerateNextBlock();
-			this.GenerateNextRandomBlock();
-			this.GenerateNextStar();
-		}
+		// for (int i = 0; i < this.stars.getCount(); i++) {
+		// Entity block = this.stars.getByIndex(i);
+		// // block.setPosition(block.getX() - Options.blockStep, block.getY());
+		// if (block.getX() + block.getWidth() < Game.camera.getCenterX() - Options.cameraCenterX) {
+		// block.destroy();
+		// }
+		// }
+		//
+		// for (int i = 0; i < this.starsd.getCount(); i++) {
+		// Entity block = this.starsd.getByIndex(i);
+		// // block.setPosition(block.getX() - Options.blockStep, block.getY());
+		// if (block.getX() + block.getWidth() < Game.camera.getCenterX() - Options.cameraCenterX) {
+		// block.destroy();
+		// }
+		// }
+		//
+		// this.GenerateNextRandomBlock();
+		// this.GenerateNextStar();
 
 		this.CheckCollision(this.personage);
 	}
