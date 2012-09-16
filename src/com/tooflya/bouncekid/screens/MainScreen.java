@@ -1,5 +1,6 @@
 package com.tooflya.bouncekid.screens;
 
+import org.anddev.andengine.engine.camera.hud.HUD;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.Scene.IOnSceneTouchListener;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
@@ -53,6 +54,8 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	private final static ChangeableText resolutionInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxxxxxxxxxxxxxxxxxx");
 	private final static ChangeableText cameraInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxxxxxxxxxxxxxx");
 
+	private final static HUD hud = new HUD();
+
 	// ===========================================================
 	// Fields
 	// ===========================================================
@@ -89,20 +92,20 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 			this.pinchZoomDetector = null;
 		}
 
-		this.reInit();
-
 		this.setOnSceneTouchListener(this);
 
 		this.setOnSceneTouchListener(this);
 		this.setTouchAreaBindingEnabled(true);
 		this.attachChild(autoParallaxBackground);
 
-		this.attachChild(fpsInfo);
-		this.attachChild(altInfo);
-		this.attachChild(resolutionInfo);
-		this.attachChild(cameraInfo);
+		hud.attachChild(fpsInfo);
+		hud.attachChild(altInfo);
+		hud.attachChild(resolutionInfo);
+		hud.attachChild(cameraInfo);
+
+		this.reInit();
 	}
-	
+
 	public void reInit() {
 
 		fpsInfo.setPosition(15, 15);
@@ -218,6 +221,8 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	@Override
 	public void onAttached() {
 		super.onAttached();
+
+		Game.camera.setHUD(hud);
 
 		registerUpdateHandler(Game.GameTimer);
 	}
