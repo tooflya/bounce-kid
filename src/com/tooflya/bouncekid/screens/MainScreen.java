@@ -110,10 +110,12 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		resolutionInfo.setPosition(15, 65);
 		cameraInfo.setPosition(15, 90);
 
-		final EntitySimple reset = new EntitySimple(Options.cameraWidth - 74, 10, BitmapTextureAtlasTextureRegionFactory.createFromAsset(texture, Game.context, "reset.png", 0, 0), false) {
+		final TextureRegion region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(texture, Game.context, "reset.png", 0, 0);
+		final EntitySimple reset = new EntitySimple((int) (Options.cameraWidth - region.getWidth() * Options.cameraRatioFactor) - (int) (10 * Options.cameraRatioFactor), (int) (10 * Options.cameraRatioFactor), region, false) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				GameTimer.world.reInit();
+
 				return false;
 			}
 		};
