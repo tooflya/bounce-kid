@@ -26,9 +26,9 @@ public class Personage extends Entity {
 	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 
 	private final int maxFlyTime = 40;
-	private final int runStep = Options.mainStep;
-	private final int flyStep = 2;
-	private final int fallStep = 2;
+	public final int runStep = Options.mainStep; // TODO: Make a getter and private.
+	public final int flyStep = 2; // TODO: Make a getter and private.
+	public final int fallStep = 2; // TODO: Make a getter and private.
 
 	// ===========================================================
 	// Fields
@@ -41,6 +41,8 @@ public class Personage extends Entity {
 	// ===========================================================
 	// Constructors
 	// ===========================================================
+
+	// TODO: Need to make a better code.
 
 	public Personage(final TiledTextureRegion pTiledTextureRegion) {
 		super(pTiledTextureRegion);
@@ -63,6 +65,10 @@ public class Personage extends Entity {
 
 	public Personage(final float x, final float y) {
 		this(x, y, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "sprite_running.png", 0, 0, 5, 3));
+	}
+
+	public Personage() {
+		this(0, 0);
 	}
 
 	// ===========================================================
