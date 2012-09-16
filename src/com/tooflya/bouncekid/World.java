@@ -53,7 +53,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		this.personage = new Personage(0, 0);
 		this.personage.create();
-
+		Game.screens.get(Screen.MAIN).registerTouchArea(this.personage);
+		
 		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground_down.png", 0, 0, 1, 1)));
 		this.GenerateStartBlocks();
 
@@ -63,6 +64,12 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		// this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
 		// this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "obj_star_disappear.png", 140, 0, 1, 11)));
+	}
+	
+	public void reInit() {
+		this.personage.setPosition(0,0);
+		this.blocks.clear();
+		this.GenerateStartBlocks();
 	}
 
 	// ===========================================================
@@ -85,7 +92,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	private void GenerateNextBottomBlock() {
 		final Block tempBlock = (Block) this.blocks.create();
 		// TODO: Add some more clever code for generating various blocks.
-		this.bottomBlock.setScale(7 * Game.random.nextFloat() + 3, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
+		tempBlock.setScale(7 * Game.random.nextFloat() + 3, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
 		// * Start of randomization x and y of block.
 		final float offsetY = -this.personage.getMaxFlyHeight() * Game.random.nextFloat();
 		final float offsetX = (this.personage.getMaxFlyDistance() + this.personage.getMaxFallDistance()) * Game.random.nextFloat();
@@ -176,6 +183,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 		}
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			Entity block = this.blocks.getByIndex(i);
+			block.setPosition(block.getX()-Options.mainStep, block.getY());
+
 			if (block.getX() + block.getWidthScaled() < Game.camera.getCenterX() - Options.cameraCenterX) {
 				block.destroy();
 			}

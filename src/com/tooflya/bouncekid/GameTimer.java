@@ -17,14 +17,14 @@ public class GameTimer implements ITimerCallback {
 	// Fields
 	// ===========================================================
 
-	private World world;
+	public static World world;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public GameTimer(final World world) {
-		this.world = world;
+	public GameTimer(final World world2) {
+		world = world2;
 	}
 
 	// ===========================================================
@@ -38,7 +38,7 @@ public class GameTimer implements ITimerCallback {
 	 */
 	@Override
 	public void onTimePassed(final TimerHandler pTimerHandler) {
-		//this.world.update();
+		world.update();
 	}
 
 	public static void reset() {

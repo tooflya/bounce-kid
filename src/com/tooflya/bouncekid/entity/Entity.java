@@ -43,7 +43,6 @@ public abstract class Entity extends AnimatedSprite {
 		super(0, 0, pTiledTextureRegion.deepCopy());
 
 		this.hide();
-		this.setBlendFunction(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
 		this.setScaleCenter(0, 0);
 		this.setScaleY(Options.cameraRatioFactor);
@@ -56,13 +55,13 @@ public abstract class Entity extends AnimatedSprite {
 	}
 
 	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion) {
-		this(pTiledTextureRegion.deepCopy(), true);
+		this(pTiledTextureRegion, true);
 
 		this.setCenterPosition(x, y);
 	}
 
 	public Entity(final TiledTextureRegion pTiledTextureRegion) {
-		this(pTiledTextureRegion.deepCopy(), true);
+		this(pTiledTextureRegion, true);
 	}
 
 	// ===========================================================
@@ -89,13 +88,13 @@ public abstract class Entity extends AnimatedSprite {
 	public void show() {
 		this.setVisible(true);
 		this.setIgnoreUpdate(false);
-		this.setCullingEnabled(true);
+		this.setCullingEnabled(false);
 	}
 
 	public void hide() {
 		this.setVisible(false);
 		this.setIgnoreUpdate(true);
-		this.setCullingEnabled(false);
+		this.setCullingEnabled(true);
 	}
 
 	// ===========================================================
@@ -210,7 +209,6 @@ public abstract class Entity extends AnimatedSprite {
 		super.onInitDraw(pGL);
 
 		GLHelper.enableDither(pGL);
-		GLHelper.enableCulling(pGL);
 		GLHelper.enableTextures(pGL);
 		GLHelper.enableTexCoordArray(pGL);
 	}

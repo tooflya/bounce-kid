@@ -34,7 +34,7 @@ public class ScreenManager {
 	 * List of available screens
 	 * 
 	 */
-	private Screen[] screens;
+	public Screen[] screens;
 
 	// ===========================================================
 	// Constructors

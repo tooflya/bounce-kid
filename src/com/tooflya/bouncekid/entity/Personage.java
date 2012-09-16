@@ -1,13 +1,17 @@
 package com.tooflya.bouncekid.entity;
 
+import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.GameTimer;
 import com.tooflya.bouncekid.Options;
+import com.tooflya.bouncekid.World;
 import com.tooflya.bouncekid.helpers.ActionHelper;
+import com.tooflya.bouncekid.screens.MainScreen;
 
 /**
  * @author Tooflya.com
@@ -45,9 +49,9 @@ public class Personage extends Entity {
 		this.flyTime = this.maxFlyTime;
 
 		Game.loadTextures(texture);
-		//Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
-		//Game.camera.setBoundsEnabled(true);
-		//Game.camera.setChaseEntity(this);
+		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
+		Game.camera.setBoundsEnabled(true);
+		Game.camera.setChaseEntity(this);
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
@@ -101,8 +105,6 @@ public class Personage extends Entity {
 	public void update() {
 		super.update();
 
-		this.setPosition(this.getX() + this.runStep, this.getY());
-
 		if (this.IsState(ActionHelper.Run) && !this.isAnimationRunning()) {
 			this.animate(new long[] { 80, 80, 80, 80, 80 }, 0, 4, true);
 		}
@@ -143,7 +145,7 @@ public class Personage extends Entity {
 	 */
 	@Override
 	public Entity deepCopy() {
-		return new Personage(getTextureRegion().deepCopy());
+		return new Personage(getTextureRegion());
 	}
 
 	// ===========================================================
@@ -156,5 +158,13 @@ public class Personage extends Entity {
 
 	public void ChangeStates(byte settingMaskActions, byte unsettingMaskActions) {
 		this.currentStates = (byte) ((this.currentStates | settingMaskActions) & ~unsettingMaskActions); // And what I need to do if I don't want to have operation with int?
+	}
+
+	@Override
+	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+		((MainScreen) Game.screens.getCurrent()).reInit();
+		GameTimer.world.reInit();
+
+		return false;
 	}
 }

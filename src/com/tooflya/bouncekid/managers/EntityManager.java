@@ -67,7 +67,7 @@ public class EntityManager {
 
 			return elements[count];
 		}
-		
+
 		return null;
 	}
 
@@ -83,11 +83,8 @@ public class EntityManager {
 	}
 
 	public void clear() {
-		this.count = -1;
-
-		for (int i = 0; i < elements.length; ++i) {
-			elements[i].reset();
-			elements[i].setVisible(false);
+		for (int i = count+1; i > 0; --i) {
+			elements[i].destroy();
 		}
 	}
 }

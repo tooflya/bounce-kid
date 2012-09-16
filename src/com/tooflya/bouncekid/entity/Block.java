@@ -8,10 +8,6 @@ public class Block extends Entity {
 		super(pTiledTextureRegion);
 	}
 
-	public Block(int x, int y, TiledTextureRegion pTiledTextureRegion) {
-		super(x, y, pTiledTextureRegion);
-	}
-
 	@Override
 	public Entity deepCopy() {
 		return new Block(getTextureRegion());
