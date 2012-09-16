@@ -9,10 +9,8 @@ import com.tooflya.bouncekid.entity.Block;
 import com.tooflya.bouncekid.entity.Entity;
 import com.tooflya.bouncekid.entity.Personage;
 import com.tooflya.bouncekid.entity.Star;
-import com.tooflya.bouncekid.entity.StarD;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 import com.tooflya.bouncekid.managers.EntityManager;
-import com.tooflya.bouncekid.screens.MainScreen;
 import com.tooflya.bouncekid.screens.Screen;
 
 public class World extends org.anddev.andengine.entity.Entity {
@@ -34,7 +32,6 @@ public class World extends org.anddev.andengine.entity.Entity {
 	// ===========================================================
 
 	public Personage personage;
-	private Bird bird;
 
 	// ===========================================================
 	// Constructors
@@ -48,34 +45,31 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 		Game.loadTextures(texture);
 
-		this.personage = new Personage(100, 0);
+		this.personage = new Personage();
 		this.personage.create();
-		
-		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground.png", 0, 0, 1, 1)));
-		this.GenerateStartBlocks();
 
-		// this.bird = new Bird(0, Options.cameraHeight - 200);
-		// MainScreen.hud.attachChild(bird);
-		// this.bird.create();
+		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground_down.png", 0, 0, 1, 1)));
 
 		// this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
-		// this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "obj_star_disappear.png", 140, 0, 1, 11)));
+
+		this.reInit();
 	}
-	
+
 	public void reInit() {
-		this.personage.setPosition(0,0);
+		this.personage.setPosition(0, 0);
 		this.blocks.clear();
-		this.GenerateStartBlocks();
+		this.generateStartBlocks(0);
+
+		// TODO: reInit messages on screen.
 	}
 
 	// ===========================================================
 	// Methods
 	// ===========================================================
 
-	private void GenerateStartBlocks() {
-		// TODO: Clear all blocks.
+	private void generateStartBlocks(final float startY) {
 		this.bottomBlock = (Block) this.blocks.create();
-		this.bottomBlock.setPosition(0, Options.cameraHeight - this.bottomBlock.getHeightScaled());
+		this.bottomBlock.setPosition(startY, Options.cameraHeight - this.bottomBlock.getHeightScaled());
 		float x = this.bottomBlock.getX();
 		float y = this.bottomBlock.getY();
 		while (x < Options.cameraWidth) {
@@ -90,10 +84,13 @@ public class World extends org.anddev.andengine.entity.Entity {
 		// TODO: Add some more clever code for generating various blocks.
 		tempBlock.setScale(7 * Game.random.nextFloat() + 3, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
 		// * Start of randomization x and y of block.
-		final float offsetY = -this.personage.getMaxFlyHeight() * Game.random.nextFloat();
-		final float offsetX = (this.personage.getMaxFlyDistance() + this.personage.getMaxFallDistance()) * Game.random.nextFloat();
+		float heightMax = this.personage.getMaxFlyHeight();
+		float height = heightMax * Game.random.nextFloat();
+		float xMin = (heightMax - height) * this.personage.runStep / this.personage.flyStep;
+		float xMax = (heightMax - height) * this.personage.runStep / this.personage.fallStep;
+		float width = (xMax - xMin) * Game.random.nextFloat() + xMin;
 		// * End of randomization x and y of block.
-		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + offsetX, this.bottomBlock.getY() + offsetY);
+		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + width, this.bottomBlock.getY() - height);
 		this.bottomBlock = tempBlock;
 	}
 
@@ -179,7 +176,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		}
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			final Entity block = this.blocks.getByIndex(i);
-			block.setPosition(block.getX()-Options.mainStep, block.getY());
+			block.setPosition(block.getX() - Options.mainStep, block.getY());
 			if (block.getX() + block.getWidthScaled() < Game.camera.getCenterX() - Options.cameraCenterX) {
 				block.destroy();
 			}
