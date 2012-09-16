@@ -20,6 +20,7 @@ public class Personage extends Entity {
 	// ===========================================================
 
 	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
+
 	private final int maxFlyTime = 40;
 	private final int runStep = Options.mainStep;
 	private final int flyStep = 2;
@@ -45,9 +46,9 @@ public class Personage extends Entity {
 		this.flyTime = this.maxFlyTime;
 
 		Game.loadTextures(texture);
-		//Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
-		//Game.camera.setBoundsEnabled(true);
-		//Game.camera.setChaseEntity(this);
+		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
+		Game.camera.setBoundsEnabled(true);
+		Game.camera.setChaseEntity(this);
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
@@ -127,12 +128,6 @@ public class Personage extends Entity {
 
 		if (this.IsState(ActionHelper.Fall)) {
 			this.setPosition(this.getX(), this.getY() + this.fallStep);
-		}
-
-		// TODO: Code for testing. Delete.
-		if (this.getY() > Options.cameraHeight)
-		{
-			this.setPosition(this.getX(), 0);
 		}
 	}
 

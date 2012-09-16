@@ -25,11 +25,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	private EntityManager blocks;
 	private EntityManager stars;
-	private EntityManager starsd;
 
-	private Block tempBlock = null;
 	private Block lastBlock = null;
-
 	private Block bottomBlock = null;
 
 	// ===========================================================
@@ -51,7 +48,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 		Game.loadTextures(texture);
 
-		this.personage = new Personage(0, 0);
+		this.personage = new Personage(100, 0);
 		this.personage.create();
 
 		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground_down.png", 0, 0, 1, 1)));
@@ -85,7 +82,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	private void GenerateNextBottomBlock() {
 		final Block tempBlock = (Block) this.blocks.create();
 		// TODO: Add some more clever code for generating various blocks.
-		this.bottomBlock.setScale(7 * Game.random.nextFloat() + 3, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
+		tempBlock.setScale(7 * Game.random.nextFloat() + 3, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
 		// * Start of randomization x and y of block.
 		final float offsetY = -this.personage.getMaxFlyHeight() * Game.random.nextFloat();
 		final float offsetX = (this.personage.getMaxFlyDistance() + this.personage.getMaxFallDistance()) * Game.random.nextFloat();
@@ -107,8 +104,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 		offsetX = Game.random.nextFloat() * 82 * Options.cameraRatioFactor;
 		offsetY = this.personage.getHeight() / 2 + Options.cameraHeight / 2 + this.personage.getY() - Game.random.nextFloat() * Options.cameraHeight - 82 * Options.cameraRatioFactor;
 
-		this.tempBlock = (Block) this.blocks.create();
-		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
+		final Block tempBlock = (Block) this.blocks.create();
+		tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
 	}
 
 	private void GenerateNextStar() {
@@ -175,7 +172,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 			this.GenerateNextBottomBlock();
 		}
 		for (int i = 0; i < this.blocks.getCount(); i++) {
-			Entity block = this.blocks.getByIndex(i);
+			final Entity block = this.blocks.getByIndex(i);
 			if (block.getX() + block.getWidthScaled() < Game.camera.getCenterX() - Options.cameraCenterX) {
 				block.destroy();
 			}
