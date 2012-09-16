@@ -1,17 +1,13 @@
 package com.tooflya.bouncekid.entity;
 
-import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.tooflya.bouncekid.Game;
-import com.tooflya.bouncekid.GameTimer;
 import com.tooflya.bouncekid.Options;
-import com.tooflya.bouncekid.World;
 import com.tooflya.bouncekid.helpers.ActionHelper;
-import com.tooflya.bouncekid.screens.MainScreen;
 
 /**
  * @author Tooflya.com
@@ -45,7 +41,8 @@ public class Personage extends Entity {
 	public Personage(final TiledTextureRegion pTiledTextureRegion) {
 		super(pTiledTextureRegion);
 
-		this.currentStates = ActionHelper.Run;
+		this.currentStates = ActionHelper.Fall;
+		AnimateState.setFall(this);
 
 		this.flyTime = this.maxFlyTime;
 
@@ -62,7 +59,7 @@ public class Personage extends Entity {
 	}
 
 	public Personage(final float x, final float y) {
-		this(x, y, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "sprite_running.png", 0, 0, 5, 3));
+		this(x, y, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "hero.png", 0, 0, 2, 3));
 	}
 
 	// ===========================================================
@@ -106,12 +103,16 @@ public class Personage extends Entity {
 	public void update() {
 		super.update();
 
-		if (this.IsState(ActionHelper.Run) && !this.isAnimationRunning()) {
-			this.animate(new long[] { 80, 80, 80, 80, 80 }, 0, 4, true);
+		if (this.IsState(ActionHelper.Run) && !AnimateState.isRun) {
+			AnimateState.setRun(this);
 		}
 
-		if (!this.IsState(ActionHelper.Run) && this.isAnimationRunning()) {
-			this.stopAnimation(2);
+		if (this.IsState(ActionHelper.Fly) && !AnimateState.isFly) {
+			AnimateState.setFly(this);
+		}
+
+		if (this.IsState(ActionHelper.Fall) && !AnimateState.isFall) {
+			AnimateState.setFall(this);
 		}
 
 		if (this.IsState(ActionHelper.Run) && this.IsState(ActionHelper.WantToFly)) {
@@ -155,11 +156,30 @@ public class Personage extends Entity {
 		this.currentStates = (byte) ((this.currentStates | settingMaskActions) & ~unsettingMaskActions); // And what I need to do if I don't want to have operation with int?
 	}
 
-	@Override
-	public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-		((MainScreen) Game.screens.getCurrent()).reInit();
-		GameTimer.world.reInit();
+	private static class AnimateState {
+		public static boolean isRun = false;
+		public static boolean isFall = false;
+		public static boolean isFly = false;
 
-		return false;
+		public static void setRun(final Personage personage) {
+			isFall = false;
+			isFly = false;
+			isRun = true;
+			personage.animate(new long[] { 80, 80 }, 0, 1, true);
+		}
+
+		public static void setFall(final Personage personage) {
+			isFall = true;
+			isFly = false;
+			isRun = false;
+			personage.animate(new long[] { 80, 80 }, 4, 5, true);
+		}
+
+		public static void setFly(final Personage personage) {
+			isFall = false;
+			isFly = true;
+			isRun = false;
+			personage.animate(new long[] { 80, 80 }, 2, 3, true);
+		}
 	}
 }

@@ -50,7 +50,6 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		this.personage = new Personage(100, 0);
 		this.personage.create();
-		Game.screens.get(Screen.MAIN).registerTouchArea(this.personage);
 		
 		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground_down.png", 0, 0, 1, 1)));
 		this.GenerateStartBlocks();

@@ -22,6 +22,7 @@ import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import android.util.FloatMath;
 
 import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.GameTimer;
 import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.entity.EntitySimple;
 import com.tooflya.bouncekid.helpers.ActionHelper;
@@ -40,6 +41,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 	private final static BitmapTextureAtlas autoParallaxBackgroundTexture = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	private final static BitmapTextureAtlas autoParallaxBackgroundTexture2 = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	private final static BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	public final static AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(30f);
 
@@ -77,7 +79,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.5f, 1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWave1.getHeight() * Options.cameraRatioFactor) - 5, parallaxLayerWave2, false)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-1f, 1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWave1.getHeight() * Options.cameraRatioFactor), parallaxLayerWave1, false)));
 
-		Game.loadTextures(autoParallaxBackgroundTexture, autoParallaxBackgroundTexture2);
+		Game.loadTextures(autoParallaxBackgroundTexture, autoParallaxBackgroundTexture2, texture);
 
 		this.setOnAreaTouchTraversalFrontToBack();
 
@@ -103,15 +105,21 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		hud.attachChild(resolutionInfo);
 		hud.attachChild(cameraInfo);
 
-		this.reInit();
-	}
-
-	public void reInit() {
-
 		fpsInfo.setPosition(15, 15);
 		altInfo.setPosition(15, 40);
 		resolutionInfo.setPosition(15, 65);
 		cameraInfo.setPosition(15, 90);
+
+		final EntitySimple reset = new EntitySimple(Options.cameraWidth - 74, 10, BitmapTextureAtlasTextureRegionFactory.createFromAsset(texture, Game.context, "reset.png", 0, 0), false) {
+			@Override
+			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
+				GameTimer.world.reInit();
+				return false;
+			}
+		};
+		hud.registerTouchArea(reset);
+
+		hud.attachChild(reset);
 	}
 
 	/*
