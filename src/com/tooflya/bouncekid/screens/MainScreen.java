@@ -45,11 +45,8 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 	public final static AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(30f);
 
-	private final static TextureRegion parallaxLayerBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "stolen/background.png", 0, 0);
-	private final static TextureRegion parallaxLayerWave1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "stolen/wave1.png", 0, 455);
-	private final static TextureRegion parallaxLayerWave2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "stolen/wave2.png", 0, 570);
-	private final static TextureRegion parallaxLayerGrass = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "stolen/grass.png", 0, 610);
-	private final static TextureRegion parallaxLayerGrass2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture2, Game.context, "stolen/grass2.png", 0, 0);
+	private final static TextureRegion parallaxLayerWater = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "water.png", 0, 0);
+	private final static TextureRegion parallaxLayerWay = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "way.png", 0, 70);
 
 	private final static ChangeableText fpsInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxx");
 	private final static ChangeableText altInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxxxxxxxx");
@@ -71,13 +68,10 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	// ===========================================================
 
 	public MainScreen() {
-		this.setBackground(new ColorBackground(255f / 255f, 255f / 255f, 209f / 255f, 1f));
+		this.setBackground(new ColorBackground(152f / 255f, 232f / 255f, 255f / 255f, 1f));
 
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(new EntitySimple(0, 0, parallaxLayerBackground, false)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-1.5f, 1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerGrass2.getHeight() * Options.cameraRatioFactor) - 50, parallaxLayerGrass2, false)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.5f, 1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerGrass.getHeight() * Options.cameraRatioFactor) - 30, parallaxLayerGrass, false)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.5f, 1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWave1.getHeight() * Options.cameraRatioFactor) - 5, parallaxLayerWave2, false)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-1f, 1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWave1.getHeight() * Options.cameraRatioFactor), parallaxLayerWave1, false)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.5f, 0.5f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWater.getHeight() * Options.cameraRatioFactor - parallaxLayerWay.getHeight() * Options.cameraRatioFactor), parallaxLayerWay, false)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-1.5f, 1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWater.getHeight() * Options.cameraRatioFactor), parallaxLayerWater, false)));
 
 		Game.loadTextures(autoParallaxBackgroundTexture, autoParallaxBackgroundTexture2, texture);
 
