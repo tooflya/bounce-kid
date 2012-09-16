@@ -17,14 +17,14 @@ public class GameTimer implements ITimerCallback {
 	// Fields
 	// ===========================================================
 
-	private World world;
+	public static World world;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public GameTimer(final World world) {
-		this.world = world;
+	public GameTimer(final World world2) {
+		world = world2;
 	}
 
 	// ===========================================================

@@ -50,7 +50,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		this.personage = new Personage(100, 0);
 		this.personage.create();
-
+		Game.screens.get(Screen.MAIN).registerTouchArea(this.personage);
+		
 		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground_down.png", 0, 0, 1, 1)));
 		this.GenerateStartBlocks();
 
@@ -60,6 +61,12 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		// this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
 		// this.starsd = new EntityManager(10, new StarD(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "obj_star_disappear.png", 140, 0, 1, 11)));
+	}
+	
+	public void reInit() {
+		this.personage.setPosition(0,0);
+		this.blocks.clear();
+		this.GenerateStartBlocks();
 	}
 
 	// ===========================================================
@@ -173,6 +180,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		}
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			final Entity block = this.blocks.getByIndex(i);
+			block.setPosition(block.getX()-Options.mainStep, block.getY());
 			if (block.getX() + block.getWidthScaled() < Game.camera.getCenterX() - Options.cameraCenterX) {
 				block.destroy();
 			}

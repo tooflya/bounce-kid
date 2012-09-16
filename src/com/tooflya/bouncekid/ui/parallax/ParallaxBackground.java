@@ -138,7 +138,6 @@ public class ParallaxBackground extends Entity {
 		public void onDraw(final GL10 GL, final float parallaxValue, final Camera camera) {
 			GL.glPushMatrix();
 			{
-				final float cameraWidth = camera.getWidth();
 				final float shapeWidthScaled = (float) Math.floor(this.shape.getWidthScaled());
 				float baseOffsetX = (parallaxValue * this.xParallaxFactor) % shapeWidthScaled;
 				float baseOffsetY = 0;
@@ -153,7 +152,7 @@ public class ParallaxBackground extends Entity {
 					baseOffsetX -= shapeWidthScaled;
 				}
 
-				GL.glTranslatef(baseOffsetX + Game.camera.getCenterX() - Game.camera.getWidth() / 2, baseOffsetY, 0);
+				GL.glTranslatef(baseOffsetX, baseOffsetY, 0);
 
 				float currentMaxX = baseOffsetX;
 
@@ -161,7 +160,7 @@ public class ParallaxBackground extends Entity {
 					this.shape.onDraw(GL, camera);
 					GL.glTranslatef(shapeWidthScaled, 0, 0);
 					currentMaxX += shapeWidthScaled;
-				} while (currentMaxX * Options.cameraRatioFactor < cameraWidth);
+				} while (currentMaxX * Options.cameraRatioFactor < Options.cameraWidth);
 			}
 			GL.glPopMatrix();
 		}

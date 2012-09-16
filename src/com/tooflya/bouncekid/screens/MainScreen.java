@@ -40,7 +40,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	private final static BitmapTextureAtlas autoParallaxBackgroundTexture = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	private final static BitmapTextureAtlas autoParallaxBackgroundTexture2 = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-	private final static AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(30f);
+	public final static AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(30f);
 
 	private final static TextureRegion parallaxLayerBackground = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "stolen/background.png", 0, 0);
 	private final static TextureRegion parallaxLayerWave1 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "stolen/wave1.png", 0, 455);
@@ -74,20 +74,6 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.5f, 1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWave1.getHeight() * Options.cameraRatioFactor) - 5, parallaxLayerWave2, false)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-1f, 1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWave1.getHeight() * Options.cameraRatioFactor), parallaxLayerWave1, false)));
 
-		this.attachChild(autoParallaxBackground);
-
-		fpsInfo.setPosition(15, 15);
-		altInfo.setPosition(15, 40);
-		resolutionInfo.setPosition(15, 65);
-		cameraInfo.setPosition(15, 90);
-
-		this.attachChild(fpsInfo);
-		this.attachChild(altInfo);
-		this.attachChild(resolutionInfo);
-		this.attachChild(cameraInfo);
-
-		this.setOnSceneTouchListener(this);
-
 		Game.loadTextures(autoParallaxBackgroundTexture, autoParallaxBackgroundTexture2);
 
 		this.setOnAreaTouchTraversalFrontToBack();
@@ -103,9 +89,26 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 			this.pinchZoomDetector = null;
 		}
 
+		this.reInit();
+
+		this.setOnSceneTouchListener(this);
+
 		this.setOnSceneTouchListener(this);
 		this.setTouchAreaBindingEnabled(true);
+		this.attachChild(autoParallaxBackground);
 
+		this.attachChild(fpsInfo);
+		this.attachChild(altInfo);
+		this.attachChild(resolutionInfo);
+		this.attachChild(cameraInfo);
+	}
+	
+	public void reInit() {
+
+		fpsInfo.setPosition(15, 15);
+		altInfo.setPosition(15, 40);
+		resolutionInfo.setPosition(15, 65);
+		cameraInfo.setPosition(15, 90);
 	}
 
 	/*
@@ -158,6 +161,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	 */
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
+		System.out.println("123");
 		if (Options.zoomEnabled) {
 			if (this.pinchZoomDetector != null) {
 				this.pinchZoomDetector.onTouchEvent(pSceneTouchEvent);
