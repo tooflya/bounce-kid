@@ -51,7 +51,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.personage = new Personage(100, 0);
 		this.personage.create();
 		
-		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground_down.png", 0, 0, 1, 1)));
+		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground.png", 0, 0, 1, 1)));
 		this.GenerateStartBlocks();
 
 		// this.bird = new Bird(0, Options.cameraHeight - 200);
