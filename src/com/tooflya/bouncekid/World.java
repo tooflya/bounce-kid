@@ -25,11 +25,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	private EntityManager blocks;
 	private EntityManager stars;
-	private EntityManager starsd;
 
-	private Block tempBlock = null;
 	private Block lastBlock = null;
-
 	private Block bottomBlock = null;
 
 	// ===========================================================
@@ -51,7 +48,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 		Game.loadTextures(texture);
 
-		this.personage = new Personage(0, 0);
+		this.personage = new Personage(100, 0);
 		this.personage.create();
 		Game.screens.get(Screen.MAIN).registerTouchArea(this.personage);
 		
@@ -114,8 +111,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 		offsetX = Game.random.nextFloat() * 82 * Options.cameraRatioFactor;
 		offsetY = this.personage.getHeight() / 2 + Options.cameraHeight / 2 + this.personage.getY() - Game.random.nextFloat() * Options.cameraHeight - 82 * Options.cameraRatioFactor;
 
-		this.tempBlock = (Block) this.blocks.create();
-		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
+		final Block tempBlock = (Block) this.blocks.create();
+		tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
 	}
 
 	private void GenerateNextStar() {
@@ -182,9 +179,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 			this.GenerateNextBottomBlock();
 		}
 		for (int i = 0; i < this.blocks.getCount(); i++) {
-			Entity block = this.blocks.getByIndex(i);
+			final Entity block = this.blocks.getByIndex(i);
 			block.setPosition(block.getX()-Options.mainStep, block.getY());
-
 			if (block.getX() + block.getWidthScaled() < Game.camera.getCenterX() - Options.cameraCenterX) {
 				block.destroy();
 			}
