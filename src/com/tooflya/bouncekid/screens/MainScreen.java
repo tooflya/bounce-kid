@@ -47,6 +47,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 	private final static TextureRegion parallaxLayerWater = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "water.png", 0, 0);
 	private final static TextureRegion parallaxLayerWay = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "way.png", 0, 70);
+	private final static TextureRegion parallaxLayerOblaka = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "oblaka.png", 0, 210);
 
 	private final static ChangeableText fpsInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxx");
 	private final static ChangeableText altInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxxxxxxxx");
@@ -70,6 +71,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	public MainScreen() {
 		this.setBackground(new ColorBackground(152f / 255f, 232f / 255f, 255f / 255f, 1f));
 
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-3.5f, 0.1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWater.getHeight() * Options.cameraRatioFactor - parallaxLayerWay.getHeight() * Options.cameraRatioFactor - parallaxLayerOblaka.getHeight() * Options.cameraRatioFactor - 100), parallaxLayerOblaka, false)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.5f, 0.5f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWater.getHeight() * Options.cameraRatioFactor - parallaxLayerWay.getHeight() * Options.cameraRatioFactor), parallaxLayerWay, false)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-1.5f, 1f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxLayerWater.getHeight() * Options.cameraRatioFactor), parallaxLayerWater, false)));
 

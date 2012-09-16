@@ -52,7 +52,7 @@ public class LoadingScreen extends Screen {
 		 * Creating of sprites
 		 * 
 		 */
-		SpriteBackground background = new SpriteBackground(new EntitySimple(BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, Game.context, "stolen/game.png", 0, 0)));
+		SpriteBackground background = new SpriteBackground(new EntitySimple(BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, Game.context, "tooflya_hd.png", 0, 0)));
 
 		this.setBackground(background);
 
