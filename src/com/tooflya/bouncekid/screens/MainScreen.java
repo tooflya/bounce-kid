@@ -164,7 +164,6 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	 */
 	@Override
 	public boolean onSceneTouchEvent(Scene pScene, TouchEvent pSceneTouchEvent) {
-		System.out.println("123");
 		if (Options.zoomEnabled) {
 			if (this.pinchZoomDetector != null) {
 				this.pinchZoomDetector.onTouchEvent(pSceneTouchEvent);
