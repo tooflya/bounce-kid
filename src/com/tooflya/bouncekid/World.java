@@ -57,8 +57,6 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.personage.setPosition(0, 0);
 		this.blocks.clear();
 		this.generateStartBlocks(0);
-
-		// TODO: reInit messages on screen.
 	}
 
 	// ===========================================================
@@ -80,7 +78,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	private void GenerateNextBottomBlock() {
 		final Block tempBlock = (Block) this.blocks.create();
 		// TODO: Add some more clever code for generating various blocks.
-		tempBlock.setScale(7 * Game.random.nextFloat() + 3, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
+		tempBlock.setScale(9 * Game.random.nextFloat() + 1, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
 		// * Start of randomization x and y of block.
 		float heightMax = this.personage.getMaxFlyHeight();
 		float height = heightMax * Game.random.nextFloat();
