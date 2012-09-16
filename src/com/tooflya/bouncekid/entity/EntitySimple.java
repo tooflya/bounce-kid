@@ -2,6 +2,9 @@ package com.tooflya.bouncekid.entity;
 
 import javax.microedition.khronos.opengles.GL10;
 
+import org.anddev.andengine.entity.scene.Scene.IOnAreaTouchListener;
+import org.anddev.andengine.entity.scene.Scene.ITouchArea;
+import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
 import org.anddev.andengine.opengl.util.GLHelper;
 
@@ -11,7 +14,7 @@ import com.tooflya.bouncekid.Options;
  * @author Tooflya.com
  * @since
  */
-public class EntitySimple extends org.anddev.andengine.entity.sprite.Sprite {
+public class EntitySimple extends org.anddev.andengine.entity.sprite.Sprite implements IOnAreaTouchListener {
 
 	// ===========================================================
 	// Constants
@@ -65,5 +68,10 @@ public class EntitySimple extends org.anddev.andengine.entity.sprite.Sprite {
 		GLHelper.enableTextures(GL);
 		GLHelper.enableTexCoordArray(GL);
 		GLHelper.enableDither(GL);
+	}
+
+	@Override
+	public boolean onAreaTouched(TouchEvent arg0, ITouchArea arg1, float arg2, float arg3) {
+		return false;
 	}
 }
