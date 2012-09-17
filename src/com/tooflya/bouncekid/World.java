@@ -60,8 +60,12 @@ public class World extends org.anddev.andengine.entity.Entity {
 	// Methods
 	// ===========================================================
 
-	private void GenerateStartBlocks() {
+	private void ClearItems() {
 		// TODO: Clear all blocks.
+		// TODO: Clear all stars.
+	}
+	
+	private void GenerateStartBlocks() {
 		this.lastBlock = (Block) this.blocks.create();
 		this.lastBlock.setPosition(0, Options.cameraHeight - this.lastBlock.getHeight());
 		float x = this.lastBlock.getX();
@@ -73,6 +77,12 @@ public class World extends org.anddev.andengine.entity.Entity {
 		}
 	}
 
+	private void MoveStartBloks(Block block) {
+		// TODO: If block hide by left side move it to right side and do it the last. What happen if use zoome?
+		block.setPosition(this.lastBlock.getX() + this.lastBlock.getWidth(), this.lastBlock.getY());
+		this.lastBlock = block;
+	}
+	
 	private void GenerateNextBlock() {
 		// Bottom blocks.
 		this.tempBlock = (Block) this.blocks.create();
@@ -96,6 +106,28 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.tempBlock = (Block) this.blocks.create();
 		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
 	}
+	
+	
+	private void GenerateNextRandomBlock_v2(){
+		// Random blocks.
+		float offsetX = 3;
+		float upY = Math.min(3, this.lastBlock.getY() - this.personage.getHeight());
+		float downY = Options.cameraHeight - this.lastBlock.getY() - this.lastBlock.getHeight();
+		float offsetY = 0;
+		if (this.lastBlock.getY() - offsetY < this.personage.getHeight()) {
+			offsetY = this.lastBlock.getY() - this.personage.getHeight();
+		}
+
+		offsetX = Game.random.nextFloat() * 44;
+		offsetY = this.personage.getHeight() / 2 + Options.cameraHeight / 2 + this.personage.getY() - Game.random.nextFloat() * Options.cameraHeight - 44;
+
+		this.tempBlock = (Block) this.blocks.create();
+		this.tempBlock.setPosition(this.lastBlock.getX() + offsetX, offsetY);
+	}
+
+	
+	
+	
 	
 	private void GenerateNextStar() {
 		Star star = (Star) this.stars.create();
