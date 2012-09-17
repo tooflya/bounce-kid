@@ -7,8 +7,10 @@ import javax.microedition.khronos.opengles.GL10;
 import org.anddev.andengine.engine.camera.Camera;
 import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.shape.Shape;
+import org.anddev.andengine.opengl.util.GLHelper;
 
 import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.Options;
 
 /**
  * @author Tooflya.com
@@ -111,6 +113,10 @@ public class ParallaxBackground extends Entity {
 			this.yParallaxFactor = 0;
 		}
 
+		public ParallaxEntity(final Shape shape) {
+			this(0, 0, shape);
+		}
+
 		public ParallaxEntity(final float xParallaxFactor, final float yParallaxFactor, final Shape shape) {
 			this(xParallaxFactor, shape);
 
@@ -132,13 +138,12 @@ public class ParallaxBackground extends Entity {
 		public void onDraw(final GL10 GL, final float parallaxValue, final Camera camera) {
 			GL.glPushMatrix();
 			{
-				final float cameraWidth = camera.getWidth();
-				final float shapeWidthScaled = this.shape.getWidth();
+				final float shapeWidthScaled = (float) Math.floor(this.shape.getWidthScaled());
 				float baseOffsetX = (parallaxValue * this.xParallaxFactor) % shapeWidthScaled;
 				float baseOffsetY = 0;
 
-				if (this.yParallaxFactor > 0) {
-					baseOffsetY = -(camera.getCenterY() - camera.getHeight() / 2) * this.yParallaxFactor / 10;
+				if (this.yParallaxFactor != 0) {
+					baseOffsetY = -((camera.getCenterY() - camera.getHeight() / 2) * this.yParallaxFactor);
 				} else {
 					baseOffsetY = (camera.getCenterY() - camera.getHeight() / 2);
 				}
@@ -147,7 +152,7 @@ public class ParallaxBackground extends Entity {
 					baseOffsetX -= shapeWidthScaled;
 				}
 
-				GL.glTranslatef(baseOffsetX + Game.camera.getCenterX() - Game.camera.getWidth() / 2, baseOffsetY, 0);
+				GL.glTranslatef(baseOffsetX, baseOffsetY, 0);
 
 				float currentMaxX = baseOffsetX;
 
@@ -155,7 +160,7 @@ public class ParallaxBackground extends Entity {
 					this.shape.onDraw(GL, camera);
 					GL.glTranslatef(shapeWidthScaled, 0, 0);
 					currentMaxX += shapeWidthScaled;
-				} while (currentMaxX < cameraWidth);
+				} while (currentMaxX * Options.cameraRatioFactor < Options.cameraWidth);
 			}
 			GL.glPopMatrix();
 		}

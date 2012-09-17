@@ -8,10 +8,9 @@ import org.anddev.andengine.engine.handler.timer.TimerHandler;
 import org.anddev.andengine.engine.options.EngineOptions;
 import org.anddev.andengine.engine.options.EngineOptions.ScreenOrientation;
 import org.anddev.andengine.engine.options.WakeLockOptions;
-import org.anddev.andengine.engine.options.resolutionpolicy.RatioResolutionPolicy;
+import org.anddev.andengine.engine.options.resolutionpolicy.FillResolutionPolicy;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.util.FPSCounter;
-import org.anddev.andengine.extension.input.touch.controller.MultiTouch;
 import org.anddev.andengine.extension.input.touch.controller.MultiTouchController;
 import org.anddev.andengine.extension.input.touch.exception.MultiTouchException;
 import org.anddev.andengine.opengl.font.Font;
@@ -27,7 +26,6 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.KeyEvent;
-import android.widget.Toast;
 
 import com.tooflya.bouncekid.background.AsyncTaskLoader;
 import com.tooflya.bouncekid.background.IAsyncCallback;
@@ -125,23 +123,23 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		this.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
 		/** Initialize camera parameters */
-		Options.cameraWidth = displayMetrics.widthPixels * 2;
-		Options.cameraHeight = displayMetrics.heightPixels * 2;
+		Options.cameraWidth = displayMetrics.widthPixels;
+		Options.cameraHeight = displayMetrics.heightPixels;
+
 		Options.cameraCenterX = Options.cameraWidth / 2;
 		Options.cameraCenterY = Options.cameraHeight / 2;
+
+		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatio;
 
 		/** Initialize camera instance */
 		camera = new Camera(0, 0, Options.cameraWidth, Options.cameraHeight);
 
 		/** Initialize the configuration of engine */
-		final EngineOptions options = new EngineOptions(true, ScreenOrientation.LANDSCAPE, new RatioResolutionPolicy(displayMetrics.widthPixels, displayMetrics.heightPixels), camera)
+		final EngineOptions options = new EngineOptions(true, ScreenOrientation.LANDSCAPE, new FillResolutionPolicy(), camera)
 				.setWakeLockOptions(WakeLockOptions.SCREEN_BRIGHT)
 				.setWakeLockOptions(WakeLockOptions.SCREEN_ON)
 				.setNeedsMusic(true)
 				.setNeedsSound(true);
-
-		/** Disable extension vertex buffer objects. This extension usually has a problems with HTC phones */
-		options.getRenderOptions().disableExtensionVertexBufferObjects();
 
 		/** Auto setRunOnUpdateThread for touch events */
 		options.getTouchOptions().setRunOnUpdateThread(true);
@@ -150,7 +148,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		engine = new LimitedFPSEngine(options, Options.fps);
 
 		try {
-				engine.setTouchController(new MultiTouchController());
+			engine.setTouchController(new MultiTouchController());
 		} catch (final MultiTouchException e) {
 		}
 
@@ -170,7 +168,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		BitmapTextureAtlasTextureRegionFactory.setAssetBasePath("gfx/");
 		FontFactory.setAssetBasePath("font/");
 
-		font = FontFactory.createFromAsset(fontTexture, getApplicationContext(), "casual.ttf", 14, true, Color.WHITE);
+		font = FontFactory.createFromAsset(fontTexture, getApplicationContext(), "casual.ttf", 15, true, Color.RED);
 
 		this.getEngine().getFontManager().loadFont(font);
 		this.getEngine().getTextureManager().loadTextures(fontTexture, resourcesBitmapTexture);
