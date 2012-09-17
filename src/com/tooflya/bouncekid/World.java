@@ -92,8 +92,14 @@ public class World extends org.anddev.andengine.entity.Entity {
 		float xMin = (heightMax - height) * this.personage.runStep / this.personage.flyStep;
 		float xMax = (heightMax - height) * this.personage.runStep / this.personage.fallStep;
 		float width = (xMax - xMin) * Game.random.nextFloat() + xMin;
+		
+		// TODO: Code is wait for correction.
+		float correctY = this.bottomBlock.getY() - k * height;
+		if(correctY<0) {
+			correctY = 0;
+		}
 		// * End of randomization x and y of block.
-		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + width, this.bottomBlock.getY() - k * height);
+		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + width, correctY);
 		this.bottomBlock = tempBlock;
 	}
 
