@@ -82,13 +82,18 @@ public class World extends org.anddev.andengine.entity.Entity {
 		// TODO: Add some more clever code for generating various blocks.
 		tempBlock.setScale(9 * Game.random.nextFloat() + 1, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
 		// * Start of randomization x and y of block.
+		// TODO: Add constants.
+		int k = 1;
+		if(Game.random.nextInt(100) > 66) {
+			k = -1;
+		}
 		float heightMax = this.personage.getMaxFlyHeight();
 		float height = heightMax * Game.random.nextFloat();
 		float xMin = (heightMax - height) * this.personage.runStep / this.personage.flyStep;
 		float xMax = (heightMax - height) * this.personage.runStep / this.personage.fallStep;
 		float width = (xMax - xMin) * Game.random.nextFloat() + xMin;
 		// * End of randomization x and y of block.
-		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + width, this.bottomBlock.getY() - height);
+		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + width, this.bottomBlock.getY() - k * height);
 		this.bottomBlock = tempBlock;
 	}
 
