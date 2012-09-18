@@ -175,9 +175,13 @@ public class World extends org.anddev.andengine.entity.Entity {
 		return false;
 	}
 
+	public int apt = 0;
+	
 	public void update() {
 		this.personage.update();
 
+		this.apt+=Options.mainStep;
+		
 		// * Start of bottom blocks logic.
 		// ! Delete after add block. We can delete last block.
 		if (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() < Options.cameraWidth + Game.camera.getCenterX()) {

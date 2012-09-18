@@ -50,7 +50,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	private final static TextureRegion parallaxLayerOblaka = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "oblaka.png", 0, 210);
 
 	private final static ChangeableText fpsInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxx");
-	private final static ChangeableText altInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxxxxxxxx");
+	private final static ChangeableText altInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxxxxxxxxxxxxxxx");
 	private final static ChangeableText resolutionInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxxxxxxxxxxxxxxxxxx");
 	private final static ChangeableText cameraInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxxxxxxxxxxxxxx");
 
@@ -213,7 +213,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		super.onManagedUpdate(pSecondsElapsed);
 
 		fpsInfo.setText("FPS: " + FloatMath.floor(Game.fps));
-		altInfo.setText("ALT: " + FloatMath.floor(Game.world.personage.getY()));
+		altInfo.setText("DST: " + FloatMath.floor(Game.world.personage.getY()) +" x " + FloatMath.floor(Game.world.apt));
 		resolutionInfo.setText("RES: " + Options.cameraWidth + " x " + Options.cameraHeight + " x " + Options.cameraRatioFactor);
 		cameraInfo.setText("CAM: " + Game.camera.getCenterX() + " x " + Game.camera.getCenterY());
 	}
