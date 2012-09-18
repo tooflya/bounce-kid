@@ -59,6 +59,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.personage.setPosition(0, 0);
 		this.blocks.clear();
 		this.generateStartBlocks(0);
+		this.apt = 0;
 	}
 
 	// ===========================================================
