@@ -189,7 +189,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 		switch (pSceneTouchEvent.getAction()) {
 		case TouchEvent.ACTION_DOWN:
-			Game.world.personage.ChangeStates(ActionHelper.WantToFly, (byte) 0);
+			if(!Game.world.personage.IsState(ActionHelper.Fall))Game.world.personage.ChangeStates(ActionHelper.WantToFly, (byte) 0);
 			break;
 		case TouchEvent.ACTION_UP:
 			Game.world.personage.ChangeStates((byte) 0, ActionHelper.WantToFly);
