@@ -4,12 +4,14 @@ import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 
-import com.tooflya.bouncekid.entity.Bird;
+import com.tooflya.bouncekid.entity.Baby;
 import com.tooflya.bouncekid.entity.Block;
 import com.tooflya.bouncekid.entity.Entity;
 import com.tooflya.bouncekid.entity.Personage;
+import com.tooflya.bouncekid.entity.Personage.ActionsList;
 import com.tooflya.bouncekid.entity.Star;
 import com.tooflya.bouncekid.helpers.ActionHelper;
+import com.tooflya.bouncekid.managers.BroodManager;
 import com.tooflya.bouncekid.managers.EntityManager;
 import com.tooflya.bouncekid.screens.Screen;
 
@@ -23,6 +25,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	private EntityManager blocks;
 	private EntityManager stars;
+	private BroodManager brood;
 
 	private Block lastBlock = null;
 	private Block bottomBlock = null;
@@ -48,7 +51,12 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.personage = new Personage();
 		this.personage.create();
 
-		this.blocks = new EntityManager(150, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground.png", 0, 0, 1, 1)));
+		this.blocks = new EntityManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground.png", 0, 0, 1, 1)));
+
+		this.brood = new BroodManager(5, new Baby());
+		for (int i = 0; i < 5; i++) {
+			brood.create();
+		}
 
 		// this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
 
@@ -56,10 +64,22 @@ public class World extends org.anddev.andengine.entity.Entity {
 	}
 
 	public void reInit() {
-		this.personage.setPosition(0, 0);
+		this.personage.rx = 150 ;
+		this.personage.setPosition(350 * Options.cameraRatioFactor, 0);
 		this.blocks.clear();
 		this.generateStartBlocks(0);
 		this.apt = 0;
+		brood.getByIndex(0).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(0).getWidthScaled() - 5 * Options.cameraRatioFactor, 0);
+		((Baby) brood.getByIndex(0)).rx = 120;
+		brood.getByIndex(1).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(1).getWidthScaled() * 2 - 5 * Options.cameraRatioFactor*2, 0);
+		((Baby) brood.getByIndex(1)).rx =  90;
+		brood.getByIndex(2).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(2).getWidthScaled() * 3 - 5 * Options.cameraRatioFactor*3, 0);
+		((Baby) brood.getByIndex(2)).rx =  60;
+		brood.getByIndex(3).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(3).getWidthScaled() * 4 - 5 * Options.cameraRatioFactor*4, 0);
+		((Baby) brood.getByIndex(3)).rx =  30;
+		brood.getByIndex(4).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(4).getWidthScaled() * 5 - 5 * Options.cameraRatioFactor*5, 0);
+		((Baby) brood.getByIndex(4)).rx = 0 ;
+		this.personage.actions.clear();
 	}
 
 	// ===========================================================
@@ -85,7 +105,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		// * Start of randomization x and y of block.
 		// TODO: Add constants.
 		int k = 1;
-		if(Game.random.nextInt(100) > 66) {
+		if (Game.random.nextInt(100) > 66) {
 			k = -1;
 		}
 		float heightMax = this.personage.getMaxFlyHeight();
@@ -93,10 +113,10 @@ public class World extends org.anddev.andengine.entity.Entity {
 		float xMin = (heightMax - height) * this.personage.runStep / this.personage.flyStep;
 		float xMax = (heightMax - height) * this.personage.runStep / this.personage.fallStep;
 		float width = (xMax - xMin) * Game.random.nextFloat() + xMin;
-		
+
 		// TODO: Code is wait for correction.
 		float correctY = this.bottomBlock.getY() - k * height;
-		if(correctY<0) {
+		if (correctY < 0) {
 			correctY = 0;
 		}
 		// * End of randomization x and y of block.
@@ -142,18 +162,20 @@ public class World extends org.anddev.andengine.entity.Entity {
 				}
 			}
 		}
+	}
 
-		// for (int i = 0; i < this.stars.getCount(); i++) {
-		// Entity block = this.stars.getByIndex(i);
-		//
-		// if (block.collidesWith(personage)) {
-		// block.destroy();
-		//
-		// Entity a = this.starsd.create();
-		// a.setPosition(block.getX(), block.getY());
-		// personage.SetFlyPower(personage.GetFlyPower() + 3); // TODO: Make a constant.
-		// }
-		// }
+	public void CheckCollision(Baby personage) {
+		if (!personage.IsState(ActionHelper.Fly)) {
+			personage.ChangeStates(ActionHelper.Fall, (byte) 0);
+			for (int i = 0; i < this.blocks.getCount() && personage.IsState(ActionHelper.Fall); i++) {
+				// TODO: Maybe need other function of correct collision detection.
+				final Entity block = this.blocks.getByIndex(i);
+				if (this.isUpBottomCollide(personage, block)) {
+					personage.setPosition(personage.getX(), block.getY() - personage.getHeightScaled() + 1);
+					personage.ChangeStates(ActionHelper.Run, ActionHelper.Fall);
+				}
+			}
+		}
 	}
 
 	private boolean isUpBottomCollide(Entity upEntity, Entity downEntity) {
@@ -177,14 +199,12 @@ public class World extends org.anddev.andengine.entity.Entity {
 	}
 
 	public int apt = 0;
-	
+
 	public void update() {
 		this.personage.update();
 
-		this.apt+=Options.mainStep;
-		
-		// * Start of bottom blocks logic.
-		// ! Delete after add block. We can delete last block.
+		this.apt += Options.mainStep;
+
 		if (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() < Options.cameraWidth + Game.camera.getCenterX()) {
 			this.GenerateNextBottomBlock();
 		}
@@ -195,28 +215,21 @@ public class World extends org.anddev.andengine.entity.Entity {
 				block.destroy();
 			}
 		}
-		// * End of bottom blocks logic.
 
-		// this.bird.update();
+		for (int i = 0; i < this.brood.getCount(); i++) {
+			final Baby baby = (Baby) this.brood.getByIndex(i);
+			this.CheckCollision(baby);
+			baby.update();
 
-		// for (int i = 0; i < this.stars.getCount(); i++) {
-		// Entity block = this.stars.getByIndex(i);
-		// // block.setPosition(block.getX() - Options.blockStep, block.getY());
-		// if (block.getX() + block.getWidth() < Game.camera.getCenterX() - Options.cameraCenterX) {
-		// block.destroy();
-		// }
-		// }
-		//
-		// for (int i = 0; i < this.starsd.getCount(); i++) {
-		// Entity block = this.starsd.getByIndex(i);
-		// // block.setPosition(block.getX() - Options.blockStep, block.getY());
-		// if (block.getX() + block.getWidth() < Game.camera.getCenterX() - Options.cameraCenterX) {
-		// block.destroy();
-		// }
-		// }
-		//
-		// this.GenerateNextRandomBlock();
-		// this.GenerateNextStar();
+			for (ActionsList actions : this.personage.actions) {
+				if (actions.apt <= baby.rx) {
+					baby.currentStates = 0;
+					baby.ChangeStates(actions.currentStates, (byte) 0);
+
+					// this.personage.actions.remove(actions);
+				}
+			}
+		}
 
 		this.CheckCollision(this.personage);
 	}

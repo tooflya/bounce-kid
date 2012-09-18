@@ -1,5 +1,7 @@
 package com.tooflya.bouncekid.entity;
 
+import java.util.ArrayList;
+
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
@@ -18,6 +20,8 @@ public class Personage extends Entity {
 	// ===========================================================
 	// Constants
 	// ===========================================================
+	public int rx = Options.babyStep * 150;
+	public ArrayList<ActionsList> actions = new ArrayList<ActionsList>();
 
 	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 
@@ -108,7 +112,7 @@ public class Personage extends Entity {
 	@Override
 	public void update() {
 		super.update();
-
+this.rx += Options.mainStep;
 		if (this.IsState(ActionHelper.Run) && !AnimateState.isRun) {
 			AnimateState.setRun(this);
 		}
@@ -172,6 +176,10 @@ public class Personage extends Entity {
 			isFly = false;
 			isRun = true;
 			personage.animate(new long[] { 80, 80 }, 0, 1, true);
+			try {
+				personage.actions.add(new ActionsList(personage.currentStates, personage.rx));
+			} catch (NullPointerException e) {
+			}
 		}
 
 		public static void setFall(final Personage personage) {
@@ -179,6 +187,10 @@ public class Personage extends Entity {
 			isFly = false;
 			isRun = false;
 			personage.animate(new long[] { 80, 80 }, 4, 5, true);
+			try {
+				personage.actions.add(new ActionsList(personage.currentStates, personage.rx));
+			} catch (NullPointerException e) {
+			}
 		}
 
 		public static void setFly(final Personage personage) {
@@ -186,6 +198,20 @@ public class Personage extends Entity {
 			isFly = true;
 			isRun = false;
 			personage.animate(new long[] { 80, 80 }, 2, 3, true);
+			try {
+				personage.actions.add(new ActionsList(personage.currentStates, personage.rx));
+			} catch (NullPointerException e) {
+			}
+		}
+	}
+
+	public static class ActionsList {
+		public byte currentStates;
+		public int apt;
+
+		public ActionsList(final byte currentStates, final int apt) {
+			this.currentStates = currentStates;
+			this.apt = apt;
 		}
 	}
 }
