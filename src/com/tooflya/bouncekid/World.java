@@ -100,14 +100,26 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	private void GenerateNextBottomBlock() {
 		final Block tempBlock = (Block) this.blocks.create();
+		// Using some percent we can find if next block sticks up or down.
+		final int maxPercent = 100;
+		final int isUpPercent = maxPercent * 2 / 3;
+		int k = 1;
+		if (Game.random.nextInt(maxPercent) >= isUpPercent) {
+			k = -1;
+		}
+		
+		// Operation for up block.
+		float y = this.personage.getMaxFlyHeight() * Game.random.nextFloat();
+		float leftX = this.lastBlock.getX() + y / this.personage.flyStep * this.personage.runStep;
+		float rightX = 
+				this.lastBlock.getX() + this.lastBlock.getWidthScaled() - this.personage.getWidthScaled() + 
+				this.personage.getMaxFlyHeight() / this.personage.flyStep * this.personage.runStep + 
+				(this.personage.getMaxFlyHeight() - y) / this.personage.fallStep * this.personage.runStep;
+		
 		// TODO: Add some more clever code for generating various blocks.
 		tempBlock.setScale(9 * Game.random.nextFloat() + 1, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
 		// * Start of randomization x and y of block.
 		// TODO: Add constants.
-		int k = 1;
-		if (Game.random.nextInt(100) > 66) {
-			k = -1;
-		}
 		float heightMax = this.personage.getMaxFlyHeight();
 		float height = heightMax * Game.random.nextFloat();
 		float xMin = (heightMax - height) * this.personage.runStep / this.personage.flyStep;
