@@ -108,31 +108,43 @@ public class World extends org.anddev.andengine.entity.Entity {
 			k = -1;
 		}
 		
-		// Operation for up block.
+		// Operations for up block.
 		float y = this.personage.getMaxFlyHeight() * Game.random.nextFloat();
-		float leftX = this.lastBlock.getX() + y / this.personage.flyStep * this.personage.runStep;
-		float rightX = 
+		float leftXForRandom = this.lastBlock.getX() + y / this.personage.flyStep * this.personage.runStep;
+		leftXForRandom = Math.max(this.lastBlock.getX() + this.lastBlock.getWidthScaled(), leftXForRandom);		
+		float rightXForRandom = 
 				this.lastBlock.getX() + this.lastBlock.getWidthScaled() - this.personage.getWidthScaled() + 
 				this.personage.getMaxFlyHeight() / this.personage.flyStep * this.personage.runStep + 
 				(this.personage.getMaxFlyHeight() - y) / this.personage.fallStep * this.personage.runStep;
 		
-		// TODO: Add some more clever code for generating various blocks.
-		tempBlock.setScale(9 * Game.random.nextFloat() + 1, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
-		// * Start of randomization x and y of block.
-		// TODO: Add constants.
-		float heightMax = this.personage.getMaxFlyHeight();
-		float height = heightMax * Game.random.nextFloat();
-		float xMin = (heightMax - height) * this.personage.runStep / this.personage.flyStep;
-		float xMax = (heightMax - height) * this.personage.runStep / this.personage.fallStep;
-		float width = (xMax - xMin) * Game.random.nextFloat() + xMin;
+		float minBlockWidth = 1 * this.lastBlock.getWidth();
+		float maxBlockWidth = 10 * this.lastBlock.getWidth();
+		float maxX = this.lastBlock.getX() + this.lastBlock.getWidthScaled() + maxBlockWidth;
+		float leftX = (rightXForRandom - 0) * Game.random.nextFloat();
+		float rightX = (maxX - leftXForRandom) * Game.random.nextFloat() + leftXForRandom + minBlockWidth;
+		tempBlock.setScale((rightX - leftX) * Game.random.nextFloat() + leftX, 1);
+		tempBlock.setPosition(leftX, this.lastBlock.getY() - k * y);
+		// TODO: Add correct operations for down block. 
+		// End of some more clever code for generating various blocks.
+		
 
+// TODO: Uncomment if don't work.
+//		tempBlock.setScale(9 * Game.random.nextFloat() + 1, 1); // TODO: Magic numbers. Maximum and minimum generated width (it is 7+3 and 3 now).
+		// * Start of randomization x and y of block.		
+//		float heightMax = this.personage.getMaxFlyHeight();
+//		float height = heightMax * Game.random.nextFloat();
+//		float xMin = (heightMax - height) * this.personage.runStep / this.personage.flyStep;
+//		float xMax = (heightMax - height) * this.personage.runStep / this.personage.fallStep;
+//		float width = (xMax - xMin) * Game.random.nextFloat() + xMin;
 		// TODO: Code is wait for correction.
-		float correctY = this.bottomBlock.getY() - k * height;
-		if (correctY < 0) {
-			correctY = 0;
-		}
+//		float correctY = this.bottomBlock.getY() - k * height;
+//		if (correctY < 0) {
+//			correctY = 0;
+//		}
 		// * End of randomization x and y of block.
-		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + width, correctY);
+//		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + width, correctY);
+// TODO: End code for uncomment.
+		
 		this.bottomBlock = tempBlock;
 	}
 
