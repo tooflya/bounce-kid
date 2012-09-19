@@ -48,19 +48,19 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 		Game.loadTextures(texture);
 
-		//this.personage = new Personage();
-		//this.personage.create();
+		this.personage = new Personage();
+		this.personage.create();
 
-		//this.blocks = new EntityManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground.png", 0, 0, 1, 1)));
+		this.blocks = new EntityManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground.png", 0, 0, 1, 1)));
 
-		//this.brood = new BroodManager(5, new Baby());
+		this.brood = new BroodManager(5, new Baby());
 		for (int i = 0; i < 5; i++) {
-			//brood.create();
+			brood.create();
 		}
 
 		// this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
 
-		//this.reInit();
+		this.reInit();
 	}
 
 	public void reInit() {
@@ -218,36 +218,36 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatio;
 
-		//this.personage.update();
+		this.personage.update();
 
-//		this.apt += Options.mainStep;
-//
-//		if (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() < Options.cameraWidth + Game.camera.getCenterX()) {
-//			this.GenerateNextBottomBlock();
-//		}
-//		for (int i = 0; i < this.blocks.getCount(); i++) {
-//			final Entity block = this.blocks.getByIndex(i);
-//			block.setPosition(block.getX() - Options.mainStep, block.getY());
-//			if (block.getX() + block.getWidthScaled() < 0) {
-//				block.destroy();
-//			}
-//		}
-//
-//		for (int i = 0; i < this.brood.getCount(); i++) {
-//			final Baby baby = (Baby) this.brood.getByIndex(i);
-//			this.CheckCollision(baby);
-//			baby.update();
-//
-//			for (ActionsList actions : this.personage.actions) {
-//				if (actions.apt <= baby.rx) {
-//					baby.currentStates = 0;
-//					baby.ChangeStates(actions.currentStates, (byte) 0);
-//
-//					// this.personage.actions.remove(actions);
-//				}
-//			}
-//		}
-//
-//		this.CheckCollision(this.personage);
+		this.apt += Options.mainStep;
+
+		if (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() < Options.cameraWidth + Game.camera.getCenterX()) {
+			this.GenerateNextBottomBlock();
+		}
+		for (int i = 0; i < this.blocks.getCount(); i++) {
+			final Entity block = this.blocks.getByIndex(i);
+			block.setPosition(block.getX() - Options.mainStep, block.getY());
+			if (block.getX() + block.getWidthScaled() < 0) {
+				block.destroy();
+			}
+		}
+
+		for (int i = 0; i < this.brood.getCount(); i++) {
+			final Baby baby = (Baby) this.brood.getByIndex(i);
+			this.CheckCollision(baby);
+			baby.update();
+
+			for (ActionsList actions : this.personage.actions) {
+				if (actions.apt <= baby.rx) {
+					baby.currentStates = 0;
+					baby.ChangeStates(actions.currentStates, (byte) 0);
+
+					// this.personage.actions.remove(actions);
+				}
+			}
+		}
+
+		this.CheckCollision(this.personage);
 	}
 }

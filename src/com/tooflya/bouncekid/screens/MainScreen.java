@@ -137,7 +137,9 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	 */
 	@Override
 	public void onPinchZoom(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent, float pZoomFactor) {
-		Game.camera.setZoomFactor(this.pinchZoomStartedCameraZoomFactor * pZoomFactor);
+		if (this.pinchZoomStartedCameraZoomFactor * pZoomFactor < 1.5f && this.pinchZoomStartedCameraZoomFactor * pZoomFactor > 0.5f) {
+			Game.camera.setZoomFactor(this.pinchZoomStartedCameraZoomFactor * pZoomFactor);
+		}
 	}
 
 	/*
@@ -147,7 +149,10 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	 */
 	@Override
 	public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent, float pZoomFactor) {
-		Game.camera.setZoomFactor(this.pinchZoomStartedCameraZoomFactor * pZoomFactor);
+		System.out.println(this.pinchZoomStartedCameraZoomFactor * pZoomFactor);
+		if (this.pinchZoomStartedCameraZoomFactor * pZoomFactor < 1.5f && this.pinchZoomStartedCameraZoomFactor * pZoomFactor > 0.5f) {
+			Game.camera.setZoomFactor(this.pinchZoomStartedCameraZoomFactor * pZoomFactor);
+		}
 	}
 
 	/*
@@ -164,11 +169,11 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 			float distanceY = 0;
 
 			if (Options.cameraCenterOriginX <= Game.camera.getCenterX() + (-pDistanceX / zoomFactor) && Options.cameraMaxCenterX >= Game.camera.getCenterX() + (-pDistanceX / zoomFactor)) {
-				distanceX = (float) Math.floor(-pDistanceX / zoomFactor);
+				distanceX = FloatMath.floor(-pDistanceX / zoomFactor);
 			}
 
 			if (Options.cameraCenterOriginY >= Game.camera.getCenterY() + (-pDistanceY / zoomFactor) && -Options.cameraMaxCenterY <= Game.camera.getCenterY() + (-pDistanceY / zoomFactor)) {
-				distanceY = (float) Math.floor(-pDistanceY / zoomFactor);
+				distanceY = FloatMath.floor(-pDistanceY / zoomFactor);
 			}
 
 			Game.camera.offsetCenter(distanceX, distanceY);
@@ -199,15 +204,15 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 			}
 		}
 
-		// switch (pSceneTouchEvent.getAction()) {
-		// case TouchEvent.ACTION_DOWN:
-		// if (!Game.world.personage.IsState(ActionHelper.Fall))
-		// Game.world.personage.ChangeStates(ActionHelper.WantToFly, (byte) 0);
-		// break;
-		// case TouchEvent.ACTION_UP:
-		// Game.world.personage.ChangeStates((byte) 0, ActionHelper.WantToFly);
-		// break;
-		// }
+		switch (pSceneTouchEvent.getAction()) {
+		case TouchEvent.ACTION_DOWN:
+			if (!Game.world.personage.IsState(ActionHelper.Fall))
+				Game.world.personage.ChangeStates(ActionHelper.WantToFly, (byte) 0);
+			break;
+		case TouchEvent.ACTION_UP:
+			Game.world.personage.ChangeStates((byte) 0, ActionHelper.WantToFly);
+			break;
+		}
 
 		return false;
 	}
@@ -227,7 +232,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 		fpsInfo.setText("FPS: " + FloatMath.floor(Game.fps));
 		// altInfo.setText("DST: " + FloatMath.floor(Game.world.personage.getY()) + " x " + FloatMath.floor(Game.world.apt));
-		resolutionInfo.setText("RES: " + Game.camera.getWidth() + " x " + Game.camera.getHeight() + " x " + Options.cameraRatioFactor);
+		resolutionInfo.setText("RES: " + FloatMath.floor(Game.camera.getWidth()) + " x " + FloatMath.floor(Game.camera.getHeight()) + " x " + Options.cameraRatioFactor);
 		cameraInfo.setText("CAM: " + Game.camera.getCenterX() + " x " + Game.camera.getCenterY());
 	}
 

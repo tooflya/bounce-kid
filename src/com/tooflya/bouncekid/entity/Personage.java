@@ -55,7 +55,7 @@ public class Personage extends Entity {
 		Game.loadTextures(texture);
 		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeightOrigin);
 		Game.camera.setBoundsEnabled(true);
-		//Game.camera.setChaseEntity(this);
+		Game.camera.setChaseEntity(this);
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
