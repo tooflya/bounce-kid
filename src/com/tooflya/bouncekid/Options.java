@@ -13,6 +13,14 @@ public class Options {
 	public static int cameraCenterX;
 	public static int cameraCenterY;
 
+	public static int cameraWidthOrigin;
+	public static int cameraHeightOrigin;
+	public static int cameraCenterOriginX;
+	public static int cameraCenterOriginY;
+
+	public static float cameraMaxCenterX;
+	public static float cameraMaxCenterY;
+
 	public static float cameraRatioFactor;
 	public final static float cameraOriginRatio = 577.0f;
 
@@ -28,6 +36,6 @@ public class Options {
 	public static final int maxDistanceBetweenBlocksX = 300;
 	public static final int maxDistanceBetweenBlocksY = 100;
 
-	public static final int mainStep =1;
+	public static final int mainStep = 4;
 	public static final int babyStep = 1;
 }

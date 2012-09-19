@@ -159,7 +159,19 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	public void onScroll(ScrollDetector pScollDetector, TouchEvent pTouchEvent, float pDistanceX, float pDistanceY) {
 		if (Options.scrollEnabled) {
 			final float zoomFactor = Game.camera.getZoomFactor();
-			Game.camera.offsetCenter(-pDistanceX / zoomFactor, -pDistanceY / zoomFactor);
+
+			float distanceX = 0;
+			float distanceY = 0;
+
+			if (Options.cameraCenterOriginX <= Game.camera.getCenterX() + (-pDistanceX / zoomFactor) && Options.cameraMaxCenterX >= Game.camera.getCenterX() + (-pDistanceX / zoomFactor)) {
+				distanceX = (float) Math.floor(-pDistanceX / zoomFactor);
+			}
+
+			if (Options.cameraCenterOriginY >= Game.camera.getCenterY() + (-pDistanceY / zoomFactor) && -Options.cameraMaxCenterY <= Game.camera.getCenterY() + (-pDistanceY / zoomFactor)) {
+				distanceY = (float) Math.floor(-pDistanceY / zoomFactor);
+			}
+
+			Game.camera.offsetCenter(distanceX, distanceY);
 		}
 	}
 
@@ -187,14 +199,15 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 			}
 		}
 
-		switch (pSceneTouchEvent.getAction()) {
-		case TouchEvent.ACTION_DOWN:
-			if(!Game.world.personage.IsState(ActionHelper.Fall))Game.world.personage.ChangeStates(ActionHelper.WantToFly, (byte) 0);
-			break;
-		case TouchEvent.ACTION_UP:
-			Game.world.personage.ChangeStates((byte) 0, ActionHelper.WantToFly);
-			break;
-		}
+		// switch (pSceneTouchEvent.getAction()) {
+		// case TouchEvent.ACTION_DOWN:
+		// if (!Game.world.personage.IsState(ActionHelper.Fall))
+		// Game.world.personage.ChangeStates(ActionHelper.WantToFly, (byte) 0);
+		// break;
+		// case TouchEvent.ACTION_UP:
+		// Game.world.personage.ChangeStates((byte) 0, ActionHelper.WantToFly);
+		// break;
+		// }
 
 		return false;
 	}
@@ -213,8 +226,8 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		super.onManagedUpdate(pSecondsElapsed);
 
 		fpsInfo.setText("FPS: " + FloatMath.floor(Game.fps));
-		altInfo.setText("DST: " + FloatMath.floor(Game.world.personage.getY()) +" x " + FloatMath.floor(Game.world.apt));
-		resolutionInfo.setText("RES: " + Options.cameraWidth + " x " + Options.cameraHeight + " x " + Options.cameraRatioFactor);
+		// altInfo.setText("DST: " + FloatMath.floor(Game.world.personage.getY()) + " x " + FloatMath.floor(Game.world.apt));
+		resolutionInfo.setText("RES: " + Game.camera.getWidth() + " x " + Game.camera.getHeight() + " x " + Options.cameraRatioFactor);
 		cameraInfo.setText("CAM: " + Game.camera.getCenterX() + " x " + Game.camera.getCenterY());
 	}
 

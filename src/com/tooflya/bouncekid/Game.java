@@ -125,9 +125,16 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		/** Initialize camera parameters */
 		Options.cameraWidth = displayMetrics.widthPixels;
 		Options.cameraHeight = displayMetrics.heightPixels;
+		Options.cameraWidthOrigin = displayMetrics.widthPixels;
+		Options.cameraHeightOrigin = displayMetrics.heightPixels;
 
 		Options.cameraCenterX = Options.cameraWidth / 2;
 		Options.cameraCenterY = Options.cameraHeight / 2;
+		Options.cameraCenterOriginX = Options.cameraWidth / 2;
+		Options.cameraCenterOriginY = Options.cameraHeight / 2;
+
+		Options.cameraMaxCenterX = Options.cameraCenterX * 2;
+		Options.cameraMaxCenterY = Options.cameraCenterY * 2;
 
 		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatio;
 

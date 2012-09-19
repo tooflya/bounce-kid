@@ -53,9 +53,9 @@ public class Personage extends Entity {
 		this.flyTime = this.maxFlyTime;
 
 		Game.loadTextures(texture);
-		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeight);
+		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeightOrigin);
 		Game.camera.setBoundsEnabled(true);
-		Game.camera.setChaseEntity(this);
+		//Game.camera.setChaseEntity(this);
 	}
 
 	public Personage(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
@@ -112,7 +112,7 @@ public class Personage extends Entity {
 	@Override
 	public void update() {
 		super.update();
-this.rx += Options.mainStep;
+		this.rx += Options.mainStep;
 		if (this.IsState(ActionHelper.Run) && !AnimateState.isRun) {
 			AnimateState.setRun(this);
 		}

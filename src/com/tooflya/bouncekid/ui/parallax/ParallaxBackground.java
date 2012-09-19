@@ -143,9 +143,9 @@ public class ParallaxBackground extends Entity {
 				float baseOffsetY = 0;
 
 				if (this.yParallaxFactor != 0) {
-					baseOffsetY = -((camera.getCenterY() - camera.getHeight() / 2) * this.yParallaxFactor);
+					baseOffsetY = 0;//-((camera.getCenterY() - Options.cameraHeight / 2) * this.yParallaxFactor);
 				} else {
-					baseOffsetY = (camera.getCenterY() - camera.getHeight() / 2);
+					baseOffsetY = 0;//(camera.getCenterY() - Options.cameraHeight / 2);
 				}
 
 				while (baseOffsetX > 0) {
@@ -156,11 +156,11 @@ public class ParallaxBackground extends Entity {
 
 				float currentMaxX = baseOffsetX;
 
-				do {
+				while (currentMaxX * Options.cameraRatioFactor < Options.cameraWidth) {
 					this.shape.onDraw(GL, camera);
 					GL.glTranslatef(shapeWidthScaled, 0, 0);
 					currentMaxX += shapeWidthScaled;
-				} while (currentMaxX * Options.cameraRatioFactor < Options.cameraWidth);
+				}
 			}
 			GL.glPopMatrix();
 		}
