@@ -110,20 +110,20 @@ public class World extends org.anddev.andengine.entity.Entity {
 		
 		// Operations for up block.
 		float y = this.personage.getMaxFlyHeight() * Game.random.nextFloat();
-		float leftXForRandom = this.lastBlock.getX() + y / this.personage.flyStep * this.personage.runStep;
-		leftXForRandom = Math.max(this.lastBlock.getX() + this.lastBlock.getWidthScaled(), leftXForRandom);		
+		float leftXForRandom = this.bottomBlock.getX() + y / this.personage.flyStep * this.personage.runStep;
+		leftXForRandom = Math.max(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled(), leftXForRandom);		
 		float rightXForRandom = 
-				this.lastBlock.getX() + this.lastBlock.getWidthScaled() - this.personage.getWidthScaled() + 
+				this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() - this.personage.getWidthScaled() + 
 				this.personage.getMaxFlyHeight() / this.personage.flyStep * this.personage.runStep + 
 				(this.personage.getMaxFlyHeight() - y) / this.personage.fallStep * this.personage.runStep;
 		
-		float minBlockWidth = 1 * this.lastBlock.getWidth();
-		float maxBlockWidth = 10 * this.lastBlock.getWidth();
-		float maxX = this.lastBlock.getX() + this.lastBlock.getWidthScaled() + maxBlockWidth;
+		float minBlockWidth = 1 * this.bottomBlock.getWidth();
+		float maxBlockWidth = 10 * this.bottomBlock.getWidth();
+		float maxX = this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + maxBlockWidth;
 		float leftX = (rightXForRandom - 0) * Game.random.nextFloat();
 		float rightX = (maxX - leftXForRandom) * Game.random.nextFloat() + leftXForRandom + minBlockWidth;
 		tempBlock.setScale((rightX - leftX) * Game.random.nextFloat() + leftX, 1);
-		tempBlock.setPosition(leftX, this.lastBlock.getY() - k * y);
+		tempBlock.setPosition(leftX, this.bottomBlock.getY() - k * y);
 		// TODO: Add correct operations for down block. 
 		// End of some more clever code for generating various blocks.
 		
