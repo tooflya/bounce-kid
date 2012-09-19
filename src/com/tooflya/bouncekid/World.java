@@ -102,7 +102,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		final Block tempBlock = (Block) this.blocks.create();
 		// Using some percent we can find if next block sticks up or down.
 		final int maxPercent = 100;
-		final int isUpPercent = maxPercent * 2 / 3;
+		final int isUpPercent = 0; // maxPercent * 2 / 3;
 		int k = 1;
 		if (Game.random.nextInt(maxPercent) >= isUpPercent) {
 			k = -1;
@@ -120,7 +120,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		float minBlockWidth = 1 * this.bottomBlock.getWidth();
 		float maxBlockWidth = 10 * this.bottomBlock.getWidth();
 		float maxX = this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + maxBlockWidth;
-		float leftX = (rightXForRandom - 0) * Game.random.nextFloat();
+		float leftX = (rightXForRandom - (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled())) * Game.random.nextFloat() + (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled());
 		float rightX = (maxX - leftXForRandom) * Game.random.nextFloat() + leftXForRandom + minBlockWidth;
 		tempBlock.setScale((rightX - leftX) * Game.random.nextFloat() + leftX, 1);
 		tempBlock.setPosition(leftX, this.bottomBlock.getY() - k * y);
