@@ -64,21 +64,21 @@ public class World extends org.anddev.andengine.entity.Entity {
 	}
 
 	public void reInit() {
-		this.personage.rx = 150 ;
 		this.personage.setPosition(350 * Options.cameraRatioFactor, 0);
+		this.personage.rx = (int) this.personage.getX() ;
 		this.blocks.clear();
 		this.generateStartBlocks(0);
 		this.apt = 0;
 		brood.getByIndex(0).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(0).getWidthScaled() - 5 * Options.cameraRatioFactor, 0);
-		((Baby) brood.getByIndex(0)).rx = 120;
+		((Baby) brood.getByIndex(0)).rx = (int) ((Baby) brood.getByIndex(0)).getX();
 		brood.getByIndex(1).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(1).getWidthScaled() * 2 - 5 * Options.cameraRatioFactor*2, 0);
-		((Baby) brood.getByIndex(1)).rx =  90;
+		((Baby) brood.getByIndex(1)).rx = (int) ((Baby) brood.getByIndex(1)).getX();
 		brood.getByIndex(2).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(2).getWidthScaled() * 3 - 5 * Options.cameraRatioFactor*3, 0);
-		((Baby) brood.getByIndex(2)).rx =  60;
+		((Baby) brood.getByIndex(2)).rx =   (int) ((Baby) brood.getByIndex(2)).getX();
 		brood.getByIndex(3).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(3).getWidthScaled() * 4 - 5 * Options.cameraRatioFactor*4, 0);
-		((Baby) brood.getByIndex(3)).rx =  30;
+		((Baby) brood.getByIndex(3)).rx =   (int) ((Baby) brood.getByIndex(3)).getX();
 		brood.getByIndex(4).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(4).getWidthScaled() * 5 - 5 * Options.cameraRatioFactor*5, 0);
-		((Baby) brood.getByIndex(4)).rx = 0 ;
+		((Baby) brood.getByIndex(4)).rx =  (int) ((Baby) brood.getByIndex(4)).getX();
 		this.personage.actions.clear();
 	}
 
