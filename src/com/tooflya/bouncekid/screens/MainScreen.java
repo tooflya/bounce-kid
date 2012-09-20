@@ -231,7 +231,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		super.onManagedUpdate(pSecondsElapsed);
 
 		fpsInfo.setText("FPS: " + FloatMath.floor(Game.fps));
-		// altInfo.setText("DST: " + FloatMath.floor(Game.world.personage.getY()) + " x " + FloatMath.floor(Game.world.apt));
+		altInfo.setText("DST: " + FloatMath.floor(Game.world.personage.getY()) + " x " + FloatMath.floor(Game.world.apt));
 		resolutionInfo.setText("RES: " + FloatMath.floor(Game.camera.getWidth()) + " x " + FloatMath.floor(Game.camera.getHeight()) + " x " + Options.cameraRatioFactor);
 		cameraInfo.setText("CAM: " + Game.camera.getCenterX() + " x " + Game.camera.getCenterY());
 	}
