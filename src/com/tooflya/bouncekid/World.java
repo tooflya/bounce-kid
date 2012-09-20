@@ -109,21 +109,28 @@ public class World extends org.anddev.andengine.entity.Entity {
 		}
 		
 		// Operations for up block.
-		float y = this.personage.getMaxFlyHeight() * Game.random.nextFloat();
-		float leftXForRandom = this.bottomBlock.getX() + y / this.personage.flyStep * this.personage.runStep;
-		leftXForRandom = Math.max(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled(), leftXForRandom);		
-		float rightXForRandom = 
-				this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() - this.personage.getWidthScaled() + 
-				this.personage.getMaxFlyHeight() / this.personage.flyStep * this.personage.runStep + 
-				(this.personage.getMaxFlyHeight() - y) / this.personage.fallStep * this.personage.runStep;
+//		if(k > 0) {
+			final float bottomBlockWidthScaled = this.bottomBlock.getX() + this.bottomBlock.getWidthScaled();
+			final float bottomBlockWidthScaled_ = bottomBlockWidthScaled - this.personage.getWidthScaled();
+			float y = this.personage.getMaxFlyHeight() * Game.random.nextFloat();
+			final float flyDistance = y / this.personage.flyStep * this.personage.runStep;
+			final float fallDistance = (this.personage.getMaxFlyHeight() - y) / this.personage.fallStep * this.personage.runStep;
+			float leftXForRandom = Math.max(bottomBlockWidthScaled, this.bottomBlock.getX() + flyDistance);
+			float rightXForRandom = bottomBlockWidthScaled_ + this.personage.getMaxFlyDistance() + fallDistance;
 		
-		float minBlockWidth = 1 * this.bottomBlock.getWidth();
-		float maxBlockWidth = 10 * this.bottomBlock.getWidth();
-		float maxX = this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + maxBlockWidth;
-		float leftX = (rightXForRandom - (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled())) * Game.random.nextFloat() + (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled());
-		float rightX = (maxX - leftXForRandom) * Game.random.nextFloat() + leftXForRandom + minBlockWidth;
-		tempBlock.setScale((rightX - leftX) * Game.random.nextFloat() + leftX, 1);
-		tempBlock.setPosition(leftX, this.bottomBlock.getY() - k * y);
+			final float minBlockWidth = 1 * this.bottomBlock.getWidth();
+			final float maxBlockWidth = 10 * this.bottomBlock.getWidth();
+			final float m_mBlockWidth = maxBlockWidth - minBlockWidth;
+		
+			float tempBlockWidth = m_mBlockWidth * Game.random.nextFloat() + minBlockWidth;
+		
+			float leftX = (rightXForRandom - bottomBlockWidthScaled) * Game.random.nextFloat() + bottomBlockWidthScaled;
+			float rightX = Math.max(leftX + tempBlockWidth, leftXForRandom);
+			
+			tempBlock.setScale((rightX - leftX) * Game.random.nextFloat() + leftX, 1);
+			System.out.print("From " + leftX + " to " + rightX);
+			tempBlock.setPosition(leftX, this.bottomBlock.getY() - k * y);
+//		}
 		// TODO: Add correct operations for down block. 
 		// End of some more clever code for generating various blocks.
 		
