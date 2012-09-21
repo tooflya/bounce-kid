@@ -88,7 +88,6 @@ public abstract class Entity extends AnimatedSprite {
 	public void show() {
 		this.setVisible(true);
 		this.setIgnoreUpdate(false);
-		this.setCullingEnabled(false);
 	}
 
 	public void hide() {
