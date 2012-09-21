@@ -60,10 +60,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		this.blocks = new EntityManager(50, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "ground.png", 0, 0, 1, 1)));
 
-		this.brood = new BroodManager(50, new Baby());
-		for (int i = 0; i < 5; i++) {
-			// brood.create();
-		}
+		this.brood = new BroodManager(4, new Baby());
 
 		// this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
 
@@ -72,15 +69,14 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	public void reInit() {
 		gg = 0;
-		this.personage.setPosition(5 * Options.cameraRatioFactor + this.personage.getWidthScaled(), 0);
+		this.personage.setPosition(0, 0);
 		this.personage.rx = (int) this.personage.getX();
 		this.blocks.clear();
 		this.generateStartBlocks(0);
 		this.apt = 0;
-		/*
-		 * brood.getByIndex(0).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(0).getWidthScaled() - 5 * Options.cameraRatioFactor, 0); ((Baby) brood.getByIndex(0)).rx = (int) ((Baby) brood.getByIndex(0)).getX(); brood.getByIndex(1).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(1).getWidthScaled() * 2 - 5 * Options.cameraRatioFactor * 2, 0); ((Baby) brood.getByIndex(1)).rx = (int) ((Baby) brood.getByIndex(1)).getX(); brood.getByIndex(2).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(2).getWidthScaled() * 3 - 5 * Options.cameraRatioFactor * 3, 0); ((Baby) brood.getByIndex(2)).rx = (int) ((Baby) brood.getByIndex(2)).getX(); brood.getByIndex(3).setPosition(350 * Options.cameraRatioFactor - brood.getByIndex(3).getWidthScaled() * 4 - 5 * Options.cameraRatioFactor * 4, 0); ((Baby) brood.getByIndex(3)).rx = (int) ((Baby) brood.getByIndex(3)).getX(); brood.getByIndex(4).setPosition(350 * Options.cameraRatioFactor -
-		 * brood.getByIndex(4).getWidthScaled() * 5 - 5 * Options.cameraRatioFactor * 5, 0); ((Baby) brood.getByIndex(4)).rx = (int) ((Baby) brood.getByIndex(4)).getX();
-		 */
+		c = 0;
+
+		this.brood.clear();
 		this.personage.actions.clear();
 	}
 
@@ -286,7 +282,17 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		if (this.gg % 150 == 0 && c < mc) {
 			c++;
+
 			Baby baby = (Baby) this.brood.create();
+
+			this.personage.setPosition(baby.getWidthScaled() * c + 5 * Options.cameraRatioFactor * c, this.personage.getY());
+			this.personage.rx = (int) this.personage.getX() + this.apt;
+
+			for (int i = 0; i < this.brood.getCount() - 1; i++) {
+				this.brood.getByIndex(i).setPosition(this.personage.getX() - baby.getWidthScaled() * (i + 1) - 5 * Options.cameraRatioFactor * (i + 1), this.brood.getByIndex(i).getY());
+				((Baby) this.brood.getByIndex(i)).rx = (int) this.brood.getByIndex(i).getX() + this.apt;
+			}
+
 			baby.setPosition(this.personage.getX() - baby.getWidthScaled() * c - 5 * Options.cameraRatioFactor * c, this.personage.getY());
 			baby.rx = (int) baby.getX() + this.apt;
 		}

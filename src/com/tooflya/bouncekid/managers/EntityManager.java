@@ -83,7 +83,7 @@ public class EntityManager {
 	}
 
 	public void clear() {
-		for (int i = count+1; i > 0; --i) {
+		for (int i = count; i >= 0; --i) {
 			elements[i].destroy();
 		}
 	}
