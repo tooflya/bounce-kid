@@ -96,48 +96,55 @@ public class World extends org.anddev.andengine.entity.Entity {
 		}
 	}
 
-	private void GenerateNextBottomBlock() {
+	private void generateNextBottomBlock() {
 		final Block tempBlock = (Block) this.blocks.create();
+		final float maxWidth = (this.personage.getFlyPower() / this.personage.flyStep + this.personage.getFlyPower() / this.personage.fallStep) * this.personage.runStep;
+		final float maxHeight = this.personage.getFlyPower() * this.personage.flyStep;
+		final float y = Math.min(Options.cameraHeight - tempBlock.getHeightScaled(), (Game.random.nextFloat() - 0.5f) * maxHeight);
+		final float x = maxWidth * Game.random.nextFloat();
+		tempBlock.setSize(Options.cameraWidth / 2, tempBlock.getHeight());
+		tempBlock.setPosition(this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + x, this.bottomBlock.getY() + y);
+
 		// Using some percent we can find if next block sticks up or down.
-		final int maxPercent = 100;
-		final int isUpPercent = 60; // maxPercent * 2 / 3;
-		int k = 1;
-		// if (Game.random.nextInt(maxPercent) >= isUpPercent) {
-		// k = -1;
-		// }
-
-		// Operations for up block.
-		// if(k > 0) {
-		final float bottomBlockWidthScaled = this.bottomBlock.getX() + this.bottomBlock.getWidthScaled();
-		System.out.println(bottomBlockWidthScaled);
-		final float bottomBlockWidthScaled_ = bottomBlockWidthScaled - this.personage.getWidthScaled();
-		System.out.println(bottomBlockWidthScaled_);
-		float y = this.personage.getMaxFlyHeight() * Game.random.nextFloat();
-		System.out.println(y);
-		final float flyDistance = y / this.personage.flyStep * this.personage.runStep;
-		System.out.println(flyDistance);
-		final float fallDistance = (this.personage.getMaxFlyHeight() - y) / this.personage.fallStep * this.personage.runStep;
-		System.out.println(fallDistance);
-		float leftXForRandom = Math.max(bottomBlockWidthScaled, this.bottomBlock.getX() + flyDistance);
-		System.out.println(leftXForRandom);
-		float rightXForRandom = bottomBlockWidthScaled_ + this.personage.getMaxFlyDistance() + fallDistance;
-		System.out.println("From " + rightXForRandom);
-
-		final float minBlockWidth = 1 * this.bottomBlock.getWidth();
-		final float maxBlockWidth = 10 * this.bottomBlock.getWidth();
-		final float m_mBlockWidth = maxBlockWidth - minBlockWidth;
-
-		float tempBlockWidth = m_mBlockWidth * Game.random.nextFloat() + minBlockWidth;
-		System.out.println(tempBlockWidth);
-
-		float leftX = (rightXForRandom - bottomBlockWidthScaled) * Game.random.nextFloat() + bottomBlockWidthScaled;
-		System.out.println(leftX);
-		float rightX = Math.min(leftX + tempBlockWidth, leftXForRandom);
-		System.out.println(rightX);
-
-		tempBlock.setSize((rightX - leftX) * Game.random.nextFloat() + leftX, tempBlock.getHeight());
-		System.out.println("From " + leftX + " to " + rightX);
-		tempBlock.setPosition(leftX, this.bottomBlock.getY() - k * y);
+		// final int maxPercent = 100;
+		// final int isUpPercent = 60; // maxPercent * 2 / 3;
+		// int k = 1;
+		// // if (Game.random.nextInt(maxPercent) >= isUpPercent) {
+		// // k = -1;
+		// // }
+		//
+		// // Operations for up block.
+		// // if(k > 0) {
+		// final float bottomBlockWidthScaled = this.bottomBlock.getX() + this.bottomBlock.getWidthScaled();
+		// System.out.println(bottomBlockWidthScaled);
+		// final float bottomBlockWidthScaled_ = bottomBlockWidthScaled - this.personage.getWidthScaled();
+		// System.out.println(bottomBlockWidthScaled_);
+		// float y = this.personage.getMaxFlyHeight() * Game.random.nextFloat();
+		// System.out.println(y);
+		// final float flyDistance = y / this.personage.flyStep * this.personage.runStep;
+		// System.out.println(flyDistance);
+		// final float fallDistance = (this.personage.getMaxFlyHeight() - y) / this.personage.fallStep * this.personage.runStep;
+		// System.out.println(fallDistance);
+		// float leftXForRandom = Math.max(bottomBlockWidthScaled, this.bottomBlock.getX() + flyDistance);
+		// System.out.println(leftXForRandom);
+		// float rightXForRandom = bottomBlockWidthScaled_ + this.personage.getMaxFlyDistance() + fallDistance;
+		// System.out.println("From " + rightXForRandom);
+		//
+		// final float minBlockWidth = 1 * this.bottomBlock.getWidth();
+		// final float maxBlockWidth = 10 * this.bottomBlock.getWidth();
+		// final float m_mBlockWidth = maxBlockWidth - minBlockWidth;
+		//
+		// float tempBlockWidth = m_mBlockWidth * Game.random.nextFloat() + minBlockWidth;
+		// System.out.println(tempBlockWidth);
+		//
+		// float leftX = (rightXForRandom - bottomBlockWidthScaled) * Game.random.nextFloat() + bottomBlockWidthScaled;
+		// System.out.println(leftX);
+		// float rightX = Math.min(leftX + tempBlockWidth, leftXForRandom);
+		// System.out.println(rightX);
+		//
+		// tempBlock.setSize((rightX - leftX) * Game.random.nextFloat() + leftX, tempBlock.getHeight());
+		// System.out.println("From " + leftX + " to " + rightX);
+		// tempBlock.setPosition(leftX, this.bottomBlock.getY() - k * y);
 		// }
 		// TODO: Add correct operations for down block.
 		// End of some more clever code for generating various blocks.
@@ -253,7 +260,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		gg++;
 
 		if (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() < Options.cameraWidth + Game.camera.getCenterX()) {
-			this.GenerateNextBottomBlock();
+			this.generateNextBottomBlock();
 		}
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			final Entity block = this.blocks.getByIndex(i);
