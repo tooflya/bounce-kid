@@ -72,7 +72,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	public void reInit() {
 		gg = 0;
-		this.personage.setPosition(350 * Options.cameraRatioFactor, 0);
+		this.personage.setPosition(5 * Options.cameraRatioFactor + this.personage.getWidthScaled(), 0);
 		this.personage.rx = (int) this.personage.getX();
 		this.blocks.clear();
 		this.generateStartBlocks(0);
@@ -106,9 +106,9 @@ public class World extends org.anddev.andengine.entity.Entity {
 		final int maxPercent = 100;
 		final int isUpPercent = 60; // maxPercent * 2 / 3;
 		int k = 1;
-//		if (Game.random.nextInt(maxPercent) >= isUpPercent) {
-//			k = -1;
-//		}
+		// if (Game.random.nextInt(maxPercent) >= isUpPercent) {
+		// k = -1;
+		// }
 
 		// Operations for up block.
 		// if(k > 0) {
@@ -123,7 +123,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		final float fallDistance = (this.personage.getMaxFlyHeight() - y) / this.personage.fallStep * this.personage.runStep;
 		System.out.println(fallDistance);
 		float leftXForRandom = Math.max(bottomBlockWidthScaled, this.bottomBlock.getX() + flyDistance);
-		System.out.println( leftXForRandom);
+		System.out.println(leftXForRandom);
 		float rightXForRandom = bottomBlockWidthScaled_ + this.personage.getMaxFlyDistance() + fallDistance;
 		System.out.println("From " + rightXForRandom);
 
@@ -132,7 +132,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		final float m_mBlockWidth = maxBlockWidth - minBlockWidth;
 
 		float tempBlockWidth = m_mBlockWidth * Game.random.nextFloat() + minBlockWidth;
-		System.out.println( tempBlockWidth);
+		System.out.println(tempBlockWidth);
 
 		float leftX = (rightXForRandom - bottomBlockWidthScaled) * Game.random.nextFloat() + bottomBlockWidthScaled;
 		System.out.println(leftX);
@@ -241,7 +241,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	}
 
 	public int apt = 0;
-	public int gg = 0, c = 0;
+	public int gg = 0, c = 0, mc = 4;
 
 	public void update() {
 		Options.cameraWidth = (int) (Options.cameraWidthOrigin / Game.camera.getZoomFactor());
@@ -284,11 +284,11 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		this.CheckCollision(this.personage);
 
-		if (this.gg % 150 == 0) {
+		if (this.gg % 150 == 0 && c < mc) {
 			c++;
 			Baby baby = (Baby) this.brood.create();
 			baby.setPosition(this.personage.getX() - baby.getWidthScaled() * c - 5 * Options.cameraRatioFactor * c, this.personage.getY());
-			baby.rx = (int) baby.getX()+this.apt;;
+			baby.rx = (int) baby.getX() + this.apt;
 		}
 	}
 }
