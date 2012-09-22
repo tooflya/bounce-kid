@@ -110,7 +110,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		final EntitySimple reset = new EntitySimple((int) (Options.cameraWidth - region.getWidth() * Options.cameraRatioFactor) - (int) (10 * Options.cameraRatioFactor), (int) (10 * Options.cameraRatioFactor), region, false) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
-				GameTimer.world.reInit();
+				GameTimer.world.init();
 
 				return false;
 			}

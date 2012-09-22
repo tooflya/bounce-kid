@@ -26,9 +26,9 @@ public class Personage extends Entity {
 	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 
 	private final int maxFlyTime = 40;
-	public final int runStep = Options.mainStep; // TODO: Make a getter and private.
-	public final int flyStep = 2; // TODO: Make a getter and private.
-	public final int fallStep = 2; // TODO: Make a getter and private.
+	public final int runStep = Options.mainStep; // TODO: Make a getter and private. Or move to Options.
+	public final int flyStep = 2; // TODO: Make a getter and private. Or move to Options.
+	public final int fallStep = 2; // TODO: Make a getter and private. Or move to Options.
 
 	// ===========================================================
 	// Fields
