@@ -10,7 +10,6 @@ import com.tooflya.bouncekid.entity.Entity;
 import com.tooflya.bouncekid.entity.EntitySimple;
 import com.tooflya.bouncekid.entity.Personage;
 import com.tooflya.bouncekid.entity.Personage.ActionsList;
-import com.tooflya.bouncekid.entity.Star;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 import com.tooflya.bouncekid.managers.BroodManager;
 import com.tooflya.bouncekid.managers.EntityManager;
@@ -36,6 +35,9 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	// TODO: Strange name of variable. What is m?
 	private EntitySimple m;
+
+	private int widthCoef = 0;
+	private int widthCoefStep = 10;
 
 	// TODO: Strange name of variable.
 	public int apt = 0, gg = 0, c = 0, mc = 0;
@@ -94,11 +96,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.bottomBlock.setScale(width / this.bottomBlock.getWidthScaled(), 1);
 	}
 
-	private int wk = 0;
-	private int wkStep = 10;
-
 	private void generateNextBottomBlock() {
-		this.wk += wkStep;
+		this.widthCoef += widthCoefStep;
 		final Block tempBlock = (Block) this.blocks.create();
 
 		final float maxWidth = (this.personage.getFlyPower() / this.personage.flyStep + this.personage.getFlyPower() / this.personage.fallStep) * this.personage.runStep;
@@ -120,14 +119,14 @@ public class World extends org.anddev.andengine.entity.Entity {
 		if (k >= 0) {
 			float xStart = this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() + fallDistanceFromBlock;
 			float xFinish = xStart + maxWidth;
-			float width = Math.max(tempBlock.getWidth(), Options.cameraWidth - wk); // maxFlyDistance; // xFinish - xStart;
+			float width = Math.max(tempBlock.getWidth(), Options.cameraWidth - widthCoef); // maxFlyDistance; // xFinish - xStart;
 			tempBlock.setScale(width / tempBlock.getWidth(), 1);
 			tempBlock.setPosition(xStart + (xFinish - xStart) * Game.random.nextFloat(), Math.min(Options.cameraHeight - tempBlock.getHeightScaled(), this.bottomBlock.getY() + k * y));
 		}
 		else {
 			float xStart = this.bottomBlock.getX() + Math.max(this.bottomBlock.getWidthScaled(), flyDistanceFromBlock);
 			float xFinish = this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() - this.personage.getWidthScaled() + maxFlyDistance + fallDistance;
-			float width = Math.max(tempBlock.getWidth(), Options.cameraWidth - wk); // maxFlyDistance; // xFinish - xStart;
+			float width = Math.max(tempBlock.getWidth(), Options.cameraWidth - widthCoef); // maxFlyDistance; // xFinish - xStart;
 			tempBlock.setScale(width / tempBlock.getWidth(), 1);
 			tempBlock.setPosition(xStart + (xFinish - xStart) * Game.random.nextFloat(), this.bottomBlock.getY() + k * y);
 		}
@@ -200,13 +199,15 @@ public class World extends org.anddev.andengine.entity.Entity {
 		if (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() < Options.cameraWidth + Game.camera.getCenterX()) {
 			this.generateNextBottomBlock();
 		}
+		float freeX = this.personage.getFreeX();
 		for (int i = 0; i < this.blocks.getCount(); i++) {
 			final Entity block = this.blocks.getByIndex(i);
-			block.setPosition(block.getX() - Options.mainStep, block.getY());
+			block.setPosition(block.getX() - freeX, block.getY());
 			if (block.getX() + block.getWidthScaled() < 0) {
 				block.destroy();
 			}
 		}
+		this.personage.setPosition(this.personage.getX() - this.personage.getFreeX(), this.personage.getY());
 
 		for (int i = 0; i < this.brood.getCount(); i++) {
 			final Baby baby = (Baby) this.brood.getByIndex(i);

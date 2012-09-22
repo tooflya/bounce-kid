@@ -7,9 +7,6 @@ import javax.microedition.khronos.opengles.GL10;
 import org.anddev.andengine.engine.camera.Camera;
 import org.anddev.andengine.entity.Entity;
 import org.anddev.andengine.entity.shape.Shape;
-import org.anddev.andengine.opengl.util.GLHelper;
-
-import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.Options;
 
 /**

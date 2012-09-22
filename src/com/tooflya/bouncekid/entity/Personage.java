@@ -20,15 +20,13 @@ public class Personage extends Entity {
 	// ===========================================================
 	// Constants
 	// ===========================================================
-	public int rx = Options.babyStep * 150;
-	public ArrayList<ActionsList> actions = new ArrayList<ActionsList>();
 
 	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 
 	private final int maxFlyTime = 40;
-	public final int runStep = Options.mainStep; // TODO: Make a getter and private. Or move to Options.
-	public final int flyStep = 2; // TODO: Make a getter and private. Or move to Options.
-	public final int fallStep = 2; // TODO: Make a getter and private. Or move to Options.
+	public final int runStep = Options.mainStep; // TODO: Make a getter and private. Or move to Options. Or make static.
+	public final int flyStep = 2; // TODO: Make a getter and private. Or move to Options. Or make static.
+	public final int fallStep = 2; // TODO: Make a getter and private. Or move to Options. Or make static.
 
 	// ===========================================================
 	// Fields
@@ -38,11 +36,12 @@ public class Personage extends Entity {
 
 	private int flyTime;
 
+	public int rx = Options.babyStep * 150;
+	public ArrayList<ActionsList> actions = new ArrayList<ActionsList>(); // TODO: ArrayList? Can we use only one or two variables?
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
-
-	// TODO: Need to make a better code.
 
 	public Personage(final TiledTextureRegion pTiledTextureRegion) {
 		super(pTiledTextureRegion);
@@ -53,7 +52,7 @@ public class Personage extends Entity {
 		this.flyTime = this.maxFlyTime;
 
 		Game.loadTextures(texture);
-		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeightOrigin);
+		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeightOrigin); // TODO: I think this code may add some problems. Very big numbers. *R
 		Game.camera.setBoundsEnabled(true);
 		Game.camera.setChaseEntity(this);
 	}
@@ -100,6 +99,13 @@ public class Personage extends Entity {
 		return (float) this.getMaxFlyHeight() / this.fallStep * this.runStep;
 	}
 
+	public float getFreeX() {
+		if (this.getX() > 100) {
+			return getX() - 100;
+		}
+		return 0;
+	}
+
 	// ===========================================================
 	// Virtual methods
 	// ===========================================================
@@ -112,7 +118,9 @@ public class Personage extends Entity {
 	@Override
 	public void update() {
 		super.update();
+
 		this.rx += Options.mainStep;
+		
 		if (this.IsState(ActionHelper.Run) && !AnimateState.isRun) {
 			AnimateState.setRun(this);
 		}
@@ -132,7 +140,8 @@ public class Personage extends Entity {
 		if (this.IsState(ActionHelper.Fly)) {
 			if (this.flyTime > 0 && this.IsState(ActionHelper.WantToFly)) {
 				this.flyTime--;
-				this.setPosition(this.getX(), this.getY() - this.flyStep);
+				// Change first of 3 code to use not linear moving. 
+				this.setPosition(this.getX() + this.runStep, this.getY() - this.flyStep);
 			} else {
 				this.flyTime = Math.max(this.maxFlyTime, this.flyTime);
 				this.ChangeStates(ActionHelper.Fall, ActionHelper.Fly);
@@ -140,7 +149,13 @@ public class Personage extends Entity {
 		}
 
 		if (this.IsState(ActionHelper.Fall)) {
-			this.setPosition(this.getX(), this.getY() + this.fallStep);
+			// Change second of 3 code to use not linear moving.
+			this.setPosition(this.getX() + this.runStep, this.getY() + this.fallStep);
+		}
+
+		if (!this.IsState(ActionHelper.Fly) && !this.IsState(ActionHelper.Fall)) {
+			// Change third of 3 code to use not linear moving.
+			this.setPosition(this.getX() + this.runStep, this.getY());
 		}
 	}
 
