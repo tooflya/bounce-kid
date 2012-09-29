@@ -2,6 +2,9 @@ package com.tooflya.bouncekid.ui;
 
 import org.anddev.andengine.engine.camera.ZoomCamera;
 
+import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.helpers.ActionHelper;
+
 /**
  * @author Tooflya.com
  * @since
@@ -38,9 +41,35 @@ public class Camera extends ZoomCamera {
 	// Virtual methods
 	// ===========================================================
 
+	private final float maxA = 100;
+	private final float countT = 40;
+	private final float maxT = (float) (2 * Math.PI * 3); // Where 3 is count of wavering.
+	private final float stepT = maxT / countT;
+	private float t = 0;
+
 	@Override
 	public void onUpdate(float pSecondsElapsed) {
+		float yOld = this.getCenterY();
+
 		super.onUpdate(pSecondsElapsed);
+
+		final float distance = this.getCenterY() - yOld;
+		if (distance < -this.maxA) {
+			yOld = this.getCenterY() + this.maxA;
+			t = (float) Math.PI;
+		}
+		else if (this.maxA < distance) {
+			yOld = this.getCenterY() - this.maxA;
+			t = 0;
+		}
+		else if (t < maxT && Game.world != null && Game.world.personage != null) {
+			if (!Game.world.personage.IsState(ActionHelper.Fly) && !Game.world.personage.IsState(ActionHelper.Fall)) {
+				yOld += (float) ((1 - t / maxT) * maxA * Math.sin(t));
+				t += stepT;
+			}
+		}
+
+		this.setCenter(this.getCenterX(), yOld);
 
 		if (mShaking) {
 			mX = this.getCenterX();
@@ -61,6 +90,7 @@ public class Camera extends ZoomCamera {
 				this.setCenter((float) (mX + Math.random() * mIntensity * sentitX), (float) (mY + Math.random() * mIntensity * sentitY));
 			}
 		}
+
 	}
 
 	// ===========================================================

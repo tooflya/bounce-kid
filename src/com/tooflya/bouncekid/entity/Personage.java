@@ -52,7 +52,7 @@ public class Personage extends Entity {
 		this.flyTime = this.maxFlyTime;
 
 		Game.loadTextures(texture);
-		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeightOrigin); // TODO: I think this code may add some problems. Very big numbers. *R
+		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Integer.MAX_VALUE);// Options.cameraHeightOrigin); // TODO: I think this code may add some problems. Very big numbers. *R
 		Game.camera.setBoundsEnabled(true);
 		Game.camera.setChaseEntity(this);
 	}
@@ -120,7 +120,7 @@ public class Personage extends Entity {
 		super.update();
 
 		this.rx += Options.mainStep;
-		
+
 		if (this.IsState(ActionHelper.Run) && !AnimateState.isRun) {
 			AnimateState.setRun(this);
 		}
@@ -140,7 +140,7 @@ public class Personage extends Entity {
 		if (this.IsState(ActionHelper.Fly)) {
 			if (this.flyTime > 0 && this.IsState(ActionHelper.WantToFly)) {
 				this.flyTime--;
-				// Change first of 3 code to use not linear moving. 
+				// Change first of 3 code to use not linear moving.
 				this.setPosition(this.getX() + this.runStep, this.getY() - this.flyStep);
 			} else {
 				this.flyTime = Math.max(this.maxFlyTime, this.flyTime);
