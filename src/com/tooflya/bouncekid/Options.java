@@ -5,6 +5,8 @@ package com.tooflya.bouncekid;
  * @since
  */
 public class Options {
+	public static final boolean DEBUG = false;
+	
 	public static float PI = 3.14159265358979f;
 
 	/** Camera parameters */

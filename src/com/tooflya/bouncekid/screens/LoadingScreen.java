@@ -43,7 +43,7 @@ public class LoadingScreen extends Screen {
 		 * 
 		 */
 		mBackgroundTextureAtlas = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-		mProgressBarTextureAtlas = new BitmapTextureAtlas(512, 512, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		mProgressBarTextureAtlas = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 		Game.loadTextures(mBackgroundTextureAtlas, mProgressBarTextureAtlas);
 
@@ -56,7 +56,7 @@ public class LoadingScreen extends Screen {
 
 		this.setBackground(background);
 
-		progressBar = new Sprite(228, 421, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mProgressBarTextureAtlas, Game.context, "loaderbar_full_hd.png", 0, 0));
+		progressBar = new Sprite(228, 421, BitmapTextureAtlasTextureRegionFactory.createFromAsset(mProgressBarTextureAtlas, Game.context, "tooflya_hd.png", 0, 0));
 		progressBar.setWidth(1);
 		progressBar.getTextureRegion().setWidth(1);
 		// attachChild(progressBar);
