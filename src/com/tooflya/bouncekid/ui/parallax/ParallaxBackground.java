@@ -192,7 +192,7 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		// Constants
 		// ===========================================================
 
-		private final static int mShapesCount = 150;
+		private final static int mShapesCount = 3;
 
 		// ===========================================================
 		// Fields
@@ -227,7 +227,7 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		// Methods
 		// ===========================================================
 
-		private final int minTreeDistance = 400, minBushDistance = 200;
+		private final int minTreeDistance = 100/*400*/, minBushDistance = 200;
 		private int treeDistance = 0, bushDistance = 0;
 
 		@Override

@@ -101,7 +101,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 		this.setOnSceneTouchListener(this);
 		this.setTouchAreaBindingEnabled(true);
-		this.attachChild(autoParallaxBackground);
+		//this.attachChild(autoParallaxBackground);
 
 		if (Options.DEBUG) {
 			hud.attachChild(fpsInfo);
@@ -258,9 +258,9 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 		Game.camera.setHUD(hud);
 
-		// registerUpdateHandler(Game.GameTimer);
+		 registerUpdateHandler(Game.GameTimer);
 
-		this.registerUpdateHandler(new IUpdateHandler() {
+/*		this.registerUpdateHandler(new IUpdateHandler() {
 
 			@Override
 			public void onUpdate(float arg0) {
@@ -271,7 +271,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 			public void reset() {
 			}
 
-		});
+		});*/
 	}
 
 	/*
