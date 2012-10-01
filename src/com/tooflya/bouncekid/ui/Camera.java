@@ -47,29 +47,41 @@ public class Camera extends ZoomCamera {
 	private final float stepT = maxT / countT;
 	private float t = 0;
 
+	private int k = 0;
+	private float oldY = 0;
+
 	@Override
 	public void onUpdate(float pSecondsElapsed) {
 		float yOld = this.getCenterY();
 
 		super.onUpdate(pSecondsElapsed);
 
-//		final float distance = this.getCenterY() - yOld;
-//		if (distance < -this.maxA) {
-//			yOld = this.getCenterY() + this.maxA;
-//			t = (float) Math.PI;
-//		}
-//		else if (this.maxA < distance) {
-//			yOld = this.getCenterY() - this.maxA;
-//			t = 0;
-//		}
-//		else if (t < maxT && Game.world != null && Game.world.personage != null) {
-//			if (!Game.world.personage.IsState(ActionHelper.Fly) && !Game.world.personage.IsState(ActionHelper.Fall)) {
-//				yOld += (float) ((1 - t / maxT) * maxA * Math.sin(t));
-//				t += stepT;
-//			}
-//		}
-//
-//		this.setCenter(this.getCenterX(), yOld);
+		if (k == 10) {
+			oldY = this.getCenterY();
+			k = 0;
+			this.setCenter(this.getCenterX(), oldY);
+		}
+		else {
+			k++;
+		}
+
+		// final float distance = this.getCenterY() - yOld;
+		// if (distance < -this.maxA) {
+		// yOld = this.getCenterY() + this.maxA;
+		// t = (float) Math.PI;
+		// }
+		// else if (this.maxA < distance) {
+		// yOld = this.getCenterY() - this.maxA;
+		// t = 0;
+		// }
+		// else if (t < maxT && Game.world != null && Game.world.personage != null) {
+		// if (!Game.world.personage.IsState(ActionHelper.Fly) && !Game.world.personage.IsState(ActionHelper.Fall)) {
+		// yOld += (float) ((1 - t / maxT) * maxA * Math.sin(t));
+		// t += stepT;
+		// }
+		// }
+		//
+		// this.setCenter(this.getCenterX(), yOld);
 
 		if (mShaking) {
 			mX = this.getCenterX();
