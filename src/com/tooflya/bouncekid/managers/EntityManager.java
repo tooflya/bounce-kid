@@ -16,7 +16,7 @@ public class EntityManager {
 	// Fields
 	// ===========================================================
 
-	protected int count;
+	protected int lastElementNumber;
 	protected int capacity;
 
 	protected Entity[] elements;
@@ -26,7 +26,7 @@ public class EntityManager {
 	// ===========================================================
 
 	public EntityManager(final int capacity, Entity element) {
-		this.count = -1;
+		this.lastElementNumber = -1;
 
 		this.capacity = capacity;
 
@@ -48,7 +48,7 @@ public class EntityManager {
 	// ===========================================================
 
 	public int getCount() {
-		return this.count + 1;
+		return this.lastElementNumber + 1;
 	}
 
 	public int getCapacity() {
@@ -60,12 +60,12 @@ public class EntityManager {
 	}
 
 	public Entity create() throws NullPointerException {
-		if (count + 1 < capacity) {
-			count++;
+		if (lastElementNumber + 1 < capacity) {
+			lastElementNumber++;
 
-			elements[count].create();
+			elements[lastElementNumber].create();
 
-			return elements[count];
+			return elements[lastElementNumber];
 		}
 
 		return null;
@@ -73,17 +73,17 @@ public class EntityManager {
 
 	public void destroy(final int i) {
 		Entity temp_element = elements[i];
-		elements[i] = elements[count];
-		elements[count] = temp_element;
+		elements[i] = elements[lastElementNumber];
+		elements[lastElementNumber] = temp_element;
 
 		elements[i].setID(i);
-		elements[count].setID(count);
+		elements[lastElementNumber].setID(lastElementNumber);
 
-		count--;
+		lastElementNumber--;
 	}
 
 	public void clear() {
-		for (int i = count; i >= 0; --i) {
+		for (int i = lastElementNumber; i >= 0; --i) {
 			elements[i].destroy();
 		}
 	}

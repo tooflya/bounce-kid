@@ -26,7 +26,7 @@ public class Options {
 	public static float cameraRatioFactor;
 	public final static float cameraOriginRatio = 577.0f;
 
-	public static final int fps = 30;
+	public static final int fps = 120;
 
 	public static final boolean zoomEnabled = true;
 	public static final boolean scrollEnabled = true;

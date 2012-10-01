@@ -227,7 +227,7 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		// Methods
 		// ===========================================================
 
-		private final int minTreeDistance = 400, minBushDistance = 200;
+		private final int minTreeDistance = 200, minBushDistance = 200;
 		private int treeDistance = 0, bushDistance = 0;
 
 		@Override
@@ -268,6 +268,7 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 
 				if (shape.getX() + shape.getWidthScaled() < 0) {
 					shape.destroy();
+					i--;
 				} else {
 					float baseOffsetX = this.xParallaxFactor / 2f;
 					float baseOffsetY = 0;
