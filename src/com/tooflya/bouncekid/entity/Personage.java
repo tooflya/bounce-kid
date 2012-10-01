@@ -52,7 +52,7 @@ public class Personage extends Entity {
 		this.flyTime = this.maxFlyTime;
 
 		Game.loadTextures(texture);
-		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE,  Options.cameraHeightOrigin); // TODO: I think this code may add some problems. Very big numbers. *R
+		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeightOrigin); // TODO: I think this code may add some problems. Very big numbers. *R
 		Game.camera.setBoundsEnabled(true);
 		Game.camera.setChaseEntity(this);
 	}

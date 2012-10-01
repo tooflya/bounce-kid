@@ -148,6 +148,9 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 				.setNeedsMusic(true)
 				.setNeedsSound(true);
 
+		/** Disable extension vertex buffer objects. This extension usually has a problems with HTC phones */
+		options.getRenderOptions().disableExtensionVertexBufferObjects();
+
 		/** Auto setRunOnUpdateThread for touch events */
 		options.getTouchOptions().setRunOnUpdateThread(true);
 

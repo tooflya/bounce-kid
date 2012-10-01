@@ -26,7 +26,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	// Fields
 	// ===========================================================
 
-	public ObjectsManager mObjectsManager;
+	//public ObjectsManager mObjectsManager;
 
 	private BitmapTextureAtlas texture;
 
@@ -51,7 +51,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	public World() {
 		super();
-		mObjectsManager = new ObjectsManager();
+		//mObjectsManager = new ObjectsManager();
 		Game.screens.get(Screen.MAIN).attachChild(this);
 
 		this.texture = new BitmapTextureAtlas(1024, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -128,7 +128,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		}
 
 		this.bottomBlock = tempBlock;
-		this.mObjectsManager.decorate(this.bottomBlock);
+		//this.mObjectsManager.decorate(this.bottomBlock);
 	}
 
 	private void checkCollision(Personage personage) {
@@ -241,6 +241,6 @@ public class World extends org.anddev.andengine.entity.Entity {
 			baby.rx = (int) baby.getX() + this.apt;
 		}
 
-		mObjectsManager.update();
+		//mObjectsManager.update();
 	}
 }

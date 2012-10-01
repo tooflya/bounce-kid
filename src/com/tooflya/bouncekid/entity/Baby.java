@@ -15,7 +15,7 @@ public class Baby extends Entity {
 	public int rx = 0;
 
 	private final int maxFlyTime = 40;
-	public final int runStep = Options.mainStep; // TODO: Make a getter and private.
+	public final float runStep = Options.mainStep; // TODO: Make a getter and private.
 	public final int flyStep = 2; // TODO: Make a getter and private.
 	public final int fallStep = 2; // TODO: Make a getter and private.
 

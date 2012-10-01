@@ -5,8 +5,8 @@ package com.tooflya.bouncekid;
  * @since
  */
 public class Options {
-	public static final boolean DEBUG = false;
-	
+	public static final boolean DEBUG = true;
+
 	public static float PI = 3.14159265358979f;
 
 	/** Camera parameters */
@@ -26,7 +26,7 @@ public class Options {
 	public static float cameraRatioFactor;
 	public final static float cameraOriginRatio = 577.0f;
 
-	public static final int fps = 120;
+	public static final int fps = 30;
 
 	public static final boolean zoomEnabled = true;
 	public static final boolean scrollEnabled = true;

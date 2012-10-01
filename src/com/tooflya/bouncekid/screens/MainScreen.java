@@ -1,6 +1,7 @@
 package com.tooflya.bouncekid.screens;
 
 import org.anddev.andengine.engine.camera.hud.HUD;
+import org.anddev.andengine.engine.handler.IUpdateHandler;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.Scene.IOnSceneTouchListener;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
@@ -18,17 +19,20 @@ import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
 import org.anddev.andengine.opengl.texture.bitmap.BitmapTexture.BitmapTextureFormat;
 import org.anddev.andengine.opengl.texture.region.TextureRegion;
+import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import android.util.FloatMath;
 
 import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.GameTimer;
 import com.tooflya.bouncekid.Options;
+import com.tooflya.bouncekid.entity.Bush;
 import com.tooflya.bouncekid.entity.EntitySimple;
+import com.tooflya.bouncekid.entity.Tree;
 import com.tooflya.bouncekid.helpers.ActionHelper;
-import com.tooflya.bouncekid.managers.ObjectsManager;
 import com.tooflya.bouncekid.ui.parallax.AutoParallaxBackground;
 import com.tooflya.bouncekid.ui.parallax.ParallaxBackground.ParallaxEntity;
+import com.tooflya.bouncekid.ui.parallax.ParallaxBackground.ParallaxEntityTree;
 
 /**
  * @author Tooflya.com
@@ -44,11 +48,13 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	private final static BitmapTextureAtlas autoParallaxBackgroundTexture2 = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	private final static BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-	public final static AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(30f);
-	public final static AutoParallaxBackground autoParallaxBackground2 = new AutoParallaxBackground(50f);
+	public final static AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(60f);
 
+	private final static TextureRegion parallaxTopLayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture2, Game.context, "oblaka.png", 0, 0);
 	private final static TextureRegion parallaxBackLayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "back_par.png", 0, 0);
-	private final static TextureRegion parallaxMiddleLayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "mid_par.png", 0, 445);
+	private final static TextureRegion parallaxFrontLayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "mid_par.png", 0, 445);
+	private final static TiledTextureRegion parallaxMiddleLayerTrees = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(autoParallaxBackgroundTexture, Game.context, "tree_one.png", 0, 690, 3, 1);
+	private final static TiledTextureRegion parallaxMiddleLayerBush = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(autoParallaxBackgroundTexture2, Game.context, "bush.png", 0, 200, 3, 1);
 
 	private final static ChangeableText fpsInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxx");
 	private final static ChangeableText altInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxxxxxxxxxxxxxxx");
@@ -72,8 +78,9 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	public MainScreen() {
 		this.setBackground(new ColorBackground(21f / 255f, 209f / 255f, 255f / 255f, 1f));
 
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-1.5f, 4f, new EntitySimple(0, (int) ((int) (Options.cameraHeight - parallaxBackLayer.getHeight() * Options.cameraRatioFactor) - parallaxMiddleLayer.getHeight() / 2 * Options.cameraRatioFactor), parallaxBackLayer, false)));
-		autoParallaxBackground2.attachParallaxEntity(new ParallaxEntity(-2f, 3f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxMiddleLayer.getHeight() * Options.cameraRatioFactor), parallaxMiddleLayer, false)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.3f, 0f, new EntitySimple(0, 0, parallaxTopLayer)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.3f, 0.3f, new EntitySimple(0, (int) ((Options.cameraHeight - parallaxBackLayer.getHeight() * Options.cameraRatioFactor) - parallaxMiddleLayerTrees.getHeight() / 2 * Options.cameraRatioFactor + 200 * Options.cameraRatioFactor), parallaxBackLayer)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntityTree(-4f, 0.4f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxFrontLayer.getHeight() * Options.cameraRatioFactor + 50 * Options.cameraRatioFactor), parallaxFrontLayer), new Tree(parallaxMiddleLayerTrees), new Bush(parallaxMiddleLayerBush)));
 
 		Game.loadTextures(autoParallaxBackgroundTexture, autoParallaxBackgroundTexture2, texture);
 
@@ -251,7 +258,20 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 		Game.camera.setHUD(hud);
 
-		registerUpdateHandler(Game.GameTimer);
+		// registerUpdateHandler(Game.GameTimer);
+
+		this.registerUpdateHandler(new IUpdateHandler() {
+
+			@Override
+			public void onUpdate(float arg0) {
+				GameTimer.world.update();
+			}
+
+			@Override
+			public void reset() {
+			}
+
+		});
 	}
 
 	/*

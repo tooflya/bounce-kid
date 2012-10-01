@@ -60,6 +60,12 @@ public abstract class Entity extends AnimatedSprite {
 		this.setCenterPosition(x, y);
 	}
 
+	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion, final boolean needParent) {
+		this(pTiledTextureRegion, needParent);
+
+		this.setCenterPosition(x, y);
+	}
+
 	public Entity(final TiledTextureRegion pTiledTextureRegion) {
 		this(pTiledTextureRegion, true);
 	}
@@ -93,7 +99,7 @@ public abstract class Entity extends AnimatedSprite {
 	public void hide() {
 		this.setVisible(false);
 		this.setIgnoreUpdate(true);
-//		this.setCullingEnabled(true);
+		// this.setCullingEnabled(true);
 	}
 
 	// ===========================================================

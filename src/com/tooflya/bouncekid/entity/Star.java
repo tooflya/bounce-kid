@@ -22,7 +22,7 @@ public class Star extends Entity {
 	 * @see org.anddev.andengine.entity.sprite.AnimatedSprite#onManagedUpdate (float)
 	 */
 	@Override
-	protected void onManagedUpdate(final float pSecondsElapsed) {
+	public  void onManagedUpdate(final float pSecondsElapsed) {
 		super.onManagedUpdate(pSecondsElapsed);
 
 	}

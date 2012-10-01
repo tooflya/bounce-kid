@@ -53,7 +53,6 @@ public class ObjectsManager {
 				new EntityManager(5, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mObjectsTexture, Game.context, "tree_two.png", 600, 0, 1, 1)))
 		};
 
-		Game.screens.get(Screen.MAIN).attachChild(MainScreen.autoParallaxBackground2); // LOL!!!
 
 		reeds = new EntityManager(5, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(mObjectsTexture, Game.context, "reed.png", 0, 300, 1, 1)));
 	}
