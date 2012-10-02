@@ -12,6 +12,7 @@ import android.util.FloatMath;
 import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.entity.Entity;
+import com.tooflya.bouncekid.entity.Tree;
 import com.tooflya.bouncekid.managers.EntityManager;
 
 /**
@@ -28,8 +29,8 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 	// Fields
 	// ===========================================================
 
-	private final ArrayList<ParallaxEntity> parallaxEntities = new ArrayList<ParallaxEntity>();
-	private int parallaxEntityCount;
+	protected final ArrayList<ParallaxEntity> parallaxEntities = new ArrayList<ParallaxEntity>();
+	protected int parallaxEntityCount;
 
 	protected float parallaxValue;
 
@@ -99,7 +100,7 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 	// Inner and Anonymous Classes
 	// ===========================================================
 
-	public static class ParallaxEntity {
+	public static class ParallaxEntity extends org.anddev.andengine.entity.Entity {
 
 		// ===========================================================
 		// Constants
@@ -177,8 +178,13 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 			GL.glPopMatrix();
 		}
 
-		public void onManagedUpdate(final float pSecondsEllapsed) {
+		@Override
+		public void onManagedUpdate(final float pSecondsElapsed) {
+			super.onManagedUpdate(pSecondsElapsed);
+		}
 
+		public void accelerate(final float accelerateFactor) {
+			this.xParallaxFactor += accelerateFactor;
 		}
 
 		// ===========================================================
@@ -192,7 +198,7 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		// Constants
 		// ===========================================================
 
-		private final static int mShapesCount = 3;
+		private final static int mShapesCount = 5;
 
 		// ===========================================================
 		// Fields
@@ -226,12 +232,14 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		// ===========================================================
 		// Methods
 		// ===========================================================
-		
-		private final int minTreeDistance = 100/*400*/, minBushDistance = 200;
+
+		private final int minTreeDistance = 600, minBushDistance = 200;
 		private int treeDistance = 0, bushDistance = 0;
 
 		@Override
 		public void onManagedUpdate(final float pSecondsElapsed) {
+			super.onManagedUpdate(pSecondsElapsed);
+
 			final int chance = Game.random.nextInt(100);
 
 			treeDistance++;
@@ -241,19 +249,17 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 				treeDistance = 0;
 				Entity shape = this.trees.create();
 				if (shape != null) {
+					if (!shape.hasParent()) {
+						this.attachChild(shape);
+					}
 					shape.setCurrentTileIndex(Game.random.nextInt(3));
-					shape.setPosition(Options.cameraWidth + shape.getWidthScaled(), 0);
+					shape.setPosition(Options.cameraOriginRatioX, 0);
 				}
 			}
 
-			if (chance > 50 && chance < 55 && bushDistance > this.minBushDistance) {
-				bushDistance = 0;
-				Entity shape = this.bush.create();
-				if (shape != null) {
-					shape.setCurrentTileIndex(Game.random.nextInt(3));
-					shape.setPosition(Options.cameraWidth + shape.getWidthScaled(), 170);
-				}
-			}
+			/*
+			 * if (chance > 50 && chance < 55 && bushDistance > this.minBushDistance) { bushDistance = 0; Entity shape = this.bush.create(); if (shape != null) { shape.setCurrentTileIndex(Game.random.nextInt(3)); shape.setPosition(Options.cameraWidth + shape.getWidthScaled(), 170); } }
+			 */
 		}
 
 		/*
@@ -264,15 +270,18 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		@Override
 		public void onDraw(final GL10 GL, final float parallaxValue, final Camera camera) {
 			for (int i = 0; i < this.trees.getCount(); i++) {
-				final Entity shape = this.trees.getByIndex(i);
+				final Tree shape = ((Tree) this.trees.getByIndex(i));
 
-				if (shape.getX() + shape.getWidthScaled() < 0) {
+				shape.drawCount++;
+
+				final float shapeWidthScaled = Options.cameraOriginRatioX + shape.getWidthScaled();
+				float baseOffsetX = (shape.drawCount * this.xParallaxFactor) % shapeWidthScaled;
+				float baseOffsetY = 0;
+
+				if (baseOffsetX <= -shapeWidthScaled + 10) {
 					shape.destroy();
 					i--;
 				} else {
-					float baseOffsetX = this.xParallaxFactor / 2f;
-					float baseOffsetY = 0;
-
 					if (this.yParallaxFactor != 0) {
 						baseOffsetY = (camera.getCenterY() - Options.cameraHeight / 2) - (Game.camera.getCenterY() - Options.cameraCenterOriginY) * this.yParallaxFactor + (Options.cameraHeight - Options.cameraHeightOrigin);
 					} else {
@@ -281,40 +290,24 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 
 					GL.glPushMatrix();
 					{
-						shape.setPosition(shape.getX() + baseOffsetX, shape.getY());
 						GL.glTranslatef(baseOffsetX, baseOffsetY, 0);
 						shape.onDraw(GL, camera);
 					}
 					GL.glPopMatrix();
-
 				}
 			}
 
-			for (int i = 0; i < this.bush.getCount(); i++) {
-				final Entity shape = this.bush.getByIndex(i);
-
-				if (shape.getX() + shape.getWidthScaled() < 0) {
-					shape.destroy();
-				} else {
-					float baseOffsetX = this.xParallaxFactor / 2f;
-					float baseOffsetY = 0;
-
-					if (this.yParallaxFactor != 0) {
-						baseOffsetY = (camera.getCenterY() - Options.cameraHeight / 2) - (Game.camera.getCenterY() - Options.cameraCenterOriginY) * this.yParallaxFactor + (Options.cameraHeight - Options.cameraHeightOrigin);
-					} else {
-						baseOffsetY = (camera.getCenterY() - camera.getHeight() / 2) + (Options.cameraHeight - Options.cameraHeightOrigin);
-					}
-
-					GL.glPushMatrix();
-					{
-						shape.setPosition(shape.getX() + baseOffsetX, shape.getY());
-						GL.glTranslatef(baseOffsetX, baseOffsetY, 0);
-						shape.onDraw(GL, camera);
-					}
-					GL.glPopMatrix();
-
-				}
-			}
+			/*
+			 * for (int i = 0; i < this.bush.getCount(); i++) { final Entity shape = this.bush.getByIndex(i);
+			 * 
+			 * if (shape.getX() + shape.getWidthScaled() < 0) { shape.destroy(); i--; } else { float baseOffsetX = this.xParallaxFactor * 2; float baseOffsetY = 0;
+			 * 
+			 * if (this.yParallaxFactor != 0) { baseOffsetY = (camera.getCenterY() - Options.cameraHeight / 2) - (Game.camera.getCenterY() - Options.cameraCenterOriginY) * this.yParallaxFactor + (Options.cameraHeight - Options.cameraHeightOrigin); } else { baseOffsetY = (camera.getCenterY() - camera.getHeight() / 2) + (Options.cameraHeight - Options.cameraHeightOrigin); }
+			 * 
+			 * GL.glPushMatrix(); { shape.setPosition(shape.getX() + baseOffsetX, shape.getY()); GL.glTranslatef(0, baseOffsetY, 0); shape.onDraw(GL, camera); } GL.glPopMatrix();
+			 * 
+			 * } }
+			 */
 
 			super.onDraw(GL, parallaxValue, camera);
 		}

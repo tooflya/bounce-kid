@@ -1,7 +1,6 @@
 package com.tooflya.bouncekid.screens;
 
 import org.anddev.andengine.engine.camera.hud.HUD;
-import org.anddev.andengine.engine.handler.IUpdateHandler;
 import org.anddev.andengine.entity.scene.Scene;
 import org.anddev.andengine.entity.scene.Scene.IOnSceneTouchListener;
 import org.anddev.andengine.entity.scene.background.ColorBackground;
@@ -48,7 +47,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	private final static BitmapTextureAtlas autoParallaxBackgroundTexture2 = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 	private final static BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-	public final static AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(60f);
+	public final static AutoParallaxBackground autoParallaxBackground = new AutoParallaxBackground(Options.fps);
 
 	private final static TextureRegion parallaxTopLayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture2, Game.context, "oblaka.png", 0, 0);
 	private final static TextureRegion parallaxBackLayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "back_par.png", 0, 0);
@@ -78,9 +77,9 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	public MainScreen() {
 		this.setBackground(new ColorBackground(21f / 255f, 209f / 255f, 255f / 255f, 1f));
 
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.3f, 0f, new EntitySimple(0, 0, parallaxTopLayer)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-2.3f, 0.3f, new EntitySimple(0, (int) ((Options.cameraHeight - parallaxBackLayer.getHeight() * Options.cameraRatioFactor) - parallaxMiddleLayerTrees.getHeight() / 2 * Options.cameraRatioFactor + 200 * Options.cameraRatioFactor), parallaxBackLayer)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntityTree(-4f, 0.4f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxFrontLayer.getHeight() * Options.cameraRatioFactor + 50 * Options.cameraRatioFactor), parallaxFrontLayer), new Tree(parallaxMiddleLayerTrees), new Bush(parallaxMiddleLayerBush)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.2f, 0f, new EntitySimple(0, 0, parallaxTopLayer)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.2f, 0.1f, new EntitySimple(0, (int) ((Options.cameraHeight - parallaxBackLayer.getHeight() * Options.cameraRatioFactor) - parallaxMiddleLayerTrees.getHeight() / 2 * Options.cameraRatioFactor + 100 * Options.cameraRatioFactor), parallaxBackLayer)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntityTree(-0.7f, 0.2f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxFrontLayer.getHeight() * Options.cameraRatioFactor + 10 * Options.cameraRatioFactor), parallaxFrontLayer), new Tree(parallaxMiddleLayerTrees), new Bush(parallaxMiddleLayerBush)));
 
 		Game.loadTextures(autoParallaxBackgroundTexture, autoParallaxBackgroundTexture2, texture);
 
@@ -101,7 +100,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 		this.setOnSceneTouchListener(this);
 		this.setTouchAreaBindingEnabled(true);
-		//this.attachChild(autoParallaxBackground);
+		this.attachChild(autoParallaxBackground);
 
 		if (Options.DEBUG) {
 			hud.attachChild(fpsInfo);
@@ -146,7 +145,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	 */
 	@Override
 	public void onPinchZoom(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent, float pZoomFactor) {
-		if (this.pinchZoomStartedCameraZoomFactor * pZoomFactor < 1.5f && this.pinchZoomStartedCameraZoomFactor * pZoomFactor > 0.5f) {
+		if (this.pinchZoomStartedCameraZoomFactor * pZoomFactor < 1.2f && this.pinchZoomStartedCameraZoomFactor * pZoomFactor > 0.5f) {
 			Game.camera.setZoomFactor(this.pinchZoomStartedCameraZoomFactor * pZoomFactor);
 		}
 	}
@@ -159,7 +158,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	@Override
 	public void onPinchZoomFinished(PinchZoomDetector pPinchZoomDetector, TouchEvent pTouchEvent, float pZoomFactor) {
 		System.out.println(this.pinchZoomStartedCameraZoomFactor * pZoomFactor);
-		if (this.pinchZoomStartedCameraZoomFactor * pZoomFactor < 1.5f && this.pinchZoomStartedCameraZoomFactor * pZoomFactor > 0.5f) {
+		if (this.pinchZoomStartedCameraZoomFactor * pZoomFactor < 1.2f && this.pinchZoomStartedCameraZoomFactor * pZoomFactor > 0.5f) {
 			Game.camera.setZoomFactor(this.pinchZoomStartedCameraZoomFactor * pZoomFactor);
 		}
 	}
@@ -258,20 +257,17 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 		Game.camera.setHUD(hud);
 
-		 registerUpdateHandler(Game.GameTimer);
+		registerUpdateHandler(Game.GameTimer);
 
-/*		this.registerUpdateHandler(new IUpdateHandler() {
-
-			@Override
-			public void onUpdate(float arg0) {
-				GameTimer.world.update();
-			}
-
-			@Override
-			public void reset() {
-			}
-
-		});*/
+		/*
+		 * this.registerUpdateHandler(new IUpdateHandler() {
+		 * 
+		 * @Override public void onUpdate(float arg0) { GameTimer.world.update(); }
+		 * 
+		 * @Override public void reset() { }
+		 * 
+		 * });
+		 */
 	}
 
 	/*
