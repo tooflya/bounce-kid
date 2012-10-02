@@ -29,6 +29,8 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 	// Fields
 	// ===========================================================
 
+	protected float parallaxChangePerSecond;
+
 	protected final ArrayList<ParallaxEntity> parallaxEntities = new ArrayList<ParallaxEntity>();
 	protected int parallaxEntityCount;
 
@@ -62,7 +64,7 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		final float parallaxValue = this.parallaxValue;
 
 		for (int i = 0; i < this.parallaxEntityCount; i++) {
-			this.parallaxEntities.get(i).onDraw(GL, parallaxValue, camera);
+			this.parallaxEntities.get(i).onDraw(GL, parallaxValue, this.parallaxChangePerSecond, camera);
 		}
 	}
 
@@ -148,7 +150,7 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		// Methods
 		// ===========================================================
 
-		public void onDraw(final GL10 GL, final float parallaxValue, final Camera camera) {
+		public void onDraw(final GL10 GL, final float parallaxValue, final float parallaxChangePerSecond, final Camera camera) {
 			GL.glPushMatrix();
 			{
 				final float shapeWidthScaled = FloatMath.floor(this.shape.getWidthScaled());
@@ -233,8 +235,8 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		// Methods
 		// ===========================================================
 
-		private final int minTreeDistance = 600, minBushDistance = 200;
-		private int treeDistance = 0, bushDistance = 0;
+		private int minTreeDistance = 1000, minTreeDistanceOrigin = 4, minBushDistance = 200;
+		private int treeDistance = minTreeDistance - 1, bushDistance = 0;
 
 		@Override
 		public void onManagedUpdate(final float pSecondsElapsed) {
@@ -262,17 +264,11 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 			 */
 		}
 
-		/*
-		 * (non-Javadoc)
-		 * 
-		 * @see com.tooflya.bouncekid.ui.parallax.ParallaxBackground.ParallaxEntity#onDraw(javax.microedition.khronos.opengles.GL10, float, org.anddev.andengine.engine.camera.Camera)
-		 */
-		@Override
-		public void onDraw(final GL10 GL, final float parallaxValue, final Camera camera) {
+		public void onDraw(final GL10 GL, final float parallaxValue, final float parallaxChangePerSecond, final Camera camera) {
 			for (int i = 0; i < this.trees.getCount(); i++) {
 				final Tree shape = ((Tree) this.trees.getByIndex(i));
 
-				shape.drawCount++;
+				shape.drawCount += parallaxChangePerSecond / Options.fps;
 
 				final float shapeWidthScaled = Options.cameraOriginRatioX + shape.getWidthScaled();
 				float baseOffsetX = (shape.drawCount * this.xParallaxFactor) % shapeWidthScaled;
@@ -281,6 +277,14 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 				if (baseOffsetX <= -shapeWidthScaled + 10) {
 					shape.destroy();
 					i--;
+					Entity shape2 = this.trees.create();
+					if (shape2 != null) {
+						if (!shape2.hasParent()) {
+							this.attachChild(shape2);
+						}
+						shape2.setCurrentTileIndex(Game.random.nextInt(3));
+						shape2.setPosition(Options.cameraOriginRatioX, 0);
+					}
 				} else {
 					if (this.yParallaxFactor != 0) {
 						baseOffsetY = (camera.getCenterY() - Options.cameraHeight / 2) - (Game.camera.getCenterY() - Options.cameraCenterOriginY) * this.yParallaxFactor + (Options.cameraHeight - Options.cameraHeightOrigin);
@@ -309,9 +313,8 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 			 * } }
 			 */
 
-			super.onDraw(GL, parallaxValue, camera);
+			super.onDraw(GL, parallaxValue, parallaxChangePerSecond, camera);
 		}
-
 		// ===========================================================
 		// Inner and Anonymous Classes
 		// ===========================================================

@@ -16,8 +16,6 @@ public class AutoParallaxBackground extends ParallaxBackground {
 	// Fields
 	// ===========================================================
 
-	private float parallaxChangePerSecond;
-
 	// ===========================================================
 	// Constructors
 	// ===========================================================

@@ -7,7 +7,7 @@ import com.tooflya.bouncekid.Options;
 
 public class Tree extends Entity {
 
-	public int drawCount = 0;
+	public float drawCount = 0;
 
 	public Tree(TiledTextureRegion pTiledTextureRegion) {
 		super(pTiledTextureRegion, false);
