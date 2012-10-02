@@ -3,8 +3,11 @@ package com.tooflya.bouncekid.entity;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.Options;
 
 public class Tree extends Entity {
+
+	public float drawCount = 0;
 
 	public Tree(TiledTextureRegion pTiledTextureRegion) {
 		super(pTiledTextureRegion, false);
@@ -22,6 +25,8 @@ public class Tree extends Entity {
 			this.getTextureRegion().setFlippedHorizontal(false);
 			break;
 		}
+
+		this.drawCount = 0;
 
 		return super.create();
 	}

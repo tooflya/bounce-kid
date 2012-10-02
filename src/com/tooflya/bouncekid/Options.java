@@ -24,9 +24,10 @@ public class Options {
 	public static float cameraMaxCenterY;
 
 	public static float cameraRatioFactor;
-	public final static float cameraOriginRatio = 577.0f;
+	public final static float cameraOriginRatioX = 1024.0f;
+	public final static float cameraOriginRatioY = 580.0f;
 
-	public static final int fps = 120;
+	public static final int fps = 80;
 
 	public static final boolean zoomEnabled = true;
 	public static final boolean scrollEnabled = true;
@@ -38,6 +39,6 @@ public class Options {
 	public static final int maxDistanceBetweenBlocksX = 300;
 	public static final int maxDistanceBetweenBlocksY = 100;
 
-	public static final int mainStep = 4;
+	public static float mainStep = 1f;
 	public static final int babyStep = 1;
 }

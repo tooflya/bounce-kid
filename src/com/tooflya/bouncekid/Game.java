@@ -136,7 +136,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		Options.cameraMaxCenterX = Options.cameraCenterX * 2;
 		Options.cameraMaxCenterY = Options.cameraCenterY * 2;
 
-		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatio;
+		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatioY;
 
 		/** Initialize camera instance */
 		camera = new Camera(0, 0, Options.cameraWidth, Options.cameraHeight);
@@ -198,7 +198,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		world = new World();
 
 		/** Create game timer */
-		GameTimer = new TimerHandler(0.02f, true, new GameTimer(world));
+		GameTimer = new TimerHandler(1f / Options.fps, true, new GameTimer(world));
 
 		/** White while progressbar is running */
 		while (!isGameLoaded) {

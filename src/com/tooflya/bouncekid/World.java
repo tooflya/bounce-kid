@@ -13,7 +13,6 @@ import com.tooflya.bouncekid.entity.Personage.ActionsList;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 import com.tooflya.bouncekid.managers.BroodManager;
 import com.tooflya.bouncekid.managers.EntityManager;
-import com.tooflya.bouncekid.managers.ObjectsManager;
 import com.tooflya.bouncekid.screens.Screen;
 
 public class World extends org.anddev.andengine.entity.Entity {
@@ -26,7 +25,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	// Fields
 	// ===========================================================
 
-	//public ObjectsManager mObjectsManager;
+	// public ObjectsManager mObjectsManager;
 
 	private BitmapTextureAtlas texture;
 
@@ -51,7 +50,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 	public World() {
 		super();
-		//mObjectsManager = new ObjectsManager();
+		// mObjectsManager = new ObjectsManager();
 		Game.screens.get(Screen.MAIN).attachChild(this);
 
 		this.texture = new BitmapTextureAtlas(1024, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
@@ -62,7 +61,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		this.brood = new BroodManager(4, new Baby());
 
-		this.blocks = new EntityManager(5, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "platform.png", 0, 0, 1, 1)));
+		this.blocks = new EntityManager(10, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "platform.png", 0, 0, 1, 1)));
 
 		// this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
 
@@ -128,7 +127,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		}
 
 		this.bottomBlock = tempBlock;
-		//this.mObjectsManager.decorate(this.bottomBlock);
+		// this.mObjectsManager.decorate(this.bottomBlock);
 	}
 
 	private void checkCollision(Personage personage) {
@@ -184,7 +183,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		Options.cameraWidth = (int) (Options.cameraWidthOrigin / Game.camera.getZoomFactor());
 		Options.cameraHeight = (int) (Options.cameraHeightOrigin / Game.camera.getZoomFactor());
 
-		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatio;
+		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatioY;
 
 		this.personage.update();
 
@@ -193,16 +192,6 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		if (this.bottomBlock.getX() + this.bottomBlock.getWidthScaled() < Options.cameraWidth + Game.camera.getCenterX()) {
 			this.generateNextBottomBlock();
-		}
-
-		float freeX = this.personage.getFreeX();
-
-		for (int i = 0; i < this.blocks.getCount(); i++) {
-			final Entity block = this.blocks.getByIndex(i);
-			block.setPosition(block.getX() - freeX, block.getY());
-			if (block.getX() + block.getWidthScaled() < 0) {
-				block.destroy();
-			}
 		}
 
 		this.personage.setPosition(this.personage.getX() - this.personage.getFreeX(), this.personage.getY());
@@ -241,6 +230,6 @@ public class World extends org.anddev.andengine.entity.Entity {
 			baby.rx = (int) baby.getX() + this.apt;
 		}
 
-		//mObjectsManager.update();
+		// mObjectsManager.update();
 	}
 }
