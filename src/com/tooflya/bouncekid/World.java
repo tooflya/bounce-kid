@@ -100,7 +100,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		final float maxHeight = this.personage.getFlyPower() * this.personage.flyStep;
 
 		final int maxPercent = 100;
-		final int isUpPercent = 55;// (int) (maxPercent * 1); // TODO: Set a percent.
+		final int isUpPercent = 90;// (int) (maxPercent * 1); // TODO: Set a percent.
 		int k = -1;
 		if (Game.random.nextInt(maxPercent) >= isUpPercent) {
 			k = 1;

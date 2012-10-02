@@ -41,29 +41,26 @@ public class Camera extends ZoomCamera {
 	// Virtual methods
 	// ===========================================================
 
-	private final float maxA = 100;
-	private final float countT = 40;
-	private final float maxT = (float) (2 * Math.PI * 3); // Where 3 is count of wavering.
-	private final float stepT = maxT / countT;
-	private float t = 0;
+	// private final float maxA = 100;
+	// private final float countT = 40;
+	// private final float maxT = (float) (2 * Math.PI * 3); // Where 3 is count of wavering.
+	// private final float stepT = maxT / countT;
+	// private float t = 0;
 
-	private int k = 0;
-	private float oldY = 0;
+	private int oldYNumber = 3;
+	private float[] oldY = new float[oldYNumber];
 
 	@Override
 	public void onUpdate(float pSecondsElapsed) {
-		float yOld = this.getCenterY();
+		// float yOld = this.getCenterY();
 
 		super.onUpdate(pSecondsElapsed);
 
-		if (k == 10) {
-			oldY = this.getCenterY();
-			k = 0;
-			this.setCenter(this.getCenterX(), oldY);
+		for (int i = oldYNumber - 1; i > 0; i--) {
+			oldY[i] = oldY[i - 1];
 		}
-		else {
-			k++;
-		}
+		oldY[0] = this.getCenterY();
+		this.setCenter(this.getCenterX(), oldY[oldYNumber - 1]);
 
 		// final float distance = this.getCenterY() - yOld;
 		// if (distance < -this.maxA) {

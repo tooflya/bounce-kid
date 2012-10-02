@@ -101,7 +101,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 		this.setOnSceneTouchListener(this);
 		this.setTouchAreaBindingEnabled(true);
-		//this.attachChild(autoParallaxBackground);
+		this.attachChild(autoParallaxBackground);
 
 		if (Options.DEBUG) {
 			hud.attachChild(fpsInfo);
