@@ -52,7 +52,7 @@ public class GameTimer implements ITimerCallback {
 
 			world.personage.runStep += 0.1f;
 
-			if (this.updateCount % 1 == 0) {
+			if (this.updateCount % 2 == 0) {
 				this.parallaxUpdateCount++;
 				MainScreen.autoParallaxBackground.accelerate(this.parallaxUpdateCount);
 			}

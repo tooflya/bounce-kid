@@ -21,7 +21,7 @@ public class Personage extends Entity {
 	// Constants
 	// ===========================================================
 
-	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
+	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	private final int maxFlyTime = 40;
 	public float runStep = Options.mainStep; // TODO: Make a getter and private. Or move to Options. Or make static.
@@ -156,6 +156,10 @@ public class Personage extends Entity {
 		if (!this.IsState(ActionHelper.Fly) && !this.IsState(ActionHelper.Fall)) {
 			// Change third of 3 code to use not linear moving.
 			this.setPosition(this.getX() + this.runStep, this.getY());
+		}
+
+		if (this.getY() > Options.cameraHeight) {
+			Game.world.init();
 		}
 	}
 

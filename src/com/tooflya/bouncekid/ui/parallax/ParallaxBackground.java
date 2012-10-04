@@ -206,6 +206,9 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		// Fields
 		// ===========================================================
 
+		private int minTreeDistance = 1000, minTreeDistanceOrigin = 4, minBushDistance = 200;
+		private int treeDistance = minTreeDistance - 1, bushDistance = 0;
+
 		private EntityManager trees, bush;
 
 		// ===========================================================
@@ -221,6 +224,8 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 
 			this.trees = new EntityManager(mShapesCount, trees);
 			this.bush = new EntityManager(mShapesCount, bush);
+
+			this.generateTree();
 		}
 
 		// ===========================================================
@@ -235,33 +240,15 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 		// Methods
 		// ===========================================================
 
-		private int minTreeDistance = 1000, minTreeDistanceOrigin = 4, minBushDistance = 200;
-		private int treeDistance = minTreeDistance - 1, bushDistance = 0;
-
-		@Override
-		public void onManagedUpdate(final float pSecondsElapsed) {
-			super.onManagedUpdate(pSecondsElapsed);
-
-			final int chance = Game.random.nextInt(100);
-
-			treeDistance++;
-			bushDistance++;
-
-			if (chance > 50 && chance < 55 && treeDistance > this.minTreeDistance) {
-				treeDistance = 0;
-				Entity shape = this.trees.create();
-				if (shape != null) {
-					if (!shape.hasParent()) {
-						this.attachChild(shape);
-					}
-					shape.setCurrentTileIndex(Game.random.nextInt(3));
-					shape.setPosition(Options.cameraOriginRatioX, 0);
+		private void generateTree() {
+			Entity shape = this.trees.create();
+			if (shape != null) {
+				if (!shape.hasParent()) {
+					this.attachChild(shape);
 				}
+				shape.setCurrentTileIndex(Game.random.nextInt(3));
+				shape.setPosition(Options.cameraWidth, 0);
 			}
-
-			/*
-			 * if (chance > 50 && chance < 55 && bushDistance > this.minBushDistance) { bushDistance = 0; Entity shape = this.bush.create(); if (shape != null) { shape.setCurrentTileIndex(Game.random.nextInt(3)); shape.setPosition(Options.cameraWidth + shape.getWidthScaled(), 170); } }
-			 */
 		}
 
 		public void onDraw(final GL10 GL, final float parallaxValue, final float parallaxChangePerSecond, final Camera camera) {
@@ -271,20 +258,14 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 				shape.drawCount += parallaxChangePerSecond / Options.fps;
 
 				final float shapeWidthScaled = Options.cameraOriginRatioX + shape.getWidthScaled();
+				final float shapeWidthScaledFalse = Options.cameraWidth + shape.getWidthScaled();
 				float baseOffsetX = (shape.drawCount * this.xParallaxFactor) % shapeWidthScaled;
 				float baseOffsetY = 0;
 
-				if (baseOffsetX <= -shapeWidthScaled + 10) {
+				if (baseOffsetX <= -shapeWidthScaledFalse) {
+					this.generateTree();
 					shape.destroy();
 					i--;
-					Entity shape2 = this.trees.create();
-					if (shape2 != null) {
-						if (!shape2.hasParent()) {
-							this.attachChild(shape2);
-						}
-						shape2.setCurrentTileIndex(Game.random.nextInt(3));
-						shape2.setPosition(Options.cameraOriginRatioX, 0);
-					}
 				} else {
 					if (this.yParallaxFactor != 0) {
 						baseOffsetY = (camera.getCenterY() - Options.cameraHeight / 2) - (Game.camera.getCenterY() - Options.cameraCenterOriginY) * this.yParallaxFactor + (Options.cameraHeight - Options.cameraHeightOrigin);

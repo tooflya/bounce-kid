@@ -1,6 +1,5 @@
 package com.tooflya.bouncekid.ui.parallax;
 
-import java.util.ArrayList;
 
 /**
  * @author Tooflya.com
@@ -30,6 +29,10 @@ public class AutoParallaxBackground extends ParallaxBackground {
 
 	public void accelerate(final int accelerateFactor) {
 		this.parallaxChangePerSecond += accelerateFactor;
+	}
+
+	public void restoreChangePerSecond(final int parallaxChangePerSecond) {
+		this.parallaxChangePerSecond = parallaxChangePerSecond;
 	}
 
 	// ===========================================================

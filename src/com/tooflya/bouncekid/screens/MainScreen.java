@@ -54,6 +54,8 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	private final static TextureRegion parallaxFrontLayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture, Game.context, "mid_par.png", 0, 445);
 	private final static TiledTextureRegion parallaxMiddleLayerTrees = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(autoParallaxBackgroundTexture, Game.context, "tree_one.png", 0, 690, 3, 1);
 	private final static TiledTextureRegion parallaxMiddleLayerBush = BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(autoParallaxBackgroundTexture2, Game.context, "bush.png", 0, 200, 3, 1);
+	private final static TextureRegion parallaxBushLayer = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture2, Game.context, "bush_par.png", 0, 400);
+	private final static TextureRegion parallaxBushLayer2 = BitmapTextureAtlasTextureRegionFactory.createFromAsset(autoParallaxBackgroundTexture2, Game.context, "bush_par2.png", 0, 600);
 
 	private final static ChangeableText fpsInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxx");
 	private final static ChangeableText altInfo = new ChangeableText(100, 160, Game.font, "xxxxxxxxxxxxxxxxxxxxxx");
@@ -79,6 +81,8 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.2f, 0f, new EntitySimple(0, 0, parallaxTopLayer)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.2f, 0.1f, new EntitySimple(0, (int) ((Options.cameraHeight - parallaxBackLayer.getHeight() * Options.cameraRatioFactor) - parallaxMiddleLayerTrees.getHeight() / 2 * Options.cameraRatioFactor + 100 * Options.cameraRatioFactor), parallaxBackLayer)));
+		//autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.3f, 0.2f, new EntitySimple(0, (int) ((Options.cameraHeight - parallaxFrontLayer.getHeight() * Options.cameraRatioFactor - parallaxBushLayer2.getHeight() * Options.cameraRatioFactor + 90 * Options.cameraRatioFactor)), parallaxBushLayer2)));
+		//autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.4f, 0.2f, new EntitySimple(0, (int) ((Options.cameraHeight - parallaxFrontLayer.getHeight() * Options.cameraRatioFactor - parallaxBushLayer.getHeight() * Options.cameraRatioFactor + 90 * Options.cameraRatioFactor)), parallaxBushLayer)));
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntityTree(-0.7f, 0.2f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxFrontLayer.getHeight() * Options.cameraRatioFactor + 10 * Options.cameraRatioFactor), parallaxFrontLayer), new Tree(parallaxMiddleLayerTrees), new Bush(parallaxMiddleLayerBush)));
 
 		Game.loadTextures(autoParallaxBackgroundTexture, autoParallaxBackgroundTexture2, texture);

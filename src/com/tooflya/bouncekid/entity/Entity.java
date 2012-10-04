@@ -139,15 +139,15 @@ public abstract class Entity extends AnimatedSprite {
 	}
 
 	public void setCenterX(final float centerX) {
-		this.setPosition(centerX - getWidth() / 2, getY());
+		this.setPosition(centerX - getWidthScaled() / 2, getY());
 	}
 
 	public void setCenterY(final float centerY) {
-		this.setPosition(getX(), centerY - getHeight() / 2);
+		this.setPosition(getX(), centerY - getHeightScaled() / 2);
 	}
 
 	public void setCenterPosition(final float centerX, final float centerY) {
-		this.setPosition(centerX - getWidth() / 2, centerY - getHeight() / 2);
+		this.setPosition(centerX - getWidthScaled() / 2, centerY - getHeightScaled() / 2);
 	}
 
 	public void setManager(final EntityManager manager) {
@@ -179,11 +179,11 @@ public abstract class Entity extends AnimatedSprite {
 	}
 
 	public float getCenterX() {
-		return getX() + getWidth() / 2;
+		return getX() + getWidthScaled() / 2;
 	}
 
 	public float getCenterY() {
-		return getY() + getHeight() / 2;
+		return getY() + getHeightScaled() / 2;
 	}
 
 	public EntityManager getManager(final EntityManager manager) {
