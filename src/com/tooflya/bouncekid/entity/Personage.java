@@ -23,10 +23,13 @@ public class Personage extends Entity {
 
 	private static final BitmapTextureAtlas texture = new BitmapTextureAtlas(1024, 1024, TextureOptions.NEAREST_PREMULTIPLYALPHA);
 
-	private final int maxFlyTime = 40;
+	private final int maxFlyTime = 100;
 	public float runStep = Options.mainStep; // TODO: Make a getter and private. Or move to Options. Or make static.
 	public final int flyStep = 2; // TODO: Make a getter and private. Or move to Options. Or make static.
 	public final int fallStep = 2; // TODO: Make a getter and private. Or move to Options. Or make static.
+
+	private float startY;
+	private float startX;
 
 	// ===========================================================
 	// Fields
@@ -35,6 +38,7 @@ public class Personage extends Entity {
 	private byte currentStates;
 
 	private int flyTime;
+	private int fallTime;
 
 	public int rx = Options.babyStep * 150;
 	public ArrayList<ActionsList> actions = new ArrayList<ActionsList>(); // TODO: ArrayList? Can we use only one or two variables?
@@ -49,7 +53,7 @@ public class Personage extends Entity {
 		this.currentStates = ActionHelper.Fall;
 		AnimateState.setFall(this);
 
-		this.flyTime = this.maxFlyTime;
+		this.flyTime = 0;
 
 		Game.loadTextures(texture);
 		Game.camera.setBounds(0, Integer.MAX_VALUE, -Integer.MAX_VALUE, Options.cameraHeightOrigin); // TODO: I think this code may add some problems. Very big numbers. *R
@@ -138,19 +142,29 @@ public class Personage extends Entity {
 		}
 
 		if (this.IsState(ActionHelper.Fly)) {
-			if (this.flyTime > 0 && this.IsState(ActionHelper.WantToFly)) {
-				this.flyTime--;
+			if (this.flyTime == 0) {
+				this.startY = this.getY();
+				this.startX = this.getX();
+				this.fallTime = 0;
+			}
+			if (this.flyTime < Math.max(this.maxFlyTime, this.flyTime) && this.IsState(ActionHelper.WantToFly)) {
+				this.flyTime++;
 				// Change first of 3 code to use not linear moving.
-				this.setPosition(this.getX() + this.runStep, this.getY() - this.flyStep);
+				this.setPosition(this.startX + this.flyFunctionX(this.flyTime), this.startY - this.flyFunctionY(this.flyTime));// this.getX() + this.runStep
 			} else {
-				this.flyTime = Math.max(this.maxFlyTime, this.flyTime);
+				this.flyTime = 0;
 				this.ChangeStates(ActionHelper.Fall, ActionHelper.Fly);
 			}
 		}
 
 		if (this.IsState(ActionHelper.Fall)) {
+			if (this.fallTime == 0) {
+				this.startY = this.getY();
+				this.startX = this.getX();
+			}
 			// Change second of 3 code to use not linear moving.
-			this.setPosition(this.getX() + this.runStep, this.getY() + this.fallStep);
+			this.setPosition(this.startX + this.fallFunctionX(this.flyTime), this.startY + this.fallFunctionY(this.fallTime));// this.getX() + this.runStep
+			this.fallTime++;
 		}
 
 		if (!this.IsState(ActionHelper.Fly) && !this.IsState(ActionHelper.Fall)) {
@@ -172,6 +186,22 @@ public class Personage extends Entity {
 	// ===========================================================
 	// Methods
 	// ===========================================================
+
+	private float flyFunctionY(final float flyTime) {
+		return this.flyStep * (float) Math.log(flyTime + 1) / (float) Math.log(this.maxFlyTime + 1) * this.maxFlyTime;
+	}
+
+	private float flyFunctionX(final float flyTime) {
+		return this.runStep * flyTime;
+	}
+
+	private float fallFunctionY(final float fallTime) {
+		return this.fallStep * fallTime * fallTime / this.maxFlyTime;
+	}
+
+	private float fallFunctionX(final float fallTime) {
+		return this.runStep * flyTime;
+	}
 
 	public boolean IsState(byte state) {
 		return (this.currentStates & state) == state;
