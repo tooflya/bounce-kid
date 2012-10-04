@@ -109,8 +109,8 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.widthCoef += widthCoefStep;
 		final Block tempBlock = (Block) this.blocks.create();
 
-		final float maxWidth = (this.personage.getFlyPower() / this.personage.flyStep + this.personage.getFlyPower() / this.personage.fallStep) * this.personage.runStep;
-		final float maxHeight = this.personage.getFlyPower() * this.personage.flyStep;
+		final float maxWidth = (this.personage.getMaxFlyTime() / this.personage.flyStep + this.personage.getFlyPower() / this.personage.fallStep) * this.personage.runStep;
+		final float maxHeight = this.personage.getMaxFlyTime() * this.personage.flyStep;
 
 		final int maxPercent = 100;
 		final int isUpPercent = 50;// (int) (maxPercent * 1); // TODO: Set a percent.
