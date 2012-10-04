@@ -1,15 +1,10 @@
 package com.tooflya.bouncekid.managers;
 
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
-import android.widget.RelativeLayout;
-
 import com.tooflya.bouncekid.Game;
-import com.tooflya.bouncekid.R;
+import com.tooflya.bouncekid.screens.LoadingScreen;
 import com.tooflya.bouncekid.screens.MainScreen;
 import com.tooflya.bouncekid.screens.Screen;
+import com.tooflya.bouncekid.screens.SplashScreen;
 
 /**
  * @author Tooflya.com
@@ -24,10 +19,6 @@ public class ScreenManager {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-
-	private RelativeLayout casper;
-
-	private Animation animationIn, animationOut;
 
 	/**
 	 * 
@@ -48,31 +39,9 @@ public class ScreenManager {
 		 * Create all scenes
 		 * 
 		 */
+		screens[Screen.SPLASH] = new SplashScreen();
+		screens[Screen.LOADING] = new LoadingScreen();
 		screens[Screen.MAIN] = new MainScreen();
-		// screens[Screen.OPTIONS] = new OptionsScreen();
-		// screens[Screen.BOXCHOISE] = new BoxChoiseScreen();
-		// screens[Screen.LEVELCHOISE] = new LevelChoiseScreen();
-		// screens[Screen.LEVEL] = new LevelScreen();
-		// screens[Screen.LEVELLOSE] = new LevelLoseScreen();
-		// screens[Screen.LEVELPREPARE] = new LevelPrepareScreen();
-		// screens[Screen.MODECHOISE] = new ModeChoiseScreen();
-		// screens[Screen.MULTIPLAYER] = new MultiplayerScreen();
-
-		/**
-		 * 
-		 * 
-		 * 
-		 */
-		casper = (RelativeLayout) Game.instance.findViewById(R.id.casper);
-
-		/**
-		 * 
-		 * 
-		 * 
-		 * 
-		 */
-		animationIn = AnimationUtils.loadAnimation(Game.context, R.anim.fadein);
-		animationOut = AnimationUtils.loadAnimation(Game.context, R.anim.fadeout);
 	}
 
 	// ===========================================================

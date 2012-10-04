@@ -15,7 +15,7 @@ import com.tooflya.bouncekid.entity.EntitySimple;
  * @author Tooflya.com
  * @since
  */
-public class LoadingScreen extends Screen {
+public class SplashScreen extends Screen {
 
 	// ===========================================================
 	// Constants
@@ -27,10 +27,10 @@ public class LoadingScreen extends Screen {
 
 	private final static BitmapTextureAtlas mBackgroundTextureAtlas = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-	private final static TimerHandler mUpdateTimer = new TimerHandler(3f, true, new ITimerCallback() {
+	private final static TimerHandler mUpdateTimer = new TimerHandler(2f, true, new ITimerCallback() {
 		@Override
 		public void onTimePassed(TimerHandler pTimerHandler) {
-			Game.isGameLoaded = true;
+			Game.screens.set(Screen.LOADING);
 		}
 	});
 
@@ -38,10 +38,10 @@ public class LoadingScreen extends Screen {
 	// Constructors
 	// ===========================================================
 
-	public LoadingScreen() {
+	public SplashScreen() {
 		Game.loadTextures(mBackgroundTextureAtlas);
 
-		this.setBackground(new SpriteBackground(new EntitySimple(BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, Game.context, "loading.png", 0, 0))));
+		this.setBackground(new SpriteBackground(new EntitySimple(BitmapTextureAtlasTextureRegionFactory.createFromAsset(mBackgroundTextureAtlas, Game.context, "tooflya_hd.png", 0, 0))));
 
 		registerUpdateHandler(mUpdateTimer);
 	}

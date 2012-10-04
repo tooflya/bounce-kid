@@ -65,7 +65,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.personage = new Personage();
 		this.personage.create();
 
-		this.brood = new BroodManager(4, new Baby());
+		//this.brood = new BroodManager(4, new Baby());
 		this.blocks = new EntityManager(10, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "platform.png", 0, 0, 1, 1)));
 		this.apples = new ApplesManager(50, new Berry(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "apple2.png", 83, 200, 1, 1)));
 
@@ -84,7 +84,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.personage.rx = (int) this.personage.getX();
 		this.apt = 0;
 		c = 0;
-		this.brood.clear();
+		//this.brood.clear();
 		this.apples.clear();
 		this.personage.actions.clear();
 
@@ -215,7 +215,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		this.personage.setPosition(this.personage.getX() - this.personage.getFreeX(), this.personage.getY());
 
-		for (int i = 0; i < this.brood.getCount(); i++) {
+		/*for (int i = 0; i < this.brood.getCount(); i++) {
 			final Baby baby = (Baby) this.brood.getByIndex(i);
 			this.checkCollision(baby);
 			baby.update();
@@ -228,7 +228,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 					// this.personage.actions.remove(actions);
 				}
 			}
-		}
+		}*/
 
 		/** fethers **/
 		for (int i = 0; i < this.apples.getCount(); i++) {
