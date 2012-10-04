@@ -63,13 +63,14 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 	public static boolean isGameLoaded = false;
 
 	/**  */
-	public static Font font;
+	public static Font font, font2;
 
 	/**  */
 	public final static BitmapTextureAtlas resourcesBitmapTexture = new BitmapTextureAtlas(1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	/**  */
 	private final static BitmapTextureAtlas fontTexture = new BitmapTextureAtlas(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	private final static BitmapTextureAtlas font2Texture = new BitmapTextureAtlas(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	/**  */
 	public static float fps;
@@ -136,7 +137,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		Options.cameraMaxCenterX = Options.cameraCenterX * 2;
 		Options.cameraMaxCenterY = Options.cameraCenterY * 2;
 
-		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatioY;
+		Options.CAMERA_RATIO_FACTOR = Options.cameraHeight / Options.cameraOriginRatioY;
 
 		/** Initialize camera instance */
 		camera = new Camera(0, 0, Options.cameraWidth, Options.cameraHeight);
@@ -179,9 +180,10 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		FontFactory.setAssetBasePath("font/");
 
 		font = FontFactory.createFromAsset(fontTexture, getApplicationContext(), "casual.ttf", 15, true, Color.RED);
+		font2 = FontFactory.createFromAsset(font2Texture, getApplicationContext(), "casual.ttf", 25, true, Color.WHITE);
 
-		this.getEngine().getFontManager().loadFont(font);
-		this.getEngine().getTextureManager().loadTextures(fontTexture, resourcesBitmapTexture);
+		this.getEngine().getFontManager().loadFonts(font, font2);
+		this.getEngine().getTextureManager().loadTextures(fontTexture, font2Texture, resourcesBitmapTexture);
 	}
 
 	/*

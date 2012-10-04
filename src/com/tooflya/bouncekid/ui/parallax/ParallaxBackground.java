@@ -171,7 +171,7 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 
 				float currentMaxX = baseOffsetX;
 
-				while (currentMaxX * Options.cameraRatioFactor < Options.cameraWidth + this.shape.getWidthScaled()) {
+				while (currentMaxX * Options.CAMERA_RATIO_FACTOR < Options.cameraWidth + this.shape.getWidthScaled()) {
 					this.shape.onDraw(GL, camera);
 					GL.glTranslatef(shapeWidthScaled, 0, 0);
 					currentMaxX += shapeWidthScaled;
@@ -219,11 +219,10 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 			super(xParallaxFactor, shape);
 		}
 
-		public ParallaxEntityTree(final float xParallaxFactor, final float yParallaxFactor, final Shape shape, final Entity trees, final Entity bush) {
+		public ParallaxEntityTree(final float xParallaxFactor, final float yParallaxFactor, final Shape shape, final Entity trees) {
 			super(xParallaxFactor, yParallaxFactor, shape);
 
 			this.trees = new EntityManager(mShapesCount, trees);
-			this.bush = new EntityManager(mShapesCount, bush);
 
 			this.generateTree();
 		}
@@ -257,7 +256,7 @@ public class ParallaxBackground extends org.anddev.andengine.entity.Entity {
 
 				shape.drawCount += parallaxChangePerSecond / Options.fps;
 
-				final float shapeWidthScaled = Options.cameraOriginRatioX + shape.getWidthScaled();
+				final float shapeWidthScaled = Options.CORX + shape.getWidthScaled();
 				final float shapeWidthScaledFalse = Options.cameraWidth + shape.getWidthScaled();
 				float baseOffsetX = (shape.drawCount * this.xParallaxFactor) % shapeWidthScaled;
 				float baseOffsetY = 0;

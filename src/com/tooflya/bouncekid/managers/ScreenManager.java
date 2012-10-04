@@ -80,49 +80,9 @@ public class ScreenManager {
 	// ===========================================================
 
 	public void set(final int pScreen) {
-		Game.instance.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				casper.setVisibility(View.VISIBLE);
-
-				animationIn.setAnimationListener(new AnimationListener() {
-					@Override
-					public void onAnimationStart(Animation animation) {
-					}
-
-					@Override
-					public void onAnimationRepeat(Animation animation) {
-					}
-
-					@Override
-					public void onAnimationEnd(Animation animation) {
-
-						animationOut.setAnimationListener(new AnimationListener() {
-							@Override
-							public void onAnimationStart(Animation animation) {
-								screens[pScreen].setScene(Game.engine);
-								screens[pScreen].onAttached();
-							}
-
-							@Override
-							public void onAnimationRepeat(Animation animation) {
-							}
-
-							@Override
-							public void onAnimationEnd(Animation animation) {
-								casper.setVisibility(View.INVISIBLE);
-
-								Screen.screen = pScreen;
-							}
-						});
-
-						casper.startAnimation(animationOut);
-					}
-				});
-
-				casper.startAnimation(animationIn);
-			}
-		});
+		screens[pScreen].setScene(Game.engine);
+		screens[pScreen].onAttached();
+		Screen.screen = pScreen;
 	}
 
 	public Screen get(final int pScreen) {

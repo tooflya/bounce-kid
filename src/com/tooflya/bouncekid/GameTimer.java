@@ -22,7 +22,7 @@ public class GameTimer implements ITimerCallback {
 	private int update = -120;
 	private int updateCount = 0;
 	private int parallaxUpdateCount = 0;
-	private final int updateNecessity = Options.fps * 2;
+	private final int updateNecessity = Options.fps * 3;
 
 	public static World world;
 

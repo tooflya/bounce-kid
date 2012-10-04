@@ -25,7 +25,6 @@ import android.util.FloatMath;
 import com.tooflya.bouncekid.Game;
 import com.tooflya.bouncekid.GameTimer;
 import com.tooflya.bouncekid.Options;
-import com.tooflya.bouncekid.entity.Bush;
 import com.tooflya.bouncekid.entity.EntitySimple;
 import com.tooflya.bouncekid.entity.Tree;
 import com.tooflya.bouncekid.helpers.ActionHelper;
@@ -80,10 +79,10 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		this.setBackground(new ColorBackground(21f / 255f, 209f / 255f, 255f / 255f, 1f));
 
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.2f, 0f, new EntitySimple(0, 0, parallaxTopLayer)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.2f, 0.1f, new EntitySimple(0, (int) ((Options.cameraHeight - parallaxBackLayer.getHeight() * Options.cameraRatioFactor) - parallaxMiddleLayerTrees.getHeight() / 2 * Options.cameraRatioFactor + 100 * Options.cameraRatioFactor), parallaxBackLayer)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.2f, 0.1f, new EntitySimple(0, (int) ((Options.cameraHeight - parallaxBackLayer.getHeight() * Options.CAMERA_RATIO_FACTOR) - parallaxMiddleLayerTrees.getHeight() / 2 * Options.CAMERA_RATIO_FACTOR + 100 * Options.CAMERA_RATIO_FACTOR), parallaxBackLayer)));
 		//autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.3f, 0.2f, new EntitySimple(0, (int) ((Options.cameraHeight - parallaxFrontLayer.getHeight() * Options.cameraRatioFactor - parallaxBushLayer2.getHeight() * Options.cameraRatioFactor + 90 * Options.cameraRatioFactor)), parallaxBushLayer2)));
 		//autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.4f, 0.2f, new EntitySimple(0, (int) ((Options.cameraHeight - parallaxFrontLayer.getHeight() * Options.cameraRatioFactor - parallaxBushLayer.getHeight() * Options.cameraRatioFactor + 90 * Options.cameraRatioFactor)), parallaxBushLayer)));
-		autoParallaxBackground.attachParallaxEntity(new ParallaxEntityTree(-0.7f, 0.2f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxFrontLayer.getHeight() * Options.cameraRatioFactor + 10 * Options.cameraRatioFactor), parallaxFrontLayer), new Tree(parallaxMiddleLayerTrees), new Bush(parallaxMiddleLayerBush)));
+		autoParallaxBackground.attachParallaxEntity(new ParallaxEntityTree(-0.7f, 0.2f, new EntitySimple(0, (int) (Options.cameraHeight - parallaxFrontLayer.getHeight() * Options.CAMERA_RATIO_FACTOR + 10 * Options.CAMERA_RATIO_FACTOR), parallaxFrontLayer), new Tree(parallaxMiddleLayerTrees)));
 
 		Game.loadTextures(autoParallaxBackgroundTexture, autoParallaxBackgroundTexture2, texture);
 
@@ -119,7 +118,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		}
 
 		final TextureRegion region = BitmapTextureAtlasTextureRegionFactory.createFromAsset(texture, Game.context, "reset.png", 0, 0);
-		final EntitySimple reset = new EntitySimple((int) (Options.cameraWidth - region.getWidth() * Options.cameraRatioFactor) - (int) (10 * Options.cameraRatioFactor), (int) (10 * Options.cameraRatioFactor), region, false) {
+		final EntitySimple reset = new EntitySimple((int) (Options.cameraWidth - region.getWidth() * Options.CAMERA_RATIO_FACTOR) - (int) (10 * Options.CAMERA_RATIO_FACTOR), (int) (10 * Options.CAMERA_RATIO_FACTOR), region, false) {
 			@Override
 			public boolean onAreaTouched(final TouchEvent pSceneTouchEvent, final float pTouchAreaLocalX, final float pTouchAreaLocalY) {
 				GameTimer.world.init();
@@ -245,7 +244,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 		if (Options.DEBUG) {
 			fpsInfo.setText("FPS: " + FloatMath.floor(Game.fps));
 			altInfo.setText("DST: " + FloatMath.floor(Game.world.personage.getY()) + " x " + FloatMath.floor(Game.world.apt));
-			resolutionInfo.setText("RES: " + FloatMath.floor(Game.camera.getWidth()) + " x " + FloatMath.floor(Game.camera.getHeight()) + " x " + Options.cameraRatioFactor);
+			resolutionInfo.setText("RES: " + FloatMath.floor(Game.camera.getWidth()) + " x " + FloatMath.floor(Game.camera.getHeight()) + " x " + Options.CAMERA_RATIO_FACTOR);
 			cameraInfo.setText("CAM: " + Game.camera.getCenterX() + " x " + Game.camera.getCenterY());
 		}
 	}

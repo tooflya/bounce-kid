@@ -6,7 +6,7 @@ import com.tooflya.bouncekid.entity.Entity;
  * @author Tooflya.com
  * @since
  */
-public class EntityManager {
+public class EntityManager extends org.anddev.andengine.entity.Entity {
 
 	// ===========================================================
 	// Constants
