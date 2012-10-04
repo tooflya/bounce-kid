@@ -1,15 +1,10 @@
 package com.tooflya.bouncekid.managers;
 
-import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.Animation.AnimationListener;
-import android.view.animation.AnimationUtils;
-import android.widget.RelativeLayout;
-
 import com.tooflya.bouncekid.Game;
-import com.tooflya.bouncekid.R;
+import com.tooflya.bouncekid.screens.LoadingScreen;
 import com.tooflya.bouncekid.screens.MainScreen;
 import com.tooflya.bouncekid.screens.Screen;
+import com.tooflya.bouncekid.screens.SplashScreen;
 
 /**
  * @author Tooflya.com
@@ -24,10 +19,6 @@ public class ScreenManager {
 	// ===========================================================
 	// Fields
 	// ===========================================================
-
-	private RelativeLayout casper;
-
-	private Animation animationIn, animationOut;
 
 	/**
 	 * 
@@ -48,31 +39,9 @@ public class ScreenManager {
 		 * Create all scenes
 		 * 
 		 */
+		screens[Screen.SPLASH] = new SplashScreen();
+		screens[Screen.LOADING] = new LoadingScreen();
 		screens[Screen.MAIN] = new MainScreen();
-		// screens[Screen.OPTIONS] = new OptionsScreen();
-		// screens[Screen.BOXCHOISE] = new BoxChoiseScreen();
-		// screens[Screen.LEVELCHOISE] = new LevelChoiseScreen();
-		// screens[Screen.LEVEL] = new LevelScreen();
-		// screens[Screen.LEVELLOSE] = new LevelLoseScreen();
-		// screens[Screen.LEVELPREPARE] = new LevelPrepareScreen();
-		// screens[Screen.MODECHOISE] = new ModeChoiseScreen();
-		// screens[Screen.MULTIPLAYER] = new MultiplayerScreen();
-
-		/**
-		 * 
-		 * 
-		 * 
-		 */
-		casper = (RelativeLayout) Game.instance.findViewById(R.id.casper);
-
-		/**
-		 * 
-		 * 
-		 * 
-		 * 
-		 */
-		animationIn = AnimationUtils.loadAnimation(Game.context, R.anim.fadein);
-		animationOut = AnimationUtils.loadAnimation(Game.context, R.anim.fadeout);
 	}
 
 	// ===========================================================
@@ -80,49 +49,9 @@ public class ScreenManager {
 	// ===========================================================
 
 	public void set(final int pScreen) {
-		Game.instance.runOnUiThread(new Runnable() {
-			@Override
-			public void run() {
-				casper.setVisibility(View.VISIBLE);
-
-				animationIn.setAnimationListener(new AnimationListener() {
-					@Override
-					public void onAnimationStart(Animation animation) {
-					}
-
-					@Override
-					public void onAnimationRepeat(Animation animation) {
-					}
-
-					@Override
-					public void onAnimationEnd(Animation animation) {
-
-						animationOut.setAnimationListener(new AnimationListener() {
-							@Override
-							public void onAnimationStart(Animation animation) {
-								screens[pScreen].setScene(Game.engine);
-								screens[pScreen].onAttached();
-							}
-
-							@Override
-							public void onAnimationRepeat(Animation animation) {
-							}
-
-							@Override
-							public void onAnimationEnd(Animation animation) {
-								casper.setVisibility(View.INVISIBLE);
-
-								Screen.screen = pScreen;
-							}
-						});
-
-						casper.startAnimation(animationOut);
-					}
-				});
-
-				casper.startAnimation(animationIn);
-			}
-		});
+		screens[pScreen].setScene(Game.engine);
+		screens[pScreen].onAttached();
+		Screen.screen = pScreen;
 	}
 
 	public Screen get(final int pScreen) {

@@ -25,47 +25,60 @@ public abstract class Entity extends AnimatedSprite {
 	// Fields
 	// ===========================================================
 
-	private int id;
+	private int mId;
 
-	protected int health;
-	protected int state;
-	protected int type;
-
-	protected float speed;
-
-	protected EntityManager manager;
+	private EntityManager mEntityManager;
 
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
-	public Entity(final TiledTextureRegion pTiledTextureRegion, final boolean needParent) {
+	/**
+	 * @param pTiledTextureRegion
+	 * @param pNeedParent
+	 */
+	public Entity(final TiledTextureRegion pTiledTextureRegion, final boolean pNeedParent) {
 		super(0, 0, pTiledTextureRegion.deepCopy());
 
 		this.hide();
 
 		this.setScaleCenter(0, 0);
-		this.setScaleY(Options.cameraRatioFactor);
-		this.setScaleX(Options.cameraRatioFactor);
+		this.setScaleY(Options.CAMERA_RATIO_FACTOR);
+		this.setScaleX(Options.CAMERA_RATIO_FACTOR);
 
-		this.setPosition(this.getX() - (this.getWidthScaled() - Options.cameraWidth) / 2, this.getY()); // TODO: YYY
+		this.mX = this.mX - (this.getWidthScaled() - Options.cameraWidth) / 2;
 
-		if (needParent)
+		if (pNeedParent) {
 			Game.screens.get(Screen.MAIN).attachChild(this);
+		}
 	}
 
-	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion) {
+	/**
+	 * @param pX
+	 * @param pY
+	 * @param pTiledTextureRegion
+	 */
+	public Entity(final int pX, final int pY, final TiledTextureRegion pTiledTextureRegion) {
 		this(pTiledTextureRegion, true);
 
-		this.setCenterPosition(x, y);
+		this.setCenterPosition(pX, pY);
 	}
 
-	public Entity(final int x, final int y, final TiledTextureRegion pTiledTextureRegion, final boolean needParent) {
-		this(pTiledTextureRegion, needParent);
+	/**
+	 * @param pX
+	 * @param pY
+	 * @param pTiledTextureRegion
+	 * @param pNeedParent
+	 */
+	public Entity(final int pX, final int pY, final TiledTextureRegion pTiledTextureRegion, final boolean pNeedParent) {
+		this(pTiledTextureRegion, pNeedParent);
 
-		this.setCenterPosition(x, y);
+		this.setCenterPosition(pX, pY);
 	}
 
+	/**
+	 * @param pTiledTextureRegion
+	 */
 	public Entity(final TiledTextureRegion pTiledTextureRegion) {
 		this(pTiledTextureRegion, true);
 	}
@@ -74,40 +87,58 @@ public abstract class Entity extends AnimatedSprite {
 	// Methods
 	// ===========================================================
 
+	/**
+	 * @return
+	 */
 	public Entity create() {
 		this.show();
 
 		return this;
 	}
 
+	/**
+	 * 
+	 */
 	public void destroy() {
 		if (this.isManagerExist()) {
-			this.manager.destroy(this.id);
+			this.mEntityManager.destroy(this.mId);
 		}
 
 		this.hide();
 	}
 
+	/**
+	 * 
+	 */
 	public void update() {
 	}
 
+	/**
+	 * 
+	 */
 	public void show() {
 		this.setVisible(true);
 		this.setIgnoreUpdate(false);
 	}
 
+	/**
+	 * 
+	 */
 	public void hide() {
 		this.setVisible(false);
 		this.setIgnoreUpdate(true);
-		// this.setCullingEnabled(true);
+		this.setCullingEnabled(true);
 	}
 
 	// ===========================================================
 	// Validate methods
 	// ===========================================================
 
+	/**
+	 * @return
+	 */
 	public boolean isManagerExist() {
-		if (this.manager != null) {
+		if (this.mEntityManager != null) {
 			return true;
 		}
 
@@ -118,76 +149,66 @@ public abstract class Entity extends AnimatedSprite {
 	// Setters
 	// ===========================================================
 
+	/**
+	 * @param id
+	 */
 	public void setID(final int id) {
-		this.id = id;
+		this.mId = id;
 	}
 
-	public void setState(final int state) {
-		this.state = state;
+	/**
+	 * @param centerX
+	 */
+	public void setCenterX(final float pCenterX) {
+		this.mX = pCenterX - getWidthScaled() / 2;
 	}
 
-	public void setType(final int type) {
-		this.type = type;
+	/**
+	 * @param pCenterY
+	 */
+	public void setCenterY(final float pCenterY) {
+		this.mY = pCenterY - getHeightScaled() / 2;
 	}
 
-	public void setSpeed(final float speed) {
-		this.speed = speed;
+	/**
+	 * @param pCenterX
+	 * @param pCenterY
+	 */
+	public void setCenterPosition(final float pCenterX, final float pCenterY) {
+		this.mX = pCenterX - getWidthScaled() / 2;
+		this.mY = pCenterY - getHeightScaled() / 2;
 	}
 
-	public void setHealth(final int health) {
-		this.health = health;
-	}
-
-	public void setCenterX(final float centerX) {
-		this.setPosition(centerX - getWidth() / 2, getY());
-	}
-
-	public void setCenterY(final float centerY) {
-		this.setPosition(getX(), centerY - getHeight() / 2);
-	}
-
-	public void setCenterPosition(final float centerX, final float centerY) {
-		this.setPosition(centerX - getWidth() / 2, centerY - getHeight() / 2);
-	}
-
-	public void setManager(final EntityManager manager) {
-		this.manager = manager;
+	/**
+	 * @param pEntityManager
+	 */
+	public void setManager(final EntityManager pEntityManager) {
+		this.mEntityManager = pEntityManager;
 	}
 
 	// ===========================================================
 	// Getters
 	// ===========================================================
 
+	/**
+	 * @return
+	 */
 	public int getID() {
-		return id;
+		return mId;
 	}
 
-	public int getState() {
-		return state;
-	}
-
-	public int getType() {
-		return type;
-	}
-
-	public float getSpeed() {
-		return speed;
-	}
-
-	public int getHealth() {
-		return health;
-	}
-
+	/**
+	 * @return
+	 */
 	public float getCenterX() {
-		return getX() + getWidth() / 2;
+		return this.mX + getWidthScaled() / 2;
 	}
 
+	/**
+	 * @return
+	 */
 	public float getCenterY() {
-		return getY() + getHeight() / 2;
-	}
-
-	public EntityManager getManager(final EntityManager manager) {
-		return manager;
+		return this.mY + getHeightScaled() / 2;
 	}
 
 	// ===========================================================

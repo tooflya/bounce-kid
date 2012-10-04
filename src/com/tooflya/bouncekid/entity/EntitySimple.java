@@ -32,8 +32,8 @@ public class EntitySimple extends org.anddev.andengine.entity.sprite.Sprite impl
 		super(x, y, textureRegion);
 
 		this.setScaleCenter(0, 0);
-		this.setScaleY(Options.cameraRatioFactor);
-		this.setScaleX(Options.cameraRatioFactor);
+		this.setScaleY(Options.CAMERA_RATIO_FACTOR);
+		this.setScaleX(Options.CAMERA_RATIO_FACTOR);
 
 		if (changePosition) {
 			this.setPosition(this.getX() - (this.getWidthScaled() - Options.cameraWidth) / 2, this.getY());

@@ -23,8 +23,8 @@ public class Options {
 	public static float cameraMaxCenterX;
 	public static float cameraMaxCenterY;
 
-	public static float cameraRatioFactor;
-	public final static float cameraOriginRatioX = 1024.0f;
+	public static float CAMERA_RATIO_FACTOR;
+	public final static float CORX = 1024.0f;
 	public final static float cameraOriginRatioY = 580.0f;
 
 	public static final int fps = 80;

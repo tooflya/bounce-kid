@@ -34,7 +34,7 @@ public class Baby extends Entity {
 	// TODO: Need to make a better code.
 
 	public Baby(final TiledTextureRegion pTiledTextureRegion) {
-		super(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(Game.resourcesBitmapTexture, Game.context, "hero.png", 100, 100, 2, 3));
+		super(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(null, Game.context, "hero.png", 100, 100, 2, 3));
 
 		this.currentStates = ActionHelper.Fall;
 		AnimateState.setFall(this);
@@ -43,13 +43,13 @@ public class Baby extends Entity {
 	}
 
 	public Baby(final float x, final float y, final TiledTextureRegion pTiledTextureRegion) {
-		this(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(Game.resourcesBitmapTexture, Game.context, "hero.png", 100, 100, 2, 3));
+		this(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(null, Game.context, "hero.png", 100, 100, 2, 3));
 
 		this.setPosition(x, y);
 	}
 
 	public Baby(final float x, final float y) {
-		this(x, y, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(Game.resourcesBitmapTexture, Game.context, "hero.png", 100, 100, 2, 3));
+		this(x, y, BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(null, Game.context, "hero.png", 100, 100, 2, 3));
 	}
 
 	public Baby() {

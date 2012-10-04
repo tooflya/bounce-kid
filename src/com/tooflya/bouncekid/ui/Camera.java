@@ -47,7 +47,7 @@ public class Camera extends ZoomCamera {
 	// private final float stepT = maxT / countT;
 	// private float t = 0;
 
-	private int oldYNumber = 3;
+	private int oldYNumber = 15;
 	private float[] oldY = new float[oldYNumber];
 
 	@Override

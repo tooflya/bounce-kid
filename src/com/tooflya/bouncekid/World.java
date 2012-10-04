@@ -3,16 +3,20 @@ package com.tooflya.bouncekid;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.anddev.andengine.opengl.texture.bitmap.BitmapTexture.BitmapTextureFormat;
 
+import com.tooflya.bouncekid.entity.Berry;
 import com.tooflya.bouncekid.entity.Baby;
 import com.tooflya.bouncekid.entity.Block;
 import com.tooflya.bouncekid.entity.Entity;
-import com.tooflya.bouncekid.entity.EntitySimple;
+import com.tooflya.bouncekid.entity.Marker;
 import com.tooflya.bouncekid.entity.Personage;
 import com.tooflya.bouncekid.entity.Personage.ActionsList;
 import com.tooflya.bouncekid.helpers.ActionHelper;
+import com.tooflya.bouncekid.managers.ApplesManager;
 import com.tooflya.bouncekid.managers.BroodManager;
 import com.tooflya.bouncekid.managers.EntityManager;
+import com.tooflya.bouncekid.screens.MainScreen;
 import com.tooflya.bouncekid.screens.Screen;
 
 public class World extends org.anddev.andengine.entity.Entity {
@@ -25,12 +29,10 @@ public class World extends org.anddev.andengine.entity.Entity {
 	// Fields
 	// ===========================================================
 
-	// public ObjectsManager mObjectsManager;
-
 	private BitmapTextureAtlas texture;
 
 	private EntityManager blocks;
-	// private EntityManager stars;
+	private ApplesManager apples;
 	private BroodManager brood;
 
 	private Block bottomBlock = null;
@@ -44,26 +46,31 @@ public class World extends org.anddev.andengine.entity.Entity {
 	// TODO: Use get or private?
 	public Personage personage;
 
+	private Marker marker;
+	private boolean needMarker = false;
+	private int meters = 0;
+
 	// ===========================================================
 	// Constructors
 	// ===========================================================
 
 	public World() {
 		super();
-		// mObjectsManager = new ObjectsManager();
+
 		Game.screens.get(Screen.MAIN).attachChild(this);
 
-		this.texture = new BitmapTextureAtlas(1024, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+		this.texture = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		Game.loadTextures(texture);
 
 		this.personage = new Personage();
 		this.personage.create();
 
-		this.brood = new BroodManager(4, new Baby());
-
+		//this.brood = new BroodManager(4, new Baby());
 		this.blocks = new EntityManager(10, new Block(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "platform.png", 0, 0, 1, 1)));
+		this.apples = new ApplesManager(50, new Berry(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "apple2.png", 83, 200, 1, 1)));
 
-		// this.stars = new EntityManager(50, new Star(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "stars.png", 83, 0, 1, 18)));
+		this.marker = new Marker(BitmapTextureAtlasTextureRegionFactory.createTiledFromAsset(texture, Game.context, "m.png", 0, 800, 1, 1));
+		this.marker.show();
 
 		this.init();
 	}
@@ -77,8 +84,15 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.personage.rx = (int) this.personage.getX();
 		this.apt = 0;
 		c = 0;
-		this.brood.clear();
+		//this.brood.clear();
+		this.apples.clear();
 		this.personage.actions.clear();
+
+		MainScreen.autoParallaxBackground.restoreChangePerSecond(Options.fps);
+		this.personage.runStep = 1f;
+
+		this.needMarker = false;
+		this.meters = 0;
 	}
 
 	// ===========================================================
@@ -99,7 +113,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		final float maxHeight = this.personage.getFlyPower() * this.personage.flyStep;
 
 		final int maxPercent = 100;
-		final int isUpPercent = 90;// (int) (maxPercent * 1); // TODO: Set a percent.
+		final int isUpPercent = 50;// (int) (maxPercent * 1); // TODO: Set a percent.
 		int k = -1;
 		if (Game.random.nextInt(maxPercent) >= isUpPercent) {
 			k = 1;
@@ -127,7 +141,12 @@ public class World extends org.anddev.andengine.entity.Entity {
 		}
 
 		this.bottomBlock = tempBlock;
-		// this.mObjectsManager.decorate(this.bottomBlock);
+		this.apples.generate(this.bottomBlock);
+
+		if (this.needMarker) {
+			this.marker.setFlag(this.bottomBlock, this.meters);
+			this.needMarker = false;
+		}
 	}
 
 	private void checkCollision(Personage personage) {
@@ -183,7 +202,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		Options.cameraWidth = (int) (Options.cameraWidthOrigin / Game.camera.getZoomFactor());
 		Options.cameraHeight = (int) (Options.cameraHeightOrigin / Game.camera.getZoomFactor());
 
-		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatioY;
+		Options.CAMERA_RATIO_FACTOR = Options.cameraHeight / Options.cameraOriginRatioY;
 
 		this.personage.update();
 
@@ -196,7 +215,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 		this.personage.setPosition(this.personage.getX() - this.personage.getFreeX(), this.personage.getY());
 
-		for (int i = 0; i < this.brood.getCount(); i++) {
+		/*for (int i = 0; i < this.brood.getCount(); i++) {
 			final Baby baby = (Baby) this.brood.getByIndex(i);
 			this.checkCollision(baby);
 			baby.update();
@@ -209,6 +228,27 @@ public class World extends org.anddev.andengine.entity.Entity {
 					// this.personage.actions.remove(actions);
 				}
 			}
+		}*/
+
+		/** fethers **/
+		for (int i = 0; i < this.apples.getCount(); i++) {
+			final Berry apple = (Berry) this.apples.getByIndex(i);
+
+			if (apple.getX() <= (this.personage.getX() + this.personage.getWidthScaled()) && 
+					this.personage.getX() <= (apple.getX() + apple.getWidthScaled()) && 
+					apple.getY() <= (this.personage.getY() + this.personage.getHeightScaled()) && 
+					this.personage.getY() <= (apple.getY() + apple.getHeightScaled())) {
+				apple.remove();
+			}
+
+			if (!apple.mIsAlreadyFollow) {
+				if (apple.getX() <= (this.personage.getX() + this.personage.getWidthScaled() * 1.1f) &&
+						(this.personage.getX() - this.personage.getWidthScaled()) <= (apple.getX() + apple.getWidthScaled()) &&
+						apple.getY() <= (this.personage.getY() + this.personage.getHeightScaled() * 1.1f) &&
+						this.personage.getY() - this.personage.getHeightScaled() <= (apple.getY() + apple.getHeightScaled())) {
+					apple.follow();
+				}
+			}
 		}
 
 		this.checkCollision(this.personage);
@@ -218,18 +258,23 @@ public class World extends org.anddev.andengine.entity.Entity {
 
 			Baby baby = (Baby) this.brood.create();
 
-			this.personage.setPosition(baby.getWidthScaled() * c + 5 * Options.cameraRatioFactor * c, this.personage.getY());
+			this.personage.setPosition(baby.getWidthScaled() * c + 5 * Options.CAMERA_RATIO_FACTOR * c, this.personage.getY());
 			this.personage.rx = (int) this.personage.getX() + this.apt;
 
 			for (int i = 0; i < this.brood.getCount() - 1; i++) {
-				this.brood.getByIndex(i).setPosition(this.personage.getX() - baby.getWidthScaled() * (i + 1) - 5 * Options.cameraRatioFactor * (i + 1), this.brood.getByIndex(i).getY());
+				this.brood.getByIndex(i).setPosition(this.personage.getX() - baby.getWidthScaled() * (i + 1) - 5 * Options.CAMERA_RATIO_FACTOR * (i + 1), this.brood.getByIndex(i).getY());
 				((Baby) this.brood.getByIndex(i)).rx = (int) this.brood.getByIndex(i).getX() + this.apt;
 			}
 
-			baby.setPosition(this.personage.getX() - baby.getWidthScaled() * c - 5 * Options.cameraRatioFactor * c, this.personage.getY());
+			baby.setPosition(this.personage.getX() - baby.getWidthScaled() * c - 5 * Options.CAMERA_RATIO_FACTOR * c, this.personage.getY());
 			baby.rx = (int) baby.getX() + this.apt;
 		}
 
-		// mObjectsManager.update();
+		if (!this.needMarker) {
+			if (this.apt / 100 > (this.meters + 10)) {
+				this.meters += 10;
+				this.needMarker = true;
+			}
+		}
 	}
 }

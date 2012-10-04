@@ -18,6 +18,7 @@ import org.anddev.andengine.opengl.font.FontFactory;
 import org.anddev.andengine.opengl.texture.TextureOptions;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlas;
 import org.anddev.andengine.opengl.texture.atlas.bitmap.BitmapTextureAtlasTextureRegionFactory;
+import org.anddev.andengine.opengl.texture.bitmap.BitmapTexture.BitmapTextureFormat;
 import org.anddev.andengine.ui.activity.LayoutGameActivity;
 
 import android.app.Activity;
@@ -30,7 +31,7 @@ import android.view.KeyEvent;
 import com.tooflya.bouncekid.background.AsyncTaskLoader;
 import com.tooflya.bouncekid.background.IAsyncCallback;
 import com.tooflya.bouncekid.managers.ScreenManager;
-import com.tooflya.bouncekid.screens.LoadingScreen;
+import com.tooflya.bouncekid.screens.SplashScreen;
 import com.tooflya.bouncekid.screens.Screen;
 import com.tooflya.bouncekid.ui.Camera;
 
@@ -63,13 +64,14 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 	public static boolean isGameLoaded = false;
 
 	/**  */
-	public static Font font;
+	public static Font font, font2;
 
 	/**  */
-	public final static BitmapTextureAtlas resourcesBitmapTexture = new BitmapTextureAtlas(1024, 1024, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	// public final static BitmapTextureAtlas resourcesBitmapTexture = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	/**  */
-	private final static BitmapTextureAtlas fontTexture = new BitmapTextureAtlas(256, 256, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	private final static BitmapTextureAtlas fontTexture = new BitmapTextureAtlas(128, 128, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
+	private final static BitmapTextureAtlas font2Texture = new BitmapTextureAtlas(128, 128, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	/**  */
 	public static float fps;
@@ -136,7 +138,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		Options.cameraMaxCenterX = Options.cameraCenterX * 2;
 		Options.cameraMaxCenterY = Options.cameraCenterY * 2;
 
-		Options.cameraRatioFactor = Options.cameraHeight / Options.cameraOriginRatioY;
+		Options.CAMERA_RATIO_FACTOR = Options.cameraHeight / Options.cameraOriginRatioY;
 
 		/** Initialize camera instance */
 		camera = new Camera(0, 0, Options.cameraWidth, Options.cameraHeight);
@@ -179,9 +181,10 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		FontFactory.setAssetBasePath("font/");
 
 		font = FontFactory.createFromAsset(fontTexture, getApplicationContext(), "casual.ttf", 15, true, Color.RED);
+		font2 = FontFactory.createFromAsset(font2Texture, getApplicationContext(), "casual.ttf", 25, true, Color.WHITE);
 
-		this.getEngine().getFontManager().loadFont(font);
-		this.getEngine().getTextureManager().loadTextures(fontTexture, resourcesBitmapTexture);
+		this.getEngine().getFontManager().loadFonts(font, font2);
+		this.getEngine().getTextureManager().loadTextures(fontTexture, font2Texture);
 	}
 
 	/*
@@ -256,7 +259,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		new AsyncTaskLoader().execute(this);
 
 		/** Create loading screen and return her scene for attaching to the activity */
-		return new LoadingScreen();
+		return new SplashScreen();
 	}
 
 	/*
