@@ -27,7 +27,7 @@ public class SplashScreen extends Screen {
 
 	private final static BitmapTextureAtlas mBackgroundTextureAtlas = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
-	private final static TimerHandler mUpdateTimer = new TimerHandler(2f, true, new ITimerCallback() {
+	private final static TimerHandler mUpdateTimer = new TimerHandler(4f, true, new ITimerCallback() {
 		@Override
 		public void onTimePassed(TimerHandler pTimerHandler) {
 			Game.screens.set(Screen.LOADING);

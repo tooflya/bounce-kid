@@ -9,6 +9,7 @@ import org.anddev.andengine.opengl.texture.bitmap.BitmapTexture.BitmapTextureFor
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 
 import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.GameTimer;
 import com.tooflya.bouncekid.Options;
 import com.tooflya.bouncekid.helpers.ActionHelper;
 
@@ -74,6 +75,12 @@ public class Personage extends Entity {
 
 	public Personage() {
 		this(0, 0);
+	}
+
+	public void init() {
+		this.fallTime = 0;
+		this.flyTime = 0;
+		this.rx = (int) this.mX;
 	}
 
 	// ===========================================================
@@ -151,7 +158,7 @@ public class Personage extends Entity {
 			if (this.flyTime < Math.max(this.maxFlyTime, this.flyTime) && this.IsState(ActionHelper.WantToFly)) {
 				this.flyTime++;
 				// Change first of 3 code to use not linear moving.
-				this.setPosition(this.startX + this.flyFunctionX(this.flyTime), this.startY - this.flyFunctionY(this.flyTime));// this.getX() + this.runStep
+				this.setPosition(this.getX() + this.runStep, this.startY - this.flyFunctionY(this.flyTime));// this.getX() + this.runStep
 			} else {
 				this.flyTime = 0;
 				this.ChangeStates(ActionHelper.Fall, ActionHelper.Fly);
@@ -164,7 +171,7 @@ public class Personage extends Entity {
 				this.startX = this.getX();
 			}
 			// Change second of 3 code to use not linear moving.
-			this.setPosition(this.startX + this.fallFunctionX(this.flyTime), this.startY + this.fallFunctionY(this.fallTime));// this.getX() + this.runStep
+			this.setPosition(this.getX() + this.runStep, this.startY + this.fallFunctionY(this.fallTime));// this.getX() + this.runStep
 			this.fallTime++;
 		}
 
@@ -174,7 +181,7 @@ public class Personage extends Entity {
 		}
 
 		if (this.getY() > Options.cameraHeight) {
-			Game.world.init();
+			GameTimer.world.init();
 		}
 	}
 

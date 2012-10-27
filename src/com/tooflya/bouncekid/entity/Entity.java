@@ -3,6 +3,7 @@ package com.tooflya.bouncekid.entity;
 import javax.microedition.khronos.opengles.GL10;
 
 import org.anddev.andengine.entity.sprite.AnimatedSprite;
+import org.anddev.andengine.input.touch.TouchEvent;
 import org.anddev.andengine.opengl.texture.region.TiledTextureRegion;
 import org.anddev.andengine.opengl.util.GLHelper;
 
@@ -49,7 +50,7 @@ public abstract class Entity extends AnimatedSprite {
 		this.mX = this.mX - (this.getWidthScaled() - Options.cameraWidth) / 2;
 
 		if (pNeedParent) {
-			Game.screens.get(Screen.MAIN).attachChild(this);
+			Game.screens.get(Screen.LEVEL).attachChild(this);
 		}
 	}
 
@@ -127,7 +128,7 @@ public abstract class Entity extends AnimatedSprite {
 	public void hide() {
 		this.setVisible(false);
 		this.setIgnoreUpdate(true);
-		this.setCullingEnabled(true);
+		// this.setCullingEnabled(true);
 	}
 
 	// ===========================================================

@@ -1,8 +1,9 @@
 package com.tooflya.bouncekid.managers;
 
 import com.tooflya.bouncekid.Game;
+import com.tooflya.bouncekid.screens.LevelScreen;
 import com.tooflya.bouncekid.screens.LoadingScreen;
-import com.tooflya.bouncekid.screens.MainScreen;
+import com.tooflya.bouncekid.screens.MenuScreen;
 import com.tooflya.bouncekid.screens.Screen;
 import com.tooflya.bouncekid.screens.SplashScreen;
 
@@ -41,7 +42,8 @@ public class ScreenManager {
 		 */
 		screens[Screen.SPLASH] = new SplashScreen();
 		screens[Screen.LOADING] = new LoadingScreen();
-		screens[Screen.MAIN] = new MainScreen();
+		screens[Screen.MENU] = new MenuScreen();
+		screens[Screen.LEVEL] = new LevelScreen();
 	}
 
 	// ===========================================================

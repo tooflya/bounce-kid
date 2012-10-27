@@ -36,7 +36,7 @@ import com.tooflya.bouncekid.ui.parallax.ParallaxBackground.ParallaxEntityTree;
  * @author Tooflya.com
  * @since
  */
-public class MainScreen extends Screen implements IOnSceneTouchListener, IScrollDetectorListener, IPinchZoomDetectorListener {
+public class LevelScreen extends Screen implements IOnSceneTouchListener, IScrollDetectorListener, IPinchZoomDetectorListener {
 
 	// ===========================================================
 	// Constants
@@ -75,7 +75,7 @@ public class MainScreen extends Screen implements IOnSceneTouchListener, IScroll
 	// Constructors
 	// ===========================================================
 
-	public MainScreen() {
+	public LevelScreen() {
 		this.setBackground(new ColorBackground(21f / 255f, 209f / 255f, 255f / 255f, 1f));
 
 		autoParallaxBackground.attachParallaxEntity(new ParallaxEntity(-0.2f, 0f, new EntitySimple(0, 0, parallaxTopLayer)));

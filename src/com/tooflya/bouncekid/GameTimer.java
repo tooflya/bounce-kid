@@ -3,7 +3,7 @@ package com.tooflya.bouncekid;
 import org.anddev.andengine.engine.handler.timer.ITimerCallback;
 import org.anddev.andengine.engine.handler.timer.TimerHandler;
 
-import com.tooflya.bouncekid.screens.MainScreen;
+import com.tooflya.bouncekid.screens.LevelScreen;
 
 /**
  * @author Tooflya.com
@@ -54,7 +54,7 @@ public class GameTimer implements ITimerCallback {
 
 			if (this.updateCount % 2 == 0) {
 				this.parallaxUpdateCount++;
-				MainScreen.autoParallaxBackground.accelerate(this.parallaxUpdateCount);
+				LevelScreen.autoParallaxBackground.accelerate(this.parallaxUpdateCount);
 			}
 		}
 

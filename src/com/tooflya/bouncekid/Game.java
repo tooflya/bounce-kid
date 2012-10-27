@@ -67,11 +67,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 	public static Font font, font2;
 
 	/**  */
-	// public final static BitmapTextureAtlas resourcesBitmapTexture = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-
-	/**  */
 	private final static BitmapTextureAtlas fontTexture = new BitmapTextureAtlas(128, 128, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
-	private final static BitmapTextureAtlas font2Texture = new BitmapTextureAtlas(128, 128, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 
 	/**  */
 	public static float fps;
@@ -181,10 +177,10 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 		FontFactory.setAssetBasePath("font/");
 
 		font = FontFactory.createFromAsset(fontTexture, getApplicationContext(), "casual.ttf", 15, true, Color.RED);
-		font2 = FontFactory.createFromAsset(font2Texture, getApplicationContext(), "casual.ttf", 25, true, Color.WHITE);
+		font2 = FontFactory.createFromAsset(fontTexture, getApplicationContext(), "casual.ttf", 25, true, Color.WHITE);
 
 		this.getEngine().getFontManager().loadFonts(font, font2);
-		this.getEngine().getTextureManager().loadTextures(fontTexture, font2Texture);
+		this.getEngine().getTextureManager().loadTextures(fontTexture);
 	}
 
 	/*
@@ -215,7 +211,7 @@ public class Game extends LayoutGameActivity implements IAsyncCallback {
 	 */
 	@Override
 	public void onComplete() {
-		screens.set(Screen.MAIN);
+		screens.set(Screen.MENU);
 	}
 
 	/*

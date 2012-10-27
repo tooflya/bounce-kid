@@ -95,7 +95,7 @@ public class Marker extends Entity {
 		public MarkerText(float pX, float pY, Font pFont, String pText) {
 			super(pX, pY, pFont, pText);
 
-			Game.screens.get(Screen.MAIN).attachChild(this);
+			Game.screens.get(Screen.LEVEL).attachChild(this);
 		}
 
 		/*

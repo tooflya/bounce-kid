@@ -41,4 +41,7 @@ public class Options {
 
 	public static float mainStep = 1f;
 	public static final int babyStep = 1;
+
+	public static boolean NEED_MUSIC = true;
+	public static boolean NEED_SOUND = true;
 }

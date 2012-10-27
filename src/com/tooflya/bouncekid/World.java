@@ -16,7 +16,7 @@ import com.tooflya.bouncekid.helpers.ActionHelper;
 import com.tooflya.bouncekid.managers.ApplesManager;
 import com.tooflya.bouncekid.managers.BroodManager;
 import com.tooflya.bouncekid.managers.EntityManager;
-import com.tooflya.bouncekid.screens.MainScreen;
+import com.tooflya.bouncekid.screens.LevelScreen;
 import com.tooflya.bouncekid.screens.Screen;
 
 public class World extends org.anddev.andengine.entity.Entity {
@@ -57,7 +57,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 	public World() {
 		super();
 
-		Game.screens.get(Screen.MAIN).attachChild(this);
+		Game.screens.get(Screen.LEVEL).attachChild(this);
 
 		this.texture = new BitmapTextureAtlas(1024, 1024, BitmapTextureFormat.RGBA_8888, TextureOptions.BILINEAR_PREMULTIPLYALPHA);
 		Game.loadTextures(texture);
@@ -80,15 +80,15 @@ public class World extends org.anddev.andengine.entity.Entity {
 		this.generateStartBlocks(0, Options.cameraWidth);
 
 		gg = 0;
+		this.personage.init();
 		this.personage.setPosition(0, this.bottomBlock.getY() - this.bottomBlock.getHeightScaled());
-		this.personage.rx = (int) this.personage.getX();
 		this.apt = 0;
 		c = 0;
 		//this.brood.clear();
 		this.apples.clear();
 		this.personage.actions.clear();
 
-		MainScreen.autoParallaxBackground.restoreChangePerSecond(Options.fps);
+		LevelScreen.autoParallaxBackground.restoreChangePerSecond(Options.fps);
 		this.personage.runStep = 1f;
 
 		this.needMarker = false;
@@ -110,7 +110,7 @@ public class World extends org.anddev.andengine.entity.Entity {
 		final Block tempBlock = (Block) this.blocks.create();
 
 		final float maxWidth = (this.personage.getMaxFlyTime() / this.personage.flyStep + this.personage.getFlyPower() / this.personage.fallStep) * this.personage.runStep;
-		final float maxHeight = this.personage.getMaxFlyTime() * this.personage.flyStep;
+		final float maxHeight = this.personage.getMaxFlyTime() * this.personage.flyStep - this.personage.getHeightScaled()/10;
 
 		final int maxPercent = 100;
 		final int isUpPercent = 50;// (int) (maxPercent * 1); // TODO: Set a percent.
